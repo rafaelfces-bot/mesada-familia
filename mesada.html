@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mesada Família</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+  :root{--bg:#0f0f13;--surface:#1a1a22;--surface2:#22222e;--border:#2e2e3e;--lucas:#f5a623;--lucas-dim:rgba(245,166,35,0.12);--pedro:#4fc3f7;--pedro-dim:rgba(79,195,247,0.12);--penalty:#ff6b6b;--penalty-dim:rgba(255,107,107,0.10);--text:#e8e8f0;--text-muted:#7a7a9a;--success:#56d98a;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+  #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+  .login-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;width:100%;max-width:380px;}
+  .login-box h1{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:4px;}
+  .login-box p{font-size:13px;color:var(--text-muted);margin-bottom:28px;}
+  .login-box label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:6px;}
+  .login-box input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:16px;}
+  .login-box input:focus{border-color:var(--text-muted);}
+  .login-box button{width:100%;background:var(--success);color:#0f0f13;border:none;border-radius:8px;padding:12px;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:opacity 0.15s;}
+  .login-box button:hover{opacity:0.85;}
+  #login-erro{color:var(--penalty);font-size:12px;margin-top:12px;min-height:18px;text-align:center;}
+  #readonly-banner{display:none;background:rgba(79,195,247,0.1);border-bottom:1px solid var(--pedro);padding:8px 20px;text-align:center;font-size:12px;color:var(--pedro);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px;}
+  #app{display:none;}
+  #saldo-bar{position:sticky;top:0;z-index:100;background:rgba(15,15,19,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .saldo-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);flex-shrink:0;}
+  .saldo-cards{display:flex;gap:12px;flex-wrap:wrap;flex:1;}
+  .saldo-card{display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:10px;padding:8px 16px;border:1px solid var(--border);flex:1;min-width:150px;}
+  .saldo-card .nome{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;flex-shrink:0;}
+  .saldo-card.lucas .nome{color:var(--lucas);}
+  .saldo-card.pedro .nome{color:var(--pedro);}
+  .saldo-card .valor{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-left:auto;}
+  .saldo-card.lucas .valor{color:var(--lucas);}
+  .saldo-card.pedro .valor{color:var(--pedro);}
+  .progress-bar-wrap{width:48px;height:4px;background:var(--border);border-radius:99px;overflow:hidden;}
+  .progress-bar{height:100%;border-radius:99px;transition:width 0.4s ease;}
+  .lucas-bar{background:var(--lucas);}
+  .pedro-bar{background:var(--pedro);}
+  .semana-wrap{display:flex;align-items:center;gap:8px;}
+  .semana-wrap label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;}
+  .semana-wrap select{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;outline:none;}
+  .btn-logout{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:none;color:var(--text-muted);cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+  .btn-logout:hover{border-color:var(--penalty);color:var(--penalty);}
+  .container{max-width:860px;margin:0 auto;padding:24px 16px 80px;}
+  .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;}
+  .page-subtitle{font-size:13px;color:var(--text-muted);margin-top:3px;}
+  .section-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--text-muted);margin:32px 0 12px;display:flex;align-items:center;gap:10px;}
+  .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+  #sync-status{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text-muted);padding:4px 0 0;text-align:right;}
+  #sync-status.ok{color:var(--success);}
+  #sync-status.err{color:var(--penalty);}
+  .table-wrapper{border-radius:12px;border:1px solid var(--border);overflow:hidden;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  thead th{background:var(--surface2);padding:10px 12px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);white-space:nowrap;text-align:left;}
+  thead th.center{text-align:center;}
+  tbody tr{border-bottom:1px solid var(--border);transition:background 0.15s;}
+  tbody tr:last-child{border-bottom:none;}
+  tbody tr:hover{background:var(--surface);}
+  td{padding:10px 12px;vertical-align:middle;}
+  td.cat{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;width:1%;}
+  td.nome{color:var(--text);font-size:13px;}
+  td.center{text-align:center;white-space:nowrap;width:1%;}
+  .diff-badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;text-transform:uppercase;letter-spacing:1px;}
+  .diff-facil{background:rgba(86,217,138,0.15);color:var(--success);}
+  .diff-medio{background:rgba(245,166,35,0.15);color:var(--lucas);}
+  .diff-dificil{background:rgba(255,107,107,0.15);color:var(--penalty);}
+  .valor-ativ{font-family:'Syne',sans-serif;font-weight:700;color:var(--success);}
+  .valor-pen{font-family:'Syne',sans-serif;font-weight:700;color:var(--penalty);}
+  .counter{display:inline-flex;align-items:center;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg);}
+  .counter button{background:none;border:none;color:var(--text-muted);font-size:16px;font-weight:700;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s,color 0.15s;line-height:1;padding:0;font-family:'Syne',sans-serif;}
+  .counter button:hover{background:var(--surface2);}
+  .counter button:disabled{opacity:0.25;cursor:not-allowed;}
+  .counter .count{min-width:28px;text-align:center;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:var(--text);border-left:1px solid var(--border);border-right:1px solid var(--border);padding:0 4px;height:30px;line-height:30px;}
+  .counter.lucas-active{border-color:var(--lucas);}
+  .counter.lucas-active .count{color:var(--lucas);background:var(--lucas-dim);}
+  .counter.lucas-active button{color:var(--lucas);}
+  .counter.pedro-active{border-color:var(--pedro);}
+  .counter.pedro-active .count{color:var(--pedro);background:var(--pedro-dim);}
+  .counter.pedro-active button{color:var(--pedro);}
+  .counter.pen-active{border-color:var(--penalty);}
+  .counter.pen-active .count{color:var(--penalty);background:var(--penalty-dim);}
+  .counter.pen-active button{color:var(--penalty);}
+  .limit-tag{display:inline-block;font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--penalty);background:var(--penalty-dim);border-radius:4px;padding:2px 5px;margin-left:4px;vertical-align:middle;}
+  .actions{margin-top:36px;display:flex;gap:12px;flex-wrap:wrap;}
+  button.btn{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:11px 22px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text-muted);cursor:pointer;transition:all 0.15s;}
+  button.btn:hover{border-color:var(--penalty);color:var(--penalty);}
+  button.btn.primary{border-color:var(--success);color:var(--success);background:rgba(86,217,138,0.08);}
+  button.btn.primary:hover{background:rgba(86,217,138,0.18);}
+  button.btn:disabled{opacity:0.4;cursor:not-allowed;}
+  #relatorio{display:none;position:fixed;inset:0;z-index:200;background:#fff;color:#111;overflow-y:auto;padding:40px;font-family:'DM Sans',sans-serif;font-size:13px;}
+  #relatorio h1{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#111;margin-bottom:4px;}
+  #relatorio .rel-sub{font-size:12px;color:#888;margin-bottom:24px;}
+  #relatorio .rel-actions{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap;}
+  #relatorio .rel-btn{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:10px 20px;border-radius:8px;border:none;cursor:pointer;transition:opacity 0.15s;}
+  #relatorio .rel-btn:hover{opacity:0.8;}
+  #relatorio .rel-btn.imprimir{background:#111;color:#fff;}
+  #relatorio .rel-btn.fechar{background:#eee;color:#444;}
+  #relatorio .rel-filho{margin-bottom:36px;}
+  #relatorio .rel-filho h2{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;padding:8px 14px;border-radius:6px;margin-bottom:14px;}
+  #relatorio .rel-filho.lucas h2{background:#fff4e0;color:#b07000;}
+  #relatorio .rel-filho.pedro h2{background:#e0f4ff;color:#006fa8;}
+  #relatorio .rel-section{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#aaa;margin:16px 0 8px;}
+  #relatorio table{width:100%;border-collapse:collapse;margin-bottom:4px;}
+  #relatorio thead th{background:#f5f5f5;padding:7px 10px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#888;border-bottom:1px solid #e0e0e0;text-align:left;}
+  #relatorio thead th.rc{text-align:right;}
+  #relatorio tbody td{padding:7px 10px;border-bottom:1px solid #f0f0f0;color:#222;}
+  #relatorio tbody td.rc{text-align:right;font-family:'Syne',sans-serif;font-weight:700;}
+  #relatorio tbody tr:last-child td{border-bottom:none;}
+  #relatorio .rel-total{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;text-align:right;padding:12px 10px 0;border-top:2px solid #e0e0e0;margin-top:4px;}
+  #relatorio .rel-total.lucas{color:#b07000;}
+  #relatorio .rel-total.pedro{color:#006fa8;}
+  #relatorio .rel-divider{border:none;border-top:1px solid #e8e8e8;margin:28px 0;}
+  #relatorio .rel-nenhuma{color:#aaa;font-style:italic;font-size:12px;padding:6px 10px;}
+  @media print{body>*:not(#relatorio){display:none!important;}#relatorio{position:static;padding:20px;}#relatorio .rel-actions{display:none!important;}}
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-box">
+    <h1>Mesada Família</h1>
+    <p>Entre com seu e-mail e senha para continuar</p>
+    <label>E-mail</label>
+    <input type="email" id="login-email" placeholder="seu@email.com">
+    <label>Senha</label>
+    <input type="password" id="login-senha" placeholder="••••••••">
+    <button onclick="fazerLogin()">Entrar</button>
+    <div id="login-erro"></div>
+  </div>
+</div>
+
+<div id="readonly-banner">👁 Modo leitura — apenas Rafael e Tatiana podem editar</div>
+
+<div id="app">
+  <div id="saldo-bar">
+    <div class="saldo-title">Mesada</div>
+    <div class="saldo-cards">
+      <div class="saldo-card lucas">
+        <div class="nome">Lucas</div>
+        <div class="progress-bar-wrap"><div class="progress-bar lucas-bar" id="prog-lucas" style="width:0%"></div></div>
+        <div class="valor" id="saldo-lucas">R$ 0,00</div>
+      </div>
+      <div class="saldo-card pedro">
+        <div class="nome">Pedro</div>
+        <div class="progress-bar-wrap"><div class="progress-bar pedro-bar" id="prog-pedro" style="width:0%"></div></div>
+        <div class="valor" id="saldo-pedro">R$ 0,00</div>
+      </div>
+    </div>
+    <div class="semana-wrap">
+      <label for="sel-semana">Semana</label>
+      <select id="sel-semana" onchange="trocarSemana()"></select>
+    </div>
+    <button class="btn-logout" onclick="fazerLogout()">Sair</button>
+  </div>
+
+  <div class="container">
+    <div class="page-title">Controle Semanal</div>
+    <div class="page-subtitle">Use + e − para registrar quantas vezes cada atividade foi realizada</div>
+    <div id="sync-status"></div>
+    <div class="section-label">Atividades</div>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr>
+          <th>Categoria</th><th>Atividade</th>
+          <th class="center">Dif.</th><th class="center">Valor</th>
+          <th class="center">Limite</th>
+          <th class="center">Lucas</th><th class="center">Pedro</th>
+        </tr></thead>
+        <tbody id="tbody-atividades"></tbody>
+      </table>
+    </div>
+    <div class="section-label">Penalidades</div>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr>
+          <th>Categoria</th><th>Penalidade</th>
+          <th class="center">Desconto</th>
+          <th class="center">Lucas</th><th class="center">Pedro</th>
+        </tr></thead>
+        <tbody id="tbody-penalidades"></tbody>
+      </table>
+    </div>
+    <div class="actions">
+      <button class="btn primary" onclick="gerarRelatorio()">📄 Gerar Relatório Semanal</button>
+      <button class="btn" id="btn-reset" onclick="resetarSemana()">🔄 Resetar Semana</button>
+    </div>
+  </div>
+</div>
+
+<div id="relatorio"></div>
+
+<!-- Firebase SDK compatível (não-modular) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDJ8KtuveA7q3Bgs_HHy5myw0G4ZBxxAks",
+  authDomain: "mesada-familia-90979.firebaseapp.com",
+  databaseURL: "https://mesada-familia-90979-default-rtdb.firebaseio.com",
+  projectId: "mesada-familia-90979",
+  storageBucket: "mesada-familia-90979.firebasestorage.app",
+  messagingSenderId: "587453263333",
+  appId: "1:587453263333:web:c59f9cadc031b4c396530c"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db   = firebase.database();
+
+const MAXIMO = 50.00;
+const ADMINS = ['2PASdYiHAnYpuVcA6vWkMVSNUp73','ZQeG7yATnAf5U0w2jL3ARIEjaWl2'];
+
+const atividades = [
+  {cat:'Doméstica',      nome:'Varrer a casa',                                  dif:'Fácil',   valor:1.50,limite:7},
+  {cat:'Doméstica',      nome:'Lavar o banheiro',                               dif:'Médio',   valor:3.00,limite:7},
+  {cat:'Doméstica',      nome:'Ajudar a preparar uma refeição completa',        dif:'Médio',   valor:3.00,limite:7},
+  {cat:'Doméstica',      nome:'Lavar a louça após o jantar',                    dif:'Fácil',   valor:1.50,limite:7},
+  {cat:'Doméstica',      nome:'Lavar sua louça após o almoço',                  dif:'Fácil',   valor:1.00,limite:7},
+  {cat:'Educacional',    nome:'Fazer a lição de casa',                          dif:'Fácil',   valor:2.00,limite:5},
+  {cat:'Educacional',    nome:'Ler um livro por 30 min',                        dif:'Fácil',   valor:1.50,limite:5},
+  {cat:'Educacional',    nome:'Ler um livro e resumir a história',              dif:'Médio',   valor:3.00,limite:5},
+  {cat:'Educacional',    nome:'Estudar matemática por 1h',                      dif:'Médio',   valor:3.00,limite:5},
+  {cat:'Educacional',    nome:'Estudar um conteúdo além do escolar',            dif:'Médio',   valor:3.00,limite:5},
+  {cat:'Educacional',    nome:'Fazer uma redação sobre um tema do interesse',   dif:'Difícil', valor:4.00,limite:5},
+  {cat:'Desenv. Pessoal',nome:'Praticar alongamento ou calistenia por 20 min',  dif:'Fácil',   valor:1.50,limite:5},
+  {cat:'Desenv. Pessoal',nome:'Instrumento musical por 20 min',                 dif:'Fácil',   valor:1.50,limite:5},
+  {cat:'Desenv. Pessoal',nome:'Idioma por 20 min',                              dif:'Fácil',   valor:1.50,limite:5},
+  {cat:'Desenv. Pessoal',nome:'Programação por 20 min',                         dif:'Médio',   valor:2.00,limite:5},
+  {cat:'Desenv. Pessoal',nome:'Ajudar um irmão ou amigo',                       dif:'Fácil',   valor:1.50,limite:5},
+  {cat:'Desenv. Pessoal',nome:'Ajudar um irmão ou parente sem ser pedido',      dif:'Médio',   valor:3.00,limite:5},
+  {cat:'Desenv. Pessoal',nome:'Planejar e apresentar um pequeno projeto',       dif:'Difícil', valor:5.00,limite:5},
+];
+
+const penalidades = [
+  {cat:'Comportamento',nome:'Desobedecer os pais',                                       valor:5.00},
+  {cat:'Comportamento',nome:'Deixar calçados fora do lugar correto',                     valor:1.00},
+  {cat:'Comportamento',nome:'Não lavar as mãos quando necessário',                       valor:1.00},
+  {cat:'Comportamento',nome:'Não tomar banho no horário determinado',                    valor:2.00},
+  {cat:'Comportamento',nome:'Não cumprir o horário das atividades programadas',          valor:2.00},
+  {cat:'Tecnologia',   nome:'Exceder o tempo de tela sem pausar',                        valor:2.00},
+  {cat:'Tecnologia',   nome:'Não soltar o celular para dar atenção a quem está falando', valor:3.00},
+  {cat:'Tecnologia',   nome:'Falou "espera aí, rapidinho" e recomeçou o jogo depois',   valor:2.00},
+];
+
+let state = {
+  ativ: atividades.map(()=>({lucas:0,pedro:0})),
+  pen:  penalidades.map(()=>({lucas:0,pedro:0})),
+};
+let semanaAtual = 1;
+let isAdmin = false;
+let dbListener = null;
+
+function fmt(v){return v.toFixed(2).replace('.',',');}
+
+function semanaAtualDoAno(){
+  const d=new Date(),i=new Date(d.getFullYear(),0,1);
+  return Math.ceil(((d-i)/86400000+i.getDay()+1)/7);
+}
+function totalSemanas(ano){
+  const d=new Date(ano,11,31),dia=d.getDay();
+  return(dia===4||(dia===3&&ano%4===0))?53:52;
+}
+function chaveDB(sem){
+  return 'semanas/sem'+String(sem).padStart(2,'0')+'_'+new Date().getFullYear();
+}
+function setSyncStatus(msg,cls){
+  const el=document.getElementById('sync-status');
+  el.textContent=msg;el.className=cls;
+}
+
+function popularSemanas(){
+  const sel=document.getElementById('sel-semana');
+  const ano=new Date().getFullYear(),total=totalSemanas(ano),atual=semanaAtualDoAno();
+  sel.innerHTML='';
+  for(let s=1;s<=total;s++){
+    const opt=document.createElement('option');
+    opt.value=s;opt.textContent='Semana '+s+' / '+ano;
+    if(s===atual)opt.selected=true;
+    sel.appendChild(opt);
+  }
+  semanaAtual=atual;
+}
+
+function carregarDadosSemana(){
+  if(dbListener){dbListener();dbListener=null;}
+  const r=db.ref(chaveDB(semanaAtual));
+  dbListener=r.on('value',function(snap){
+    const dados=snap.val();
+    if(dados){
+      state.ativ=dados.ativ||atividades.map(()=>({lucas:0,pedro:0}));
+      state.pen=dados.pen||penalidades.map(()=>({lucas:0,pedro:0}));
+    } else {
+      state.ativ=atividades.map(()=>({lucas:0,pedro:0}));
+      state.pen=penalidades.map(()=>({lucas:0,pedro:0}));
+    }
+    renderAtividades();renderPenalidades();atualizarSaldos();
+    setSyncStatus('✓ Sincronizado','ok');
+  },function(){
+    setSyncStatus('⚠ Erro de conexão','err');
+  });
+}
+
+function salvarDados(){
+  if(!isAdmin)return;
+  db.ref(chaveDB(semanaAtual)).set({ativ:state.ativ,pen:state.pen})
+    .then(()=>setSyncStatus('✓ Salvo','ok'))
+    .catch(()=>setSyncStatus('⚠ Erro ao salvar','err'));
+}
+
+function trocarSemana(){
+  semanaAtual=parseInt(document.getElementById('sel-semana').value);
+  carregarDadosSemana();
+}
+
+function fazerLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const senha=document.getElementById('login-senha').value;
+  document.getElementById('login-erro').textContent='';
+  auth.signInWithEmailAndPassword(email,senha)
+    .catch(function(){
+      document.getElementById('login-erro').textContent='E-mail ou senha incorretos.';
+    });
+}
+
+function fazerLogout(){
+  if(dbListener){db.ref(chaveDB(semanaAtual)).off('value',dbListener);dbListener=null;}
+  auth.signOut();
+}
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&document.getElementById('login-screen').style.display!=='none'){
+    fazerLogin();
+  }
+});
+
+auth.onAuthStateChanged(function(user){
+  if(user){
+    isAdmin=ADMINS.indexOf(user.uid)!==-1;
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    document.getElementById('readonly-banner').style.display=isAdmin?'none':'block';
+    document.getElementById('btn-reset').disabled=!isAdmin;
+    popularSemanas();
+    carregarDadosSemana();
+  } else {
+    document.getElementById('login-screen').style.display='flex';
+    document.getElementById('app').style.display='none';
+    document.getElementById('readonly-banner').style.display='none';
+  }
+});
+
+function calcular(filho){
+  let total=0;
+  atividades.forEach(function(a,i){total+=state.ativ[i][filho]*a.valor;});
+  penalidades.forEach(function(p,i){total-=state.pen[i][filho]*p.valor;});
+  return Math.max(0,Math.min(MAXIMO,total));
+}
+
+function atualizarSaldos(){
+  const sL=calcular('lucas'),sP=calcular('pedro');
+  document.getElementById('saldo-lucas').textContent='R$ '+fmt(sL);
+  document.getElementById('saldo-pedro').textContent='R$ '+fmt(sP);
+  document.getElementById('prog-lucas').style.width=(sL/MAXIMO*100)+'%';
+  document.getElementById('prog-pedro').style.width=(sP/MAXIMO*100)+'%';
+}
+
+function makeCounter(qty,max,colorClass,onMinus,onPlus){
+  const atLimit=max!==null&&qty>=max;
+  const activeClass=qty>0?colorClass:'';
+  const limitTag=atLimit?'<span class="limit-tag">máx</span>':'';
+  const dis=!isAdmin;
+  return '<div style="display:flex;align-items:center;justify-content:center;gap:4px"><div class="counter '+activeClass+'"><button onclick="'+onMinus+'" '+(qty<=0||dis?'disabled':'')+'>−</button><span class="count">'+qty+'</span><button onclick="'+onPlus+'" '+(atLimit||dis?'disabled':'')+'>+</button></div>'+limitTag+'</div>';
+}
+
+function renderAtividades(){
+  const tbody=document.getElementById('tbody-atividades');
+  tbody.innerHTML='';
+  atividades.forEach(function(a,i){
+    const sL=state.ativ[i].lucas,sP=state.ativ[i].pedro;
+    const difClass=a.dif==='Fácil'?'diff-facil':a.dif==='Médio'?'diff-medio':'diff-dificil';
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td class="cat">'+a.cat+'</td><td class="nome">'+a.nome+'</td><td class="center"><span class="diff-badge '+difClass+'">'+a.dif+'</span></td><td class="center valor-ativ">R$&nbsp;'+fmt(a.valor)+'</td><td class="center" style="color:var(--text-muted);font-family:\'Syne\',sans-serif;font-size:11px;font-weight:700">'+a.limite+'×/sem</td><td class="center">'+makeCounter(sL,a.limite,'lucas-active',"ajustarAtiv("+i+",'lucas',-1)","ajustarAtiv("+i+",'lucas',1)")+'</td><td class="center">'+makeCounter(sP,a.limite,'pedro-active',"ajustarAtiv("+i+",'pedro',-1)","ajustarAtiv("+i+",'pedro',1)")+'</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function renderPenalidades(){
+  const tbody=document.getElementById('tbody-penalidades');
+  tbody.innerHTML='';
+  penalidades.forEach(function(p,i){
+    const sL=state.pen[i].lucas,sP=state.pen[i].pedro;
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td class="cat">'+p.cat+'</td><td class="nome">'+p.nome+'</td><td class="center valor-pen">- R$&nbsp;'+fmt(p.valor)+'</td><td class="center">'+makeCounter(sL,null,'pen-active',"ajustarPen("+i+",'lucas',-1)","ajustarPen("+i+",'lucas',1)")+'</td><td class="center">'+makeCounter(sP,null,'pen-active',"ajustarPen("+i+",'pedro',-1)","ajustarPen("+i+",'pedro',1)")+'</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function ajustarAtiv(i,filho,delta){
+  if(!isAdmin)return;
+  state.ativ[i][filho]=Math.max(0,Math.min(atividades[i].limite,state.ativ[i][filho]+delta));
+  renderAtividades();atualizarSaldos();salvarDados();
+}
+
+function ajustarPen(i,filho,delta){
+  if(!isAdmin)return;
+  state.pen[i][filho]=Math.max(0,state.pen[i][filho]+delta);
+  renderPenalidades();atualizarSaldos();salvarDados();
+}
+
+function resetarSemana(){
+  if(!isAdmin)return;
+  if(!confirm('Resetar a semana? Todos os contadores voltam para zero.'))return;
+  state.ativ=atividades.map(()=>({lucas:0,pedro:0}));
+  state.pen=penalidades.map(()=>({lucas:0,pedro:0}));
+  renderAtividades();renderPenalidades();atualizarSaldos();salvarDados();
+}
+
+function gerarRelatorio(){
+  const semana=document.getElementById('sel-semana').value;
+  const ano=new Date().getFullYear();
+  const dataGeracao=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+
+  function blocoFilho(filho,nomeExibir,cssClass){
+    const saldo=calcular(filho);
+    let subAtiv=0,linhasAtiv='';
+    atividades.forEach(function(a,i){
+      const qty=state.ativ[i][filho];if(!qty)return;
+      const sub=qty*a.valor;subAtiv+=sub;
+      linhasAtiv+='<tr><td>'+a.cat+'</td><td>'+a.nome+'</td><td class="rc">'+qty+'×</td><td class="rc">R$&nbsp;'+fmt(a.valor)+'</td><td class="rc">R$&nbsp;'+fmt(sub)+'</td></tr>';
+    });
+    const tAtiv=linhasAtiv?'<table><thead><tr><th>Categoria</th><th>Atividade</th><th class="rc">Qtd</th><th class="rc">Unit.</th><th class="rc">Total</th></tr></thead><tbody>'+linhasAtiv+'</tbody></table><div style="text-align:right;font-size:12px;color:#666;padding:4px 10px 0;font-family:Syne,sans-serif;font-weight:700">Subtotal: R$&nbsp;'+fmt(subAtiv)+'</div>':'<p class="rel-nenhuma">Nenhuma atividade registrada.</p>';
+    let subPen=0,linhasPen='';
+    penalidades.forEach(function(p,i){
+      const qty=state.pen[i][filho];if(!qty)return;
+      const sub=qty*p.valor;subPen+=sub;
+      linhasPen+='<tr><td>'+p.cat+'</td><td>'+p.nome+'</td><td class="rc">'+qty+'×</td><td class="rc">R$&nbsp;'+fmt(p.valor)+'</td><td class="rc" style="color:#cc3333">- R$&nbsp;'+fmt(sub)+'</td></tr>';
+    });
+    const tPen=linhasPen?'<table><thead><tr><th>Categoria</th><th>Penalidade</th><th class="rc">Qtd</th><th class="rc">Unit.</th><th class="rc">Desconto</th></tr></thead><tbody>'+linhasPen+'</tbody></table><div style="text-align:right;font-size:12px;color:#cc3333;padding:4px 10px 0;font-family:Syne,sans-serif;font-weight:700">Total descontos: - R$&nbsp;'+fmt(subPen)+'</div>':'<p class="rel-nenhuma">Nenhuma penalidade aplicada. ✓</p>';
+    return '<div class="rel-filho '+cssClass+'"><h2>'+nomeExibir+'</h2><div class="rel-section">Atividades Realizadas</div>'+tAtiv+'<div class="rel-section">Penalidades Aplicadas</div>'+tPen+'<div class="rel-total '+cssClass+'">Total a receber: R$&nbsp;'+fmt(saldo)+'</div></div>';
+  }
+
+  document.getElementById('relatorio').innerHTML='<h1>Relatório de Mesada</h1><p class="rel-sub">Semana '+semana+' / '+ano+' &nbsp;·&nbsp; Gerado em '+dataGeracao+'</p><div class="rel-actions"><button class="rel-btn imprimir" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button><button class="rel-btn fechar" onclick="document.getElementById(\'relatorio\').style.display=\'none\'">✕ Fechar</button></div>'+blocoFilho('lucas','Lucas','lucas')+'<hr class="rel-divider">'+blocoFilho('pedro','Pedro','pedro');
+  document.getElementById('relatorio').style.display='block';
+}
+</script>
+</body>
+</html>
