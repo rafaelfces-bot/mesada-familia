@@ -59,6 +59,8 @@
   .step-dot{width:8px;height:8px;border-radius:99px;background:var(--border);transition:background 0.3s;}
   .step-dot.active{background:var(--success);}
   .step-dot.done{background:var(--success);opacity:0.4;}
+  .tooltip-balao{background:rgba(86,217,138,0.08);border:1px solid rgba(86,217,138,0.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
+  .tooltip-balao strong{color:var(--success);}
   .convite-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;margin:16px 0;}
   .convite-code{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--success);letter-spacing:6px;}
   .convite-sub{font-size:12px;color:var(--text-muted);margin-top:6px;}
@@ -271,6 +273,16 @@
       <div class="setup-title">🏠 Bem-vindo!</div>
       <div class="setup-desc">Vamos configurar a sua família. Como ela se chama?</div>
       <div class="field"><label>Nome da família</label><input type="text" id="s-nome-familia" placeholder="Ex: Família Silva"></div>
+      <div class="field">
+        <label>Limite semanal por filho (R$)</label>
+        <input type="number" id="s-limite" value="50" min="10" step="5">
+        <div class="tooltip-balao">
+          💡 <strong>O que é o limite semanal?</strong><br>
+          É o valor máximo que cada filho pode ganhar por semana, somando todas as atividades realizadas.
+          Penalidades são descontadas desse valor. O saldo nunca passa desse limite nem fica negativo.<br>
+          <span style="color:var(--text-muted)">Ex: R$ 50,00 significa que cada filho pode ganhar no máximo R$ 50,00 por semana.</span>
+        </div>
+      </div>
       <button class="btn-primary" onclick="setupStep1()">Continuar →</button>
       <div id="s0-msg" class="msg-erro"></div>
     </div>
@@ -475,12 +487,12 @@ var CORES_DIM=['rgba(245,166,35,0.12)','rgba(79,195,247,0.12)','rgba(86,217,138,
 
 // ── TEMPLATES PADRÃO ──
 var ATIV_TPL=[
-  {cat:'Doméstica',nome:'Varrer a casa',dif:'Fácil',valor:1.5,limite:7},
-  {cat:'Doméstica',nome:'Lavar o banheiro',dif:'Médio',valor:3,limite:7},
+  {cat:'Doméstica',nome:'Botar o lixo na rua',dif:'Fácil',valor:1.5,limite:7},
+  {cat:'Doméstica',nome:'Retirar o lixo do banheiro',dif:'Médio',valor:3,limite:7},
   {cat:'Doméstica',nome:'Ajudar a preparar uma refeição completa',dif:'Médio',valor:3,limite:7},
   {cat:'Doméstica',nome:'Lavar a louça após o jantar',dif:'Fácil',valor:1.5,limite:7},
   {cat:'Doméstica',nome:'Lavar sua louça após o almoço',dif:'Fácil',valor:1,limite:7},
-  {cat:'Educacional',nome:'Fazer a lição de casa',dif:'Fácil',valor:2,limite:5},
+  {cat:'Educacional',nome:'Concluir a lição de casa (antes das 15h)',dif:'Fácil',valor:2,limite:5},
   {cat:'Educacional',nome:'Ler um livro por 30 min',dif:'Fácil',valor:1.5,limite:5},
   {cat:'Educacional',nome:'Ler um livro e resumir a história',dif:'Médio',valor:3,limite:5},
   {cat:'Educacional',nome:'Estudar matemática por 1h',dif:'Médio',valor:3,limite:5},
@@ -497,12 +509,13 @@ var ATIV_TPL=[
 var PEN_TPL=[
   {cat:'Comportamento',nome:'Desobedecer os pais',valor:5},
   {cat:'Comportamento',nome:'Deixar calçados fora do lugar correto',valor:1},
-  {cat:'Comportamento',nome:'Não lavar as mãos quando necessário',valor:1},
-  {cat:'Comportamento',nome:'Não tomar banho no horário determinado',valor:2},
-  {cat:'Comportamento',nome:'Não cumprir o horário das atividades programadas',valor:2},
+  {cat:'Comportamento',nome:'Esquecer arcondicionado ligado ou porta aberta',valor:10},
+  {cat:'Comportamento',nome:'Esquecer luz, ventilador, tv, videogame ou computador ligado',valor:4},
+  {cat:'Comportamento',nome:'Não tomar banho no horário determinado',valor:5},
   {cat:'Tecnologia',nome:'Exceder o tempo de tela sem pausar',valor:2},
   {cat:'Tecnologia',nome:'Não soltar o celular para dar atenção a quem está falando',valor:3},
   {cat:'Tecnologia',nome:'Falou "espera aí, rapidinho" e recomeçou o jogo depois',valor:2},
+  {cat:'Tecnologia',nome:'Usar o celular conectado no carregador (exceto comunicação necessária)',valor:20},
 ];
 
 // ── STATE GLOBAL ──
@@ -657,8 +670,10 @@ function setupStep2(){
   if(setupFilhos.length===0){document.getElementById('s1-msg').textContent='Adicione pelo menos um filho.';return;}
   var nomeFam=document.getElementById('s-nome-familia').value.trim();
   var uid=currentUser.uid;
+  var lim=parseFloat(document.getElementById('s-limite').value)||50;
   var fid=db.ref('familias').push().key;
   familiaId=fid;
+  familia.limite=lim;
   var codigo=gerarCodigo();
   var expira=Date.now()+(7*24*60*60*1000);
 
@@ -671,7 +686,7 @@ function setupStep2(){
   setupFilhos.forEach(function(n,i){filhosObj['filho_'+i]={nome:n,cor:i};});
 
   db.ref('familias/'+fid).set({
-    info:{nome:nomeFam,limite:50,criadoEm:Date.now()},
+    info:{nome:nomeFam,limite:lim,criadoEm:Date.now()},
     membros:membros,
     filhos:filhosObj,
     atividades:ATIV_TPL,

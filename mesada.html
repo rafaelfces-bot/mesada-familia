@@ -13,14 +13,20 @@
   /* LOGIN */
   #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
   .login-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;width:100%;max-width:380px;}
-  .login-box h1{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:4px;}
-  .login-box p{font-size:13px;color:var(--text-muted);margin-bottom:28px;}
+  .login-box h1{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:16px;}
+  .login-tabs{display:flex;gap:0;margin-bottom:24px;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+  .login-tab{flex:1;background:var(--surface2);border:none;color:var(--text-muted);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:10px;cursor:pointer;transition:all 0.15s;}
+  .login-tab.active{background:var(--success);color:#0f0f13;}
+  .login-tab:hover:not(.active){background:var(--border);}
+  .login-box p{font-size:13px;color:var(--text-muted);margin-bottom:20px;}
   .login-box label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:6px;}
-  .login-box input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:16px;}
+  .login-box input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:14px;}
   .login-box input:focus{border-color:var(--text-muted);}
-  .login-box button{width:100%;background:var(--success);color:#0f0f13;border:none;border-radius:8px;padding:12px;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
-  #login-erro{color:var(--penalty);font-size:12px;margin-top:12px;min-height:18px;text-align:center;}
+  .login-box button.btn-login{width:100%;background:var(--success);color:#0f0f13;border:none;border-radius:8px;padding:12px;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:4px;}
+  .msg-erro{color:var(--penalty);font-size:12px;margin-top:10px;min-height:18px;text-align:center;}
+  .msg-ok{color:var(--success);font-size:12px;margin-top:10px;text-align:center;}
 
+  /* BANNERS */
   #readonly-banner{display:none;background:rgba(79,195,247,0.1);border-bottom:1px solid var(--pedro);padding:8px 20px;text-align:center;font-size:12px;color:var(--pedro);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px;}
   #app{display:none;}
 
@@ -45,7 +51,7 @@
   .btn-logout{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:none;color:var(--text-muted);cursor:pointer;white-space:nowrap;}
   .btn-logout:hover{border-color:var(--penalty);color:var(--penalty);}
   .badge-btn{position:relative;display:inline-flex;align-items:center;}
-  .badge{position:absolute;top:-8px;right:-8px;background:var(--penalty);color:#fff;border-radius:99px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;padding:2px 6px;min-width:18px;text-align:center;display:none;}
+  .badge{position:absolute;top:-8px;right:-8px;border-radius:99px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;padding:2px 6px;min-width:18px;text-align:center;display:none;color:#fff;background:var(--penalty);}
   .badge.show{display:block;}
 
   /* LAYOUT */
@@ -81,8 +87,10 @@
   /* BOTÕES DE AÇÃO NA LINHA */
   .row-actions{display:flex;gap:4px;align-items:center;justify-content:center;}
   .btn-row{background:none;border:1px solid var(--border);border-radius:6px;color:var(--text-muted);font-size:13px;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;padding:0;}
-  .btn-row:hover.edit{border-color:var(--lucas);color:var(--lucas);}
-  .btn-row:hover.del{border-color:var(--penalty);color:var(--penalty);}
+  .btn-row.edit:hover{border-color:var(--lucas);color:var(--lucas);}
+  .btn-row.del:hover{border-color:var(--penalty);color:var(--penalty);}
+  .btn-row.no-perm{opacity:0.18;cursor:not-allowed;filter:grayscale(1);}
+  .btn-row.no-perm:hover{border-color:var(--border) !important;color:var(--text-muted) !important;}
 
   /* CONTADOR */
   .counter{display:inline-flex;align-items:center;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg);}
@@ -111,6 +119,9 @@
   button.btn.add-btn{border-color:var(--lucas);color:var(--lucas);background:var(--lucas-dim);}
   button.btn.add-btn:hover{background:rgba(245,166,35,0.2);}
   button.btn.pending-btn{border-color:var(--pending);color:var(--pending);background:var(--pending-dim);}
+  button.btn.usr-btn{border-color:var(--lucas);color:var(--lucas);background:var(--lucas-dim);}
+  button.btn.no-perm{opacity:0.22;cursor:not-allowed;filter:grayscale(1);}
+  button.btn.no-perm:hover{border-color:var(--border) !important;color:var(--text-muted) !important;background:var(--surface2) !important;}
   button.btn:disabled{opacity:0.4;cursor:not-allowed;}
 
   /* PAINEL FILHO */
@@ -141,7 +152,7 @@
   .btn-modal-save{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:11px 22px;border-radius:8px;border:none;background:var(--success);color:#0f0f13;cursor:pointer;flex:1;}
   .btn-modal-cancel{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:11px 22px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text-muted);cursor:pointer;}
 
-  /* MODAL PENDÊNCIAS */
+  /* PENDÊNCIAS */
   .pendencia-item{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
   .pendencia-info{flex:1;}
   .pendencia-filho{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
@@ -155,7 +166,25 @@
   .btn-aprovar:hover{background:rgba(86,217,138,0.2);}
   .btn-rejeitar{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:7px 14px;border-radius:6px;border:1px solid var(--penalty);background:rgba(255,107,107,0.1);color:var(--penalty);cursor:pointer;}
   .btn-rejeitar:hover{background:rgba(255,107,107,0.2);}
-  .empty-pendencias{text-align:center;padding:40px;color:var(--text-muted);font-size:13px;}
+  .empty-msg{text-align:center;padding:32px;color:var(--text-muted);font-size:13px;}
+
+  /* USUÁRIOS */
+  .section-sub{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;margin-top:4px;}
+  .usuario-item{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .usuario-info{flex:1;}
+  .usuario-nome{font-size:13px;font-weight:600;color:var(--text);}
+  .usuario-email{font-size:12px;color:var(--text-muted);margin-top:2px;}
+  .perfil-tag{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:99px;}
+  .perfil-tag.admin{background:var(--lucas-dim);color:var(--lucas);}
+  .perfil-tag.filho{background:var(--pedro-dim);color:var(--pedro);}
+  .perfil-tag.leitura{background:var(--pending-dim);color:var(--pending);}
+  .perfil-tag.pendente{background:var(--penalty-dim);color:var(--penalty);}
+  .usuario-actions{display:flex;gap:6px;flex-wrap:wrap;}
+  .btn-usr{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:6px 12px;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:none;color:var(--text-muted);}
+  .btn-usr.leitura{border-color:var(--pending);background:var(--pending-dim);color:var(--pending);}
+  .btn-usr.filho{border-color:var(--pedro);background:var(--pedro-dim);color:var(--pedro);}
+  .btn-usr.admin{border-color:var(--lucas);background:var(--lucas-dim);color:var(--lucas);}
+  .btn-usr.rejeitar,.btn-usr.remover{border-color:var(--penalty);background:var(--penalty-dim);color:var(--penalty);}
 
   /* RELATÓRIO */
   #relatorio{display:none;position:fixed;inset:0;z-index:300;background:#fff;color:#111;overflow-y:auto;padding:40px;font-family:'DM Sans',sans-serif;font-size:13px;}
@@ -186,16 +215,38 @@
 </head>
 <body>
 
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <h1>Mesada Família</h1>
-    <p>Entre com seu e-mail e senha para continuar</p>
-    <label>E-mail</label>
-    <input type="email" id="login-email" placeholder="seu@email.com">
-    <label>Senha</label>
-    <input type="password" id="login-senha" placeholder="••••••••">
-    <button onclick="fazerLogin()">Entrar</button>
-    <div id="login-erro"></div>
+    <div class="login-tabs">
+      <button class="login-tab active" id="tab-entrar" onclick="mostrarAba('entrar')">Entrar</button>
+      <button class="login-tab" id="tab-cadastro" onclick="mostrarAba('cadastro')">Criar conta</button>
+    </div>
+    <!-- Entrar -->
+    <div id="painel-entrar">
+      <p>Entre com seu e-mail e senha para continuar</p>
+      <label>E-mail</label>
+      <input type="email" id="login-email" placeholder="seu@email.com" autocomplete="username">
+      <label>Senha</label>
+      <input type="password" id="login-senha" placeholder="••••••••" autocomplete="current-password">
+      <button class="btn-login" onclick="fazerLogin()">Entrar</button>
+      <div class="msg-erro" id="login-erro"></div>
+    </div>
+    <!-- Criar conta -->
+    <div id="painel-cadastro" style="display:none">
+      <p>Crie sua conta — um admin irá aprovar seu acesso</p>
+      <label>Nome</label>
+      <input type="text" id="cad-nome" placeholder="Seu nome completo">
+      <label>E-mail</label>
+      <input type="email" id="cad-email" placeholder="seu@email.com" autocomplete="username">
+      <label>Senha</label>
+      <input type="password" id="cad-senha" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+      <label>Confirmar senha</label>
+      <input type="password" id="cad-senha2" placeholder="Repita a senha" autocomplete="new-password">
+      <button class="btn-login" onclick="fazerCadastro()">Criar conta</button>
+      <div id="cad-msg"></div>
+    </div>
   </div>
 </div>
 
@@ -222,7 +273,11 @@
     </div>
     <div class="badge-btn">
       <button class="btn pending-btn" id="btn-pendencias" onclick="abrirModal('modal-pendencias')" style="display:none">⏳ Pendências</button>
-      <span class="badge" id="badge-count"></span>
+      <span class="badge" id="badge-pend"></span>
+    </div>
+    <div class="badge-btn">
+      <button class="btn usr-btn" id="btn-usuarios" onclick="abrirModalUsuarios()" style="display:none">👥 Usuários</button>
+      <span class="badge" id="badge-usr" style="background:var(--lucas)"></span>
     </div>
     <button class="btn-logout" onclick="fazerLogout()">Sair</button>
   </div>
@@ -245,8 +300,8 @@
         <tbody id="tbody-atividades"></tbody>
       </table>
     </div>
-    <div style="margin-top:12px;display:flex;gap:10px;">
-      <button class="btn add-btn" onclick="abrirModalNovaAtiv()">+ Nova Atividade</button>
+    <div style="margin-top:12px">
+      <button id="btn-nova-ativ" class="btn add-btn" onclick="isAdmin?abrirModalNovaAtiv():semPerm()">+ Nova Atividade</button>
     </div>
 
     <div id="painel-filho">
@@ -274,8 +329,8 @@
         <tbody id="tbody-penalidades"></tbody>
       </table>
     </div>
-    <div style="margin-top:12px;display:flex;gap:10px;">
-      <button class="btn add-btn" onclick="abrirModalNovaPen()">+ Nova Penalidade</button>
+    <div style="margin-top:12px">
+      <button id="btn-nova-pen" class="btn add-btn" onclick="isAdmin?abrirModalNovaPen():semPerm()">+ Nova Penalidade</button>
     </div>
 
     <div class="actions">
@@ -292,7 +347,23 @@
       <h2>⏳ Pendências para validar</h2>
       <button class="modal-close" onclick="fecharModal('modal-pendencias')">✕</button>
     </div>
-    <div class="modal-body" id="modal-pendencias-body"></div>
+    <div class="modal-body" id="body-pendencias"></div>
+  </div>
+</div>
+
+<!-- MODAL USUÁRIOS -->
+<div class="modal-overlay" id="modal-usuarios">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>👥 Gerenciar Usuários</h2>
+      <button class="modal-close" onclick="fecharModal('modal-usuarios')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="section-sub">Aguardando aprovação</div>
+      <div id="lista-pendentes-usr"></div>
+      <div class="section-sub" style="margin-top:20px">Usuários aprovados</div>
+      <div id="lista-aprovados-usr"></div>
+    </div>
   </div>
 </div>
 
@@ -305,38 +376,20 @@
     </div>
     <div class="modal-body">
       <input type="hidden" id="ativ-edit-idx" value="-1">
-      <div class="modal-field">
-        <label>Categoria</label>
-        <select id="ativ-cat">
-          <option value="Doméstica">Doméstica</option>
-          <option value="Educacional">Educacional</option>
-          <option value="Desenv. Pessoal">Desenv. Pessoal</option>
-        </select>
-      </div>
-      <div class="modal-field">
-        <label>Nome da atividade</label>
-        <input type="text" id="ativ-nome" placeholder="Ex: Organizar o quarto">
-      </div>
-      <div class="modal-field">
-        <label>Dificuldade</label>
-        <select id="ativ-dif">
-          <option value="Fácil">Fácil</option>
-          <option value="Médio">Médio</option>
-          <option value="Difícil">Difícil</option>
-        </select>
-      </div>
-      <div class="modal-field">
-        <label>Valor (R$)</label>
-        <input type="number" id="ativ-valor" placeholder="Ex: 2.00" step="0.50" min="0.50">
-      </div>
-      <div class="modal-field">
-        <label>Limite semanal (vezes)</label>
-        <input type="number" id="ativ-limite" placeholder="Ex: 5" min="1" max="7">
-      </div>
+      <div class="modal-field"><label>Categoria</label>
+        <select id="ativ-cat"><option>Doméstica</option><option>Educacional</option><option>Desenv. Pessoal</option></select></div>
+      <div class="modal-field"><label>Nome da atividade</label>
+        <input type="text" id="ativ-nome" placeholder="Ex: Organizar o quarto"></div>
+      <div class="modal-field"><label>Dificuldade</label>
+        <select id="ativ-dif"><option>Fácil</option><option>Médio</option><option>Difícil</option></select></div>
+      <div class="modal-field"><label>Valor (R$)</label>
+        <input type="number" id="ativ-valor" placeholder="Ex: 2.00" step="0.50" min="0.50"></div>
+      <div class="modal-field"><label>Limite semanal (vezes)</label>
+        <input type="number" id="ativ-limite" placeholder="Ex: 5" min="1" max="7"></div>
     </div>
     <div class="modal-footer">
       <button class="btn-modal-cancel" onclick="fecharModal('modal-ativ')">Cancelar</button>
-      <button class="btn-modal-save" onclick="salvarAtiv()">Salvar Atividade</button>
+      <button class="btn-modal-save" onclick="salvarAtiv()">Salvar</button>
     </div>
   </div>
 </div>
@@ -350,25 +403,16 @@
     </div>
     <div class="modal-body">
       <input type="hidden" id="pen-edit-idx" value="-1">
-      <div class="modal-field">
-        <label>Categoria</label>
-        <select id="pen-cat">
-          <option value="Comportamento">Comportamento</option>
-          <option value="Tecnologia">Tecnologia</option>
-        </select>
-      </div>
-      <div class="modal-field">
-        <label>Descrição da penalidade</label>
-        <input type="text" id="pen-nome" placeholder="Ex: Não arrumar o quarto">
-      </div>
-      <div class="modal-field">
-        <label>Valor do desconto (R$)</label>
-        <input type="number" id="pen-valor" placeholder="Ex: 2.00" step="0.50" min="0.50">
-      </div>
+      <div class="modal-field"><label>Categoria</label>
+        <select id="pen-cat"><option>Comportamento</option><option>Tecnologia</option></select></div>
+      <div class="modal-field"><label>Descrição da penalidade</label>
+        <input type="text" id="pen-nome" placeholder="Ex: Não arrumar o quarto"></div>
+      <div class="modal-field"><label>Valor do desconto (R$)</label>
+        <input type="number" id="pen-valor" placeholder="Ex: 2.00" step="0.50" min="0.50"></div>
     </div>
     <div class="modal-footer">
       <button class="btn-modal-cancel" onclick="fecharModal('modal-pen')">Cancelar</button>
-      <button class="btn-modal-save" onclick="salvarPen()">Salvar Penalidade</button>
+      <button class="btn-modal-save" onclick="salvarPen()">Salvar</button>
     </div>
   </div>
 </div>
@@ -395,7 +439,6 @@ const MAXIMO=50.00;
 const ADMINS=['2PASdYiHAnYpuVcA6vWkMVSNUp73','ZQeG7yATnAf5U0w2jL3ARIEjaWl2'];
 const FILHOS_UID={'rRKR56vU4eeuB2mlTkcDRQBfciW2':'lucas','iwkHUeOzzke2pbCl5TDpjvayVQv2':'pedro'};
 
-// DADOS PADRÃO
 const ATIVIDADES_PADRAO=[
   {cat:'Doméstica',nome:'Varrer a casa',dif:'Fácil',valor:1.50,limite:7},
   {cat:'Doméstica',nome:'Lavar o banheiro',dif:'Médio',valor:3.00,limite:7},
@@ -427,241 +470,398 @@ const PENALIDADES_PADRAO=[
   {cat:'Tecnologia',nome:'Falou "espera aí, rapidinho" e recomeçou o jogo depois',valor:2.00},
 ];
 
-// STATE
-let atividades=[...ATIVIDADES_PADRAO.map(a=>({...a}))];
-let penalidades=[...PENALIDADES_PADRAO.map(p=>({...p}))];
-let state={ativ:atividades.map(()=>({lucas:0,pedro:0})),pen:penalidades.map(()=>({lucas:0,pedro:0}))};
-let pendencias={};
-let semanaAtual=1;
-let isAdmin=false;
-let filhoLogado=null;
-let dbListener=null,pendenciasListener=null,configListener=null;
+var atividades=ATIVIDADES_PADRAO.map(function(a){return Object.assign({},a);});
+var penalidades=PENALIDADES_PADRAO.map(function(p){return Object.assign({},p);});
+var state={ativ:atividades.map(function(){return{lucas:0,pedro:0};}),pen:penalidades.map(function(){return{lucas:0,pedro:0};})};
+var pendencias={};
+var semanaAtual=1;
+var isAdmin=false;
+var filhoLogado=null;
+var dbListener=null,pendListener=null,cfgListener=null,usrListener=null;
 
 function fmt(v){return parseFloat(v).toFixed(2).replace('.',',');}
-function semanaAtualDoAno(){const d=new Date(),i=new Date(d.getFullYear(),0,1);return Math.ceil(((d-i)/86400000+i.getDay()+1)/7);}
-function totalSemanas(ano){const d=new Date(ano,11,31),dia=d.getDay();return(dia===4||(dia===3&&ano%4===0))?53:52;}
-function chaveDB(sem){return'semanas/sem'+String(sem).padStart(2,'0')+'_'+new Date().getFullYear();}
-function chavePend(sem){return'pendencias/sem'+String(sem).padStart(2,'0')+'_'+new Date().getFullYear();}
-function setSyncStatus(msg,cls){const el=document.getElementById('sync-status');el.textContent=msg;el.className=cls;}
-
-// ── MODAL HELPERS ──
+function semanaAtualDoAno(){var d=new Date(),i=new Date(d.getFullYear(),0,1);return Math.ceil(((d-i)/86400000+i.getDay()+1)/7);}
+function totalSemanas(ano){var d=new Date(ano,11,31),dia=d.getDay();return(dia===4||(dia===3&&ano%4===0))?53:52;}
+function chaveDB(s){return'semanas/sem'+String(s).padStart(2,'0')+'_'+new Date().getFullYear();}
+function chavePend(s){return'pendencias/sem'+String(s).padStart(2,'0')+'_'+new Date().getFullYear();}
+function setSyncStatus(m,c){var el=document.getElementById('sync-status');el.textContent=m;el.className=c;}
 function abrirModal(id){document.getElementById(id).classList.add('show');}
 function fecharModal(id){document.getElementById(id).classList.remove('show');}
+function semPerm(){alert('🔒 Apenas admins (Rafael e Tatiana) possuem permissão para esta ação.');}
+
+// ── ABAS LOGIN ──
+function mostrarAba(aba){
+  document.getElementById('painel-entrar').style.display=aba==='entrar'?'block':'none';
+  document.getElementById('painel-cadastro').style.display=aba==='cadastro'?'block':'none';
+  document.getElementById('tab-entrar').classList.toggle('active',aba==='entrar');
+  document.getElementById('tab-cadastro').classList.toggle('active',aba==='cadastro');
+  document.getElementById('login-erro').textContent='';
+  document.getElementById('cad-msg').textContent='';
+}
+
+// ── AUTH ──
+function fazerLogin(){
+  var email=document.getElementById('login-email').value.trim();
+  var senha=document.getElementById('login-senha').value;
+  var erro=document.getElementById('login-erro');
+  erro.textContent='';erro.className='msg-erro';
+  if(!email||!senha){erro.textContent='Preencha e-mail e senha.';return;}
+  auth.signInWithEmailAndPassword(email,senha).catch(function(){
+    erro.textContent='E-mail ou senha incorretos.';
+  });
+}
+
+function fazerCadastro(){
+  var nome=document.getElementById('cad-nome').value.trim();
+  var email=document.getElementById('cad-email').value.trim();
+  var senha=document.getElementById('cad-senha').value;
+  var senha2=document.getElementById('cad-senha2').value;
+  var msg=document.getElementById('cad-msg');
+  msg.textContent='';msg.className='msg-erro';
+  if(!nome){msg.textContent='Informe seu nome.';return;}
+  if(!email){msg.textContent='Informe seu e-mail.';return;}
+  if(senha.length<6){msg.textContent='Senha deve ter pelo menos 6 caracteres.';return;}
+  if(senha!==senha2){msg.textContent='As senhas não coincidem.';return;}
+  auth.createUserWithEmailAndPassword(email,senha).then(function(cred){
+    return db.ref('usuarios/'+cred.user.uid).set({nome:nome,email:email,perfil:'pendente',ts:Date.now()});
+  }).then(function(){
+    auth.signOut();
+    document.getElementById('cad-nome').value='';
+    document.getElementById('cad-email').value='';
+    document.getElementById('cad-senha').value='';
+    document.getElementById('cad-senha2').value='';
+    msg.className='msg-ok';
+    msg.textContent='✅ Conta criada! Aguarde a aprovação de um admin para acessar.';
+  }).catch(function(e){
+    if(e.code==='auth/email-already-in-use')msg.textContent='Este e-mail já está cadastrado.';
+    else if(e.code==='auth/invalid-email')msg.textContent='E-mail inválido.';
+    else msg.textContent='Erro ao criar conta. Tente novamente.';
+  });
+}
+
+function fazerLogout(){
+  if(dbListener){dbListener();dbListener=null;}
+  if(pendListener){pendListener();pendListener=null;}
+  if(cfgListener){cfgListener();cfgListener=null;}
+  if(usrListener){usrListener();usrListener=null;}
+  auth.signOut();
+}
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&document.getElementById('login-screen').style.display!=='none'){
+    if(document.getElementById('painel-entrar').style.display!=='none')fazerLogin();
+    else fazerCadastro();
+  }
+});
+
+auth.onAuthStateChanged(function(user){
+  if(user){
+    var uid=user.uid;
+    var isHardcoded=ADMINS.indexOf(uid)!==-1||Object.keys(FILHOS_UID).indexOf(uid)!==-1;
+    if(isHardcoded){
+      iniciarApp(uid,null);
+    } else {
+      db.ref('usuarios/'+uid).once('value',function(snap){
+        var dados=snap.val();
+        if(!dados||dados.perfil==='pendente'){
+          auth.signOut();
+          var erro=document.getElementById('login-erro');
+          erro.className='msg-erro';
+          erro.textContent='⏳ Sua conta ainda não foi aprovada. Aguarde um admin liberar seu acesso.';
+          mostrarAba('entrar');
+          return;
+        }
+        iniciarApp(uid,dados);
+      });
+    }
+  } else {
+    document.getElementById('login-screen').style.display='flex';
+    document.getElementById('app').style.display='none';
+    document.getElementById('readonly-banner').style.display='none';
+  }
+});
+
+function iniciarApp(uid,dadosUsuario){
+  isAdmin=ADMINS.indexOf(uid)!==-1||(dadosUsuario&&dadosUsuario.perfil==='admin');
+  filhoLogado=FILHOS_UID[uid]||(dadosUsuario&&dadosUsuario.perfil==='filho'?dadosUsuario.nome.toLowerCase().split(' ')[0]:null);
+
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+
+  if(isAdmin){
+    document.getElementById('readonly-banner').style.display='none';
+    document.getElementById('painel-filho').style.display='none';
+    document.getElementById('btn-pendencias').style.display='inline-flex';
+    document.getElementById('btn-usuarios').style.display='inline-flex';
+    document.getElementById('btn-reset').disabled=false;
+    document.getElementById('btn-nova-ativ').classList.remove('no-perm');
+    document.getElementById('btn-nova-pen').classList.remove('no-perm');
+    document.getElementById('subtitulo-page').textContent='Gerencie atividades, pendências e saldos da semana';
+    ouvirUsuarios();
+  } else {
+    document.getElementById('readonly-banner').style.display='block';
+    document.getElementById('painel-filho').style.display='block';
+    document.getElementById('btn-pendencias').style.display='none';
+    document.getElementById('btn-usuarios').style.display='none';
+    document.getElementById('btn-reset').disabled=true;
+    document.getElementById('btn-nova-ativ').classList.add('no-perm');
+    document.getElementById('btn-nova-pen').classList.add('no-perm');
+    document.getElementById('subtitulo-page').textContent='Registre suas atividades — elas serão validadas pelos pais';
+    popularSelectAtividades();
+  }
+
+  popularSemanas();
+  ouvirConfig();
+  carregarDados();
+  ouvirPendencias();
+}
 
 // ── SEMANAS ──
 function popularSemanas(){
-  const sel=document.getElementById('sel-semana');
-  const ano=new Date().getFullYear(),total=totalSemanas(ano),atual=semanaAtualDoAno();
+  var sel=document.getElementById('sel-semana');
+  var ano=new Date().getFullYear(),total=totalSemanas(ano),atual=semanaAtualDoAno();
   sel.innerHTML='';
-  for(let s=1;s<=total;s++){const opt=document.createElement('option');opt.value=s;opt.textContent='Semana '+s+' / '+ano;if(s===atual)opt.selected=true;sel.appendChild(opt);}
+  for(var s=1;s<=total;s++){var opt=document.createElement('option');opt.value=s;opt.textContent='Semana '+s+' / '+ano;if(s===atual)opt.selected=true;sel.appendChild(opt);}
   semanaAtual=atual;
 }
 function trocarSemana(){semanaAtual=parseInt(document.getElementById('sel-semana').value);carregarDados();ouvirPendencias();}
 
-// ── FIREBASE CONFIG (atividades/penalidades globais) ──
+// ── CONFIG (listas globais) ──
 function ouvirConfig(){
-  if(configListener){configListener();configListener=null;}
-  configListener=db.ref('config').on('value',function(snap){
-    const cfg=snap.val();
-    if(cfg){
-      if(cfg.atividades)atividades=cfg.atividades;
-      if(cfg.penalidades)penalidades=cfg.penalidades;
-    } else {
-      atividades=ATIVIDADES_PADRAO.map(a=>({...a}));
-      penalidades=PENALIDADES_PADRAO.map(p=>({...p}));
-    }
-    // garante que state tem tamanho correto
+  if(cfgListener){cfgListener();cfgListener=null;}
+  cfgListener=db.ref('config').on('value',function(snap){
+    var cfg=snap.val();
+    if(cfg&&cfg.atividades)atividades=cfg.atividades;
+    else atividades=ATIVIDADES_PADRAO.map(function(a){return Object.assign({},a);});
+    if(cfg&&cfg.penalidades)penalidades=cfg.penalidades;
+    else penalidades=PENALIDADES_PADRAO.map(function(p){return Object.assign({},p);});
     while(state.ativ.length<atividades.length)state.ativ.push({lucas:0,pedro:0});
     while(state.pen.length<penalidades.length)state.pen.push({lucas:0,pedro:0});
-    renderAtividades();renderPenalidades();atualizarSaldos();
-    popularSelectAtividades();
+    renderAtividades();renderPenalidades();atualizarSaldos();popularSelectAtividades();
   });
 }
-
 function salvarConfig(){
-  db.ref('config').set({atividades,penalidades})
-    .then(()=>setSyncStatus('✓ Lista salva','ok'))
-    .catch(()=>setSyncStatus('⚠ Erro ao salvar lista','err'));
+  db.ref('config').set({atividades:atividades,penalidades:penalidades})
+    .then(function(){setSyncStatus('✓ Lista salva','ok');})
+    .catch(function(){setSyncStatus('⚠ Erro','err');});
 }
 
-// ── FIREBASE DADOS SEMANA ──
+// ── DADOS SEMANA ──
 function carregarDados(){
   if(dbListener){dbListener();dbListener=null;}
-  const r=db.ref(chaveDB(semanaAtual));
-  dbListener=r.on('value',function(snap){
-    const dados=snap.val();
+  dbListener=db.ref(chaveDB(semanaAtual)).on('value',function(snap){
+    var dados=snap.val();
     if(dados){
-      state.ativ=dados.ativ||atividades.map(()=>({lucas:0,pedro:0}));
-      state.pen=dados.pen||penalidades.map(()=>({lucas:0,pedro:0}));
+      state.ativ=dados.ativ||atividades.map(function(){return{lucas:0,pedro:0};});
+      state.pen=dados.pen||penalidades.map(function(){return{lucas:0,pedro:0};});
     } else {
-      state.ativ=atividades.map(()=>({lucas:0,pedro:0}));
-      state.pen=penalidades.map(()=>({lucas:0,pedro:0}));
+      state.ativ=atividades.map(function(){return{lucas:0,pedro:0};});
+      state.pen=penalidades.map(function(){return{lucas:0,pedro:0};});
     }
-    // garante tamanho
     while(state.ativ.length<atividades.length)state.ativ.push({lucas:0,pedro:0});
     while(state.pen.length<penalidades.length)state.pen.push({lucas:0,pedro:0});
     renderAtividades();renderPenalidades();atualizarSaldos();
     setSyncStatus('✓ Sincronizado','ok');
   },function(){setSyncStatus('⚠ Erro de conexão','err');});
 }
-
 function salvarDados(){
   if(!isAdmin)return;
   db.ref(chaveDB(semanaAtual)).set({ativ:state.ativ,pen:state.pen})
-    .then(()=>setSyncStatus('✓ Salvo','ok'))
-    .catch(()=>setSyncStatus('⚠ Erro ao salvar','err'));
+    .then(function(){setSyncStatus('✓ Salvo','ok');})
+    .catch(function(){setSyncStatus('⚠ Erro','err');});
 }
 
+// ── PENDÊNCIAS ──
 function ouvirPendencias(){
-  if(pendenciasListener){pendenciasListener();pendenciasListener=null;}
-  pendenciasListener=db.ref(chavePend(semanaAtual)).on('value',function(snap){
+  if(pendListener){pendListener();pendListener=null;}
+  pendListener=db.ref(chavePend(semanaAtual)).on('value',function(snap){
     pendencias=snap.val()||{};
-    atualizarBadge();
+    var total=Object.keys(pendencias).length;
+    var badge=document.getElementById('badge-pend');
+    if(total>0){badge.textContent=total;badge.classList.add('show');}else badge.classList.remove('show');
     if(document.getElementById('modal-pendencias').classList.contains('show'))renderPendencias();
+    renderAtividades();
+  });
+}
+function renderPendencias(){
+  var body=document.getElementById('body-pendencias');
+  var keys=Object.keys(pendencias);
+  if(keys.length===0){body.innerHTML='<div class="empty-msg">🎉 Nenhuma pendência! Tudo validado.</div>';return;}
+  body.innerHTML='';
+  keys.forEach(function(key){
+    var p=pendencias[key];
+    var data=new Date(p.ts).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    var div=document.createElement('div');div.className='pendencia-item';
+    div.innerHTML='<div class="pendencia-info"><div class="pendencia-filho '+p.filho+'">'+p.filho.toUpperCase()+' • '+data+'</div><div class="pendencia-nome">'+p.ativCat+' — '+p.ativNome+'</div><div class="pendencia-qty">'+p.qty+'× • R$ '+fmt(p.ativValor)+'/vez</div></div>'+
+      '<div class="pendencia-valor">R$ '+fmt(p.total)+'</div>'+
+      '<div class="pendencia-actions"><button class="btn-aprovar" onclick="aprovarPend(\''+key+'\')">✓ Aprovar</button><button class="btn-rejeitar" onclick="rejeitarPend(\''+key+'\')">✕ Rejeitar</button></div>';
+    body.appendChild(div);
+  });
+}
+function aprovarPend(key){
+  var p=pendencias[key];if(!p)return;
+  if(!state.ativ[p.ativIdx])state.ativ[p.ativIdx]={lucas:0,pedro:0};
+  var atual=state.ativ[p.ativIdx][p.filho]||0;
+  var lim=atividades[p.ativIdx]?atividades[p.ativIdx].limite:7;
+  state.ativ[p.ativIdx][p.filho]=Math.min(lim,atual+p.qty);
+  Promise.all([db.ref(chaveDB(semanaAtual)).set({ativ:state.ativ,pen:state.pen}),db.ref(chavePend(semanaAtual)+'/'+key).remove()])
+    .then(function(){setSyncStatus('✓ Aprovado','ok');}).catch(function(){setSyncStatus('⚠ Erro','err');});
+}
+function rejeitarPend(key){
+  if(!confirm('Rejeitar esta atividade?'))return;
+  db.ref(chavePend(semanaAtual)+'/'+key).remove().then(function(){setSyncStatus('✓ Rejeitado','ok');});
+}
+
+// ── PAINEL FILHO ──
+function popularSelectAtividades(){
+  var sel=document.getElementById('filho-ativ-sel');if(!sel)return;
+  sel.innerHTML='';
+  atividades.forEach(function(a,i){var opt=document.createElement('option');opt.value=i;opt.textContent=a.cat+' — '+a.nome+' (R$ '+fmt(a.valor)+')';sel.appendChild(opt);});
+}
+function enviarPendencia(){
+  if(!filhoLogado){alert('Erro: filho não identificado.');return;}
+  var idx=parseInt(document.getElementById('filho-ativ-sel').value);
+  var qty=parseInt(document.getElementById('filho-qty').value)||1;
+  var a=atividades[idx];
+  if(qty<1||qty>a.limite){alert('Quantidade inválida. Máximo: '+a.limite+'×');return;}
+  db.ref(chavePend(semanaAtual)+'/'+Date.now()).set({filho:filhoLogado,ativIdx:idx,ativNome:a.nome,ativCat:a.cat,ativValor:a.valor,qty:qty,total:qty*a.valor,ts:Date.now()})
+    .then(function(){setSyncStatus('✓ Enviado!','ok');document.getElementById('filho-qty').value=1;alert('✅ Atividade enviada! Aguarde a validação dos pais.');})
+    .catch(function(){setSyncStatus('⚠ Erro','err');});
+}
+
+// ── USUÁRIOS ──
+function ouvirUsuarios(){
+  if(usrListener){usrListener();usrListener=null;}
+  usrListener=db.ref('usuarios').on('value',function(snap){
+    var dados=snap.val()||{};
+    var pendentes=Object.values(dados).filter(function(u){return u.perfil==='pendente';}).length;
+    var badge=document.getElementById('badge-usr');
+    if(pendentes>0){badge.textContent=pendentes;badge.classList.add('show');}else badge.classList.remove('show');
+    if(document.getElementById('modal-usuarios').classList.contains('show'))renderUsuarios(dados);
+  });
+}
+function abrirModalUsuarios(){
+  abrirModal('modal-usuarios');
+  db.ref('usuarios').once('value',function(snap){renderUsuarios(snap.val()||{});});
+}
+function renderUsuarios(dados){
+  var lp=document.getElementById('lista-pendentes-usr');
+  var la=document.getElementById('lista-aprovados-usr');
+  lp.innerHTML='';la.innerHTML='';
+  var temP=false,temA=false;
+  Object.entries(dados).forEach(function(entry){
+    var uid=entry[0],u=entry[1];
+    var div=document.createElement('div');div.className='usuario-item';
+    if(u.perfil==='pendente'){
+      temP=true;
+      div.innerHTML='<div class="usuario-info"><div class="usuario-nome">'+u.nome+'</div><div class="usuario-email">'+u.email+'</div></div>'+
+        '<span class="perfil-tag pendente">Pendente</span>'+
+        '<div class="usuario-actions">'+
+        '<button class="btn-usr leitura" onclick="aprovarUsr(\''+uid+'\',\'leitura\')">👁 Leitura</button>'+
+        '<button class="btn-usr filho" onclick="aprovarUsr(\''+uid+'\',\'filho\')">👦 Filho</button>'+
+        '<button class="btn-usr admin" onclick="aprovarUsr(\''+uid+'\',\'admin\')">✏️ Admin</button>'+
+        '<button class="btn-usr rejeitar" onclick="removerUsr(\''+uid+'\',\''+u.nome+'\')">✕ Rejeitar</button>'+
+        '</div>';
+      lp.appendChild(div);
+    } else {
+      temA=true;
+      var label=u.perfil==='admin'?'Admin':u.perfil==='filho'?'Filho':'Leitura';
+      div.innerHTML='<div class="usuario-info"><div class="usuario-nome">'+u.nome+'</div><div class="usuario-email">'+u.email+'</div></div>'+
+        '<span class="perfil-tag '+u.perfil+'">'+label+'</span>'+
+        '<div class="usuario-actions"><button class="btn-usr remover" onclick="removerUsr(\''+uid+'\',\''+u.nome+'\')">🗑 Remover</button></div>';
+      la.appendChild(div);
+    }
+  });
+  if(!temP)lp.innerHTML='<div class="empty-msg">Nenhuma conta aguardando aprovação.</div>';
+  if(!temA)la.innerHTML='<div class="empty-msg">Nenhum usuário aprovado ainda.</div>';
+}
+function aprovarUsr(uid,perfil){
+  db.ref('usuarios/'+uid+'/perfil').set(perfil).then(function(){
+    setSyncStatus('✓ Usuário aprovado','ok');
+    db.ref('usuarios').once('value',function(snap){renderUsuarios(snap.val()||{});});
+  });
+}
+function removerUsr(uid,nome){
+  if(!confirm('Remover o usuário "'+nome+'"?'))return;
+  db.ref('usuarios/'+uid).remove().then(function(){
+    setSyncStatus('✓ Removido','ok');
+    db.ref('usuarios').once('value',function(snap){renderUsuarios(snap.val()||{});});
   });
 }
 
-// ── AUTH ──
-function fazerLogin(){
-  const email=document.getElementById('login-email').value.trim();
-  const senha=document.getElementById('login-senha').value;
-  document.getElementById('login-erro').textContent='';
-  auth.signInWithEmailAndPassword(email,senha).catch(function(){document.getElementById('login-erro').textContent='E-mail ou senha incorretos.';});
-}
-function fazerLogout(){
-  if(dbListener){dbListener();dbListener=null;}
-  if(pendenciasListener){pendenciasListener();pendenciasListener=null;}
-  if(configListener){configListener();configListener=null;}
-  auth.signOut();
-}
-document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('login-screen').style.display!=='none')fazerLogin();});
-
-auth.onAuthStateChanged(function(user){
-  if(user){
-    isAdmin=ADMINS.indexOf(user.uid)!==-1;
-    filhoLogado=FILHOS_UID[user.uid]||null;
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app').style.display='block';
-    if(isAdmin){
-      document.getElementById('readonly-banner').style.display='none';
-      document.getElementById('painel-filho').style.display='none';
-      document.getElementById('btn-pendencias').style.display='inline-flex';
-      document.getElementById('btn-reset').disabled=false;
-      document.getElementById('subtitulo-page').textContent='Gerencie atividades, pendências e saldos da semana';
-    } else {
-      document.getElementById('readonly-banner').style.display='block';
-      document.getElementById('painel-filho').style.display='block';
-      document.getElementById('btn-pendencias').style.display='none';
-      document.getElementById('btn-reset').disabled=true;
-      document.getElementById('subtitulo-page').textContent='Registre suas atividades — elas serão validadas pelos pais';
-    }
-    popularSemanas();
-    ouvirConfig();
-    carregarDados();
-    ouvirPendencias();
-  } else {
-    document.getElementById('login-screen').style.display='flex';
-    document.getElementById('app').style.display='none';
-  }
-});
-
 // ── CÁLCULO ──
 function calcular(filho){
-  let total=0;
+  var total=0;
   atividades.forEach(function(a,i){if(state.ativ[i])total+=state.ativ[i][filho]*a.valor;});
   penalidades.forEach(function(p,i){if(state.pen[i])total-=state.pen[i][filho]*p.valor;});
   return Math.max(0,Math.min(MAXIMO,total));
 }
 function atualizarSaldos(){
-  const sL=calcular('lucas'),sP=calcular('pedro');
+  var sL=calcular('lucas'),sP=calcular('pedro');
   document.getElementById('saldo-lucas').textContent='R$ '+fmt(sL);
   document.getElementById('saldo-pedro').textContent='R$ '+fmt(sP);
   document.getElementById('prog-lucas').style.width=(sL/MAXIMO*100)+'%';
   document.getElementById('prog-pedro').style.width=(sP/MAXIMO*100)+'%';
 }
 
-// ── BADGE ──
-function atualizarBadge(){
-  if(!isAdmin)return;
-  const total=Object.keys(pendencias).length;
-  const badge=document.getElementById('badge-count');
-  if(total>0){badge.textContent=total;badge.classList.add('show');}
-  else badge.classList.remove('show');
-}
+// ── RENDER TABELAS ──
+function pendentesAtiv(idx,filho){var t=0;Object.values(pendencias).forEach(function(p){if(p.ativIdx===idx&&p.filho===filho)t+=p.qty;});return t;}
 
-// ── RENDER ATIVIDADES ──
-function makeCounter(qty,max,colorClass,onMinus,onPlus,pendQty){
-  const atLimit=max!==null&&qty>=max;
-  const ac=qty>0?colorClass:'';
-  const lTag=atLimit?'<span class="limit-tag">máx</span>':'';
-  const pTag=pendQty>0?'<span class="pending-tag">⏳ '+pendQty+' pend.</span>':'';
-  const dis=!isAdmin;
+function makeCounter(qty,max,cor,onM,onP,pendQty){
+  var atLimit=max!==null&&qty>=max;
+  var ac=qty>0?cor:'';
+  var lTag=atLimit?'<span class="limit-tag">máx</span>':'';
+  var pTag=pendQty>0?'<span class="pending-tag">⏳ '+pendQty+'</span>':'';
+  var dis=!isAdmin;
   return '<div style="display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap">'+
     '<div class="counter '+ac+'">'+
-      '<button onclick="'+onMinus+'" '+(qty<=0||dis?'disabled':'')+'>−</button>'+
-      '<span class="count">'+qty+'</span>'+
-      '<button onclick="'+onPlus+'" '+(atLimit||dis?'disabled':'')+'>+</button>'+
+    '<button onclick="'+onM+'" '+(qty<=0||dis?'disabled':'')+'>−</button>'+
+    '<span class="count">'+qty+'</span>'+
+    '<button onclick="'+onP+'" '+(atLimit||dis?'disabled':'')+'>+</button>'+
     '</div>'+lTag+pTag+'</div>';
 }
 
-function pendentesAtiv(idx,filho){let t=0;Object.values(pendencias).forEach(function(p){if(p.ativIdx===idx&&p.filho===filho)t+=p.qty;});return t;}
-
 function renderAtividades(){
-  const tbody=document.getElementById('tbody-atividades');
-  tbody.innerHTML='';
+  var tbody=document.getElementById('tbody-atividades');tbody.innerHTML='';
   atividades.forEach(function(a,i){
-    const sL=(state.ativ[i]||{}).lucas||0,sP=(state.ativ[i]||{}).pedro||0;
-    const pL=pendentesAtiv(i,'lucas'),pP=pendentesAtiv(i,'pedro');
-    const dc=a.dif==='Fácil'?'diff-facil':a.dif==='Médio'?'diff-medio':'diff-dificil';
-    const tr=document.createElement('tr');
-    tr.innerHTML=
-      '<td class="cat">'+a.cat+'</td>'+
-      '<td class="nome">'+a.nome+'</td>'+
+    var sL=(state.ativ[i]||{}).lucas||0,sP=(state.ativ[i]||{}).pedro||0;
+    var pL=pendentesAtiv(i,'lucas'),pP=pendentesAtiv(i,'pedro');
+    var dc=a.dif==='Fácil'?'diff-facil':a.dif==='Médio'?'diff-medio':'diff-dificil';
+    var np=!isAdmin?' no-perm':'';
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td class="cat">'+a.cat+'</td><td class="nome">'+a.nome+'</td>'+
       '<td class="center"><span class="diff-badge '+dc+'">'+a.dif+'</span></td>'+
       '<td class="center valor-ativ">R$&nbsp;'+fmt(a.valor)+'</td>'+
       '<td class="center" style="color:var(--text-muted);font-family:\'Syne\',sans-serif;font-size:11px;font-weight:700">'+a.limite+'×/sem</td>'+
       '<td class="center">'+makeCounter(sL,a.limite,'lucas-active',"ajustarAtiv("+i+",'lucas',-1)","ajustarAtiv("+i+",'lucas',1)",pL)+'</td>'+
       '<td class="center">'+makeCounter(sP,a.limite,'pedro-active',"ajustarAtiv("+i+",'pedro',-1)","ajustarAtiv("+i+",'pedro',1)",pP)+'</td>'+
       '<td class="acoes"><div class="row-actions">'+
-        '<button class="btn-row edit" title="Editar" onclick="editarAtiv('+i+')">✏️</button>'+
-        '<button class="btn-row del" title="Remover" onclick="removerAtiv('+i+')">🗑️</button>'+
+      '<button class="btn-row edit'+np+'" onclick="'+(isAdmin?'editarAtiv('+i+')':'semPerm()')+'">✏️</button>'+
+      '<button class="btn-row del'+np+'" onclick="'+(isAdmin?'removerAtiv('+i+')':'semPerm()')+'">🗑️</button>'+
       '</div></td>';
     tbody.appendChild(tr);
   });
 }
 
 function renderPenalidades(){
-  const tbody=document.getElementById('tbody-penalidades');
-  tbody.innerHTML='';
+  var tbody=document.getElementById('tbody-penalidades');tbody.innerHTML='';
   penalidades.forEach(function(p,i){
-    const sL=(state.pen[i]||{}).lucas||0,sP=(state.pen[i]||{}).pedro||0;
-    const tr=document.createElement('tr');
-    tr.innerHTML=
-      '<td class="cat">'+p.cat+'</td>'+
-      '<td class="nome">'+p.nome+'</td>'+
+    var sL=(state.pen[i]||{}).lucas||0,sP=(state.pen[i]||{}).pedro||0;
+    var np=!isAdmin?' no-perm':'';
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td class="cat">'+p.cat+'</td><td class="nome">'+p.nome+'</td>'+
       '<td class="center valor-pen">- R$&nbsp;'+fmt(p.valor)+'</td>'+
       '<td class="center">'+makeCounter(sL,null,'pen-active',"ajustarPen("+i+",'lucas',-1)","ajustarPen("+i+",'lucas',1)",0)+'</td>'+
       '<td class="center">'+makeCounter(sP,null,'pen-active',"ajustarPen("+i+",'pedro',-1)","ajustarPen("+i+",'pedro',1)",0)+'</td>'+
       '<td class="acoes"><div class="row-actions">'+
-        '<button class="btn-row edit" title="Editar" onclick="editarPen('+i+')">✏️</button>'+
-        '<button class="btn-row del" title="Remover" onclick="removerPen('+i+')">🗑️</button>'+
+      '<button class="btn-row edit'+np+'" onclick="'+(isAdmin?'editarPen('+i+')':'semPerm()')+'">✏️</button>'+
+      '<button class="btn-row del'+np+'" onclick="'+(isAdmin?'removerPen('+i+')':'semPerm()')+'">🗑️</button>'+
       '</div></td>';
     tbody.appendChild(tr);
   });
 }
 
-function popularSelectAtividades(){
-  const sel=document.getElementById('filho-ativ-sel');
-  if(!sel)return;
-  sel.innerHTML='';
-  atividades.forEach(function(a,i){
-    const opt=document.createElement('option');
-    opt.value=i;opt.textContent=a.cat+' — '+a.nome+' (R$ '+fmt(a.valor)+')';
-    sel.appendChild(opt);
-  });
-}
-
-// ── AJUSTES CONTADORES ──
+// ── CONTADORES ──
 function ajustarAtiv(i,filho,delta){
   if(!isAdmin)return;
   if(!state.ativ[i])state.ativ[i]={lucas:0,pedro:0};
@@ -677,8 +877,8 @@ function ajustarPen(i,filho,delta){
 function resetarSemana(){
   if(!isAdmin)return;
   if(!confirm('Resetar a semana? Todos os contadores voltam para zero.'))return;
-  state.ativ=atividades.map(()=>({lucas:0,pedro:0}));
-  state.pen=penalidades.map(()=>({lucas:0,pedro:0}));
+  state.ativ=atividades.map(function(){return{lucas:0,pedro:0};});
+  state.pen=penalidades.map(function(){return{lucas:0,pedro:0};});
   renderAtividades();renderPenalidades();atualizarSaldos();salvarDados();
 }
 
@@ -694,7 +894,7 @@ function abrirModalNovaAtiv(){
   abrirModal('modal-ativ');
 }
 function editarAtiv(i){
-  const a=atividades[i];
+  var a=atividades[i];
   document.getElementById('modal-ativ-titulo').textContent='Editar Atividade';
   document.getElementById('ativ-edit-idx').value=i;
   document.getElementById('ativ-cat').value=a.cat;
@@ -705,36 +905,22 @@ function editarAtiv(i){
   abrirModal('modal-ativ');
 }
 function salvarAtiv(){
-  const nome=document.getElementById('ativ-nome').value.trim();
-  const valor=parseFloat(document.getElementById('ativ-valor').value);
-  const limite=parseInt(document.getElementById('ativ-limite').value);
+  var nome=document.getElementById('ativ-nome').value.trim();
+  var valor=parseFloat(document.getElementById('ativ-valor').value);
+  var limite=parseInt(document.getElementById('ativ-limite').value);
   if(!nome){alert('Informe o nome da atividade.');return;}
   if(!valor||valor<=0){alert('Informe um valor válido.');return;}
   if(!limite||limite<1){alert('Informe um limite válido.');return;}
-  const nova={
-    cat:document.getElementById('ativ-cat').value,
-    nome,
-    dif:document.getElementById('ativ-dif').value,
-    valor,
-    limite
-  };
-  const idx=parseInt(document.getElementById('ativ-edit-idx').value);
-  if(idx===-1){
-    atividades.push(nova);
-    state.ativ.push({lucas:0,pedro:0});
-  } else {
-    atividades[idx]=nova;
-  }
-  salvarConfig();
-  fecharModal('modal-ativ');
-  renderAtividades();atualizarSaldos();popularSelectAtividades();
+  var nova={cat:document.getElementById('ativ-cat').value,nome:nome,dif:document.getElementById('ativ-dif').value,valor:valor,limite:limite};
+  var idx=parseInt(document.getElementById('ativ-edit-idx').value);
+  if(idx===-1){atividades.push(nova);state.ativ.push({lucas:0,pedro:0});}
+  else atividades[idx]=nova;
+  salvarConfig();fecharModal('modal-ativ');renderAtividades();atualizarSaldos();popularSelectAtividades();
 }
 function removerAtiv(i){
-  if(!confirm('Remover a atividade "'+atividades[i].nome+'"?\nEsta ação vale para todas as semanas.'))return;
-  atividades.splice(i,1);
-  state.ativ.splice(i,1);
-  salvarConfig();
-  renderAtividades();atualizarSaldos();popularSelectAtividades();
+  if(!confirm('Remover "'+atividades[i].nome+'"?\nVale para todas as semanas.'))return;
+  atividades.splice(i,1);state.ativ.splice(i,1);
+  salvarConfig();renderAtividades();atualizarSaldos();popularSelectAtividades();
 }
 
 // ── CRUD PENALIDADES ──
@@ -747,7 +933,7 @@ function abrirModalNovaPen(){
   abrirModal('modal-pen');
 }
 function editarPen(i){
-  const p=penalidades[i];
+  var p=penalidades[i];
   document.getElementById('modal-pen-titulo').textContent='Editar Penalidade';
   document.getElementById('pen-edit-idx').value=i;
   document.getElementById('pen-cat').value=p.cat;
@@ -756,99 +942,35 @@ function editarPen(i){
   abrirModal('modal-pen');
 }
 function salvarPen(){
-  const nome=document.getElementById('pen-nome').value.trim();
-  const valor=parseFloat(document.getElementById('pen-valor').value);
-  if(!nome){alert('Informe a descrição da penalidade.');return;}
+  var nome=document.getElementById('pen-nome').value.trim();
+  var valor=parseFloat(document.getElementById('pen-valor').value);
+  if(!nome){alert('Informe a descrição.');return;}
   if(!valor||valor<=0){alert('Informe um valor válido.');return;}
-  const nova={cat:document.getElementById('pen-cat').value,nome,valor};
-  const idx=parseInt(document.getElementById('pen-edit-idx').value);
+  var nova={cat:document.getElementById('pen-cat').value,nome:nome,valor:valor};
+  var idx=parseInt(document.getElementById('pen-edit-idx').value);
   if(idx===-1){penalidades.push(nova);state.pen.push({lucas:0,pedro:0});}
   else penalidades[idx]=nova;
-  salvarConfig();
-  fecharModal('modal-pen');
-  renderPenalidades();atualizarSaldos();
+  salvarConfig();fecharModal('modal-pen');renderPenalidades();atualizarSaldos();
 }
 function removerPen(i){
-  if(!confirm('Remover a penalidade "'+penalidades[i].nome+'"?\nEsta ação vale para todas as semanas.'))return;
-  penalidades.splice(i,1);
-  state.pen.splice(i,1);
-  salvarConfig();
-  renderPenalidades();atualizarSaldos();
-}
-
-// ── PENDÊNCIAS FILHO ──
-function enviarPendencia(){
-  if(!filhoLogado){alert('Erro: filho não identificado.');return;}
-  const idxAtiv=parseInt(document.getElementById('filho-ativ-sel').value);
-  const qty=parseInt(document.getElementById('filho-qty').value)||1;
-  const a=atividades[idxAtiv];
-  if(qty<1||qty>a.limite){alert('Quantidade inválida. Máximo: '+a.limite+'×');return;}
-  const key=Date.now().toString();
-  db.ref(chavePend(semanaAtual)+'/'+key).set({
-    filho:filhoLogado,ativIdx:idxAtiv,ativNome:a.nome,ativCat:a.cat,
-    ativValor:a.valor,qty,total:qty*a.valor,ts:Date.now()
-  }).then(function(){
-    setSyncStatus('✓ Enviado para aprovação!','ok');
-    document.getElementById('filho-qty').value=1;
-    alert('✅ Atividade enviada! Aguarde a validação dos pais.');
-  }).catch(function(){setSyncStatus('⚠ Erro ao enviar','err');});
-}
-
-// ── MODAL PENDÊNCIAS (ADMIN) ──
-function renderPendencias(){
-  const body=document.getElementById('modal-pendencias-body');
-  const keys=Object.keys(pendencias);
-  if(keys.length===0){body.innerHTML='<div class="empty-pendencias">🎉 Nenhuma pendência! Tudo validado.</div>';return;}
-  body.innerHTML='';
-  keys.forEach(function(key){
-    const p=pendencias[key];
-    const data=new Date(p.ts).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-    const div=document.createElement('div');
-    div.className='pendencia-item';
-    div.innerHTML=
-      '<div class="pendencia-info">'+
-        '<div class="pendencia-filho '+p.filho+'">'+p.filho.toUpperCase()+' • '+data+'</div>'+
-        '<div class="pendencia-nome">'+p.ativCat+' — '+p.ativNome+'</div>'+
-        '<div class="pendencia-qty">'+p.qty+'× • R$ '+fmt(p.ativValor)+'/vez</div>'+
-      '</div>'+
-      '<div class="pendencia-valor">R$ '+fmt(p.total)+'</div>'+
-      '<div class="pendencia-actions">'+
-        '<button class="btn-aprovar" onclick="aprovarPendencia(\''+key+'\')">✓ Aprovar</button>'+
-        '<button class="btn-rejeitar" onclick="rejeitarPendencia(\''+key+'\')">✕ Rejeitar</button>'+
-      '</div>';
-    body.appendChild(div);
-  });
-}
-
-function aprovarPendencia(key){
-  const p=pendencias[key];if(!p)return;
-  if(!state.ativ[p.ativIdx])state.ativ[p.ativIdx]={lucas:0,pedro:0};
-  const atual=state.ativ[p.ativIdx][p.filho]||0;
-  const limite=atividades[p.ativIdx]?atividades[p.ativIdx].limite:7;
-  state.ativ[p.ativIdx][p.filho]=Math.min(limite,atual+p.qty);
-  Promise.all([
-    db.ref(chaveDB(semanaAtual)).set({ativ:state.ativ,pen:state.pen}),
-    db.ref(chavePend(semanaAtual)+'/'+key).remove()
-  ]).then(()=>setSyncStatus('✓ Aprovado','ok')).catch(()=>setSyncStatus('⚠ Erro','err'));
-}
-function rejeitarPendencia(key){
-  if(!confirm('Rejeitar esta atividade?'))return;
-  db.ref(chavePend(semanaAtual)+'/'+key).remove().then(()=>setSyncStatus('✓ Rejeitado','ok'));
+  if(!confirm('Remover "'+penalidades[i].nome+'"?\nVale para todas as semanas.'))return;
+  penalidades.splice(i,1);state.pen.splice(i,1);
+  salvarConfig();renderPenalidades();atualizarSaldos();
 }
 
 // ── RELATÓRIO ──
 function gerarRelatorio(){
-  const semana=document.getElementById('sel-semana').value;
-  const ano=new Date().getFullYear();
-  const dataGeracao=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  var semana=document.getElementById('sel-semana').value;
+  var ano=new Date().getFullYear();
+  var dataGeracao=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
   function blocoFilho(filho,nomeExibir,cssClass){
-    const saldo=calcular(filho);
-    let subA=0,lA='';
-    atividades.forEach(function(a,i){const q=(state.ativ[i]||{}).lucas||0;const qty=filho==='lucas'?q:(state.ativ[i]||{}).pedro||0;if(!qty)return;const sub=qty*a.valor;subA+=sub;lA+='<tr><td>'+a.cat+'</td><td>'+a.nome+'</td><td class="rc">'+qty+'×</td><td class="rc">R$&nbsp;'+fmt(a.valor)+'</td><td class="rc">R$&nbsp;'+fmt(sub)+'</td></tr>';});
-    const tA=lA?'<table><thead><tr><th>Categoria</th><th>Atividade</th><th class="rc">Qtd</th><th class="rc">Unit.</th><th class="rc">Total</th></tr></thead><tbody>'+lA+'</tbody></table><div style="text-align:right;font-size:12px;color:#666;padding:4px 10px 0;font-weight:700">Subtotal: R$&nbsp;'+fmt(subA)+'</div>':'<p class="rel-nenhuma">Nenhuma atividade registrada.</p>';
-    let subP=0,lP='';
-    penalidades.forEach(function(p,i){const qty=filho==='lucas'?(state.pen[i]||{}).lucas||0:(state.pen[i]||{}).pedro||0;if(!qty)return;const sub=qty*p.valor;subP+=sub;lP+='<tr><td>'+p.cat+'</td><td>'+p.nome+'</td><td class="rc">'+qty+'×</td><td class="rc">R$&nbsp;'+fmt(p.valor)+'</td><td class="rc" style="color:#cc3333">- R$&nbsp;'+fmt(sub)+'</td></tr>';});
-    const tP=lP?'<table><thead><tr><th>Categoria</th><th>Penalidade</th><th class="rc">Qtd</th><th class="rc">Unit.</th><th class="rc">Desconto</th></tr></thead><tbody>'+lP+'</tbody></table><div style="text-align:right;font-size:12px;color:#cc3333;padding:4px 10px 0;font-weight:700">Total descontos: - R$&nbsp;'+fmt(subP)+'</div>':'<p class="rel-nenhuma">Nenhuma penalidade aplicada. ✓</p>';
+    var saldo=calcular(filho);
+    var subA=0,lA='';
+    atividades.forEach(function(a,i){var qty=(state.ativ[i]||{})[filho]||0;if(!qty)return;var sub=qty*a.valor;subA+=sub;lA+='<tr><td>'+a.cat+'</td><td>'+a.nome+'</td><td class="rc">'+qty+'×</td><td class="rc">R$&nbsp;'+fmt(a.valor)+'</td><td class="rc">R$&nbsp;'+fmt(sub)+'</td></tr>';});
+    var tA=lA?'<table><thead><tr><th>Categoria</th><th>Atividade</th><th class="rc">Qtd</th><th class="rc">Unit.</th><th class="rc">Total</th></tr></thead><tbody>'+lA+'</tbody></table><div style="text-align:right;font-size:12px;color:#666;padding:4px 10px 0;font-weight:700">Subtotal: R$&nbsp;'+fmt(subA)+'</div>':'<p class="rel-nenhuma">Nenhuma atividade registrada.</p>';
+    var subP=0,lP='';
+    penalidades.forEach(function(p,i){var qty=(state.pen[i]||{})[filho]||0;if(!qty)return;var sub=qty*p.valor;subP+=sub;lP+='<tr><td>'+p.cat+'</td><td>'+p.nome+'</td><td class="rc">'+qty+'×</td><td class="rc">R$&nbsp;'+fmt(p.valor)+'</td><td class="rc" style="color:#cc3333">- R$&nbsp;'+fmt(sub)+'</td></tr>';});
+    var tP=lP?'<table><thead><tr><th>Categoria</th><th>Penalidade</th><th class="rc">Qtd</th><th class="rc">Unit.</th><th class="rc">Desconto</th></tr></thead><tbody>'+lP+'</tbody></table><div style="text-align:right;font-size:12px;color:#cc3333;padding:4px 10px 0;font-weight:700">Total descontos: - R$&nbsp;'+fmt(subP)+'</div>':'<p class="rel-nenhuma">Nenhuma penalidade aplicada. ✓</p>';
     return '<div class="rel-filho '+cssClass+'"><h2>'+nomeExibir+'</h2><div class="rel-section">Atividades Realizadas</div>'+tA+'<div class="rel-section">Penalidades Aplicadas</div>'+tP+'<div class="rel-total '+cssClass+'">Total a receber: R$&nbsp;'+fmt(saldo)+'</div></div>';
   }
   document.getElementById('relatorio').innerHTML=
