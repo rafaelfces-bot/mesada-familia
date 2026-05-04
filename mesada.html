@@ -21,7 +21,9 @@
   .login-box button{width:100%;background:var(--success);color:#0f0f13;border:none;border-radius:8px;padding:12px;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
   #login-erro{color:var(--penalty);font-size:12px;margin-top:12px;min-height:18px;text-align:center;}
 
+  /* BANNERS */
   #readonly-banner{display:none;background:rgba(79,195,247,0.1);border-bottom:1px solid var(--pedro);padding:8px 20px;text-align:center;font-size:12px;color:var(--pedro);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px;}
+
   #app{display:none;}
 
   /* SALDO BAR */
@@ -44,12 +46,14 @@
   .semana-wrap select{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;outline:none;}
   .btn-logout{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:none;color:var(--text-muted);cursor:pointer;white-space:nowrap;}
   .btn-logout:hover{border-color:var(--penalty);color:var(--penalty);}
-  .badge-btn{position:relative;display:inline-flex;align-items:center;}
+
+  /* BADGE PENDENCIAS */
+  .badge-btn{position:relative;display:inline-flex;align-items:center;gap:6px;}
   .badge{position:absolute;top:-8px;right:-8px;background:var(--penalty);color:#fff;border-radius:99px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;padding:2px 6px;min-width:18px;text-align:center;display:none;}
   .badge.show{display:block;}
 
   /* LAYOUT */
-  .container{max-width:960px;margin:0 auto;padding:24px 16px 80px;}
+  .container{max-width:900px;margin:0 auto;padding:24px 16px 80px;}
   .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;}
   .page-subtitle{font-size:13px;color:var(--text-muted);margin-top:3px;}
   .section-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--text-muted);margin:32px 0 12px;display:flex;align-items:center;gap:10px;}
@@ -70,19 +74,12 @@
   td.cat{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;width:1%;}
   td.nome{color:var(--text);font-size:13px;}
   td.center{text-align:center;white-space:nowrap;width:1%;}
-  td.acoes{width:1%;white-space:nowrap;}
   .diff-badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;text-transform:uppercase;letter-spacing:1px;}
   .diff-facil{background:rgba(86,217,138,0.15);color:var(--success);}
   .diff-medio{background:rgba(245,166,35,0.15);color:var(--lucas);}
   .diff-dificil{background:rgba(255,107,107,0.15);color:var(--penalty);}
   .valor-ativ{font-family:'Syne',sans-serif;font-weight:700;color:var(--success);}
   .valor-pen{font-family:'Syne',sans-serif;font-weight:700;color:var(--penalty);}
-
-  /* BOTÕES DE AÇÃO NA LINHA */
-  .row-actions{display:flex;gap:4px;align-items:center;justify-content:center;}
-  .btn-row{background:none;border:1px solid var(--border);border-radius:6px;color:var(--text-muted);font-size:13px;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;padding:0;}
-  .btn-row:hover.edit{border-color:var(--lucas);color:var(--lucas);}
-  .btn-row:hover.del{border-color:var(--penalty);color:var(--penalty);}
 
   /* CONTADOR */
   .counter{display:inline-flex;align-items:center;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg);}
@@ -99,49 +96,29 @@
   .counter.pen-active{border-color:var(--penalty);}
   .counter.pen-active .count{color:var(--penalty);background:var(--penalty-dim);}
   .counter.pen-active button{color:var(--penalty);}
+  .counter.pending-active{border-color:var(--pending);}
+  .counter.pending-active .count{color:var(--pending);background:var(--pending-dim);}
+  .counter.pending-active button{color:var(--pending);}
   .limit-tag{display:inline-block;font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--penalty);background:var(--penalty-dim);border-radius:4px;padding:2px 5px;margin-left:4px;vertical-align:middle;}
   .pending-tag{display:inline-block;font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--pending);background:var(--pending-dim);border-radius:4px;padding:2px 5px;margin-left:4px;vertical-align:middle;}
 
-  /* BOTÕES PRINCIPAIS */
+  /* BOTÕES */
   .actions{margin-top:36px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
   button.btn{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:11px 22px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text-muted);cursor:pointer;transition:all 0.15s;position:relative;}
   button.btn:hover{border-color:var(--penalty);color:var(--penalty);}
   button.btn.primary{border-color:var(--success);color:var(--success);background:rgba(86,217,138,0.08);}
   button.btn.primary:hover{background:rgba(86,217,138,0.18);}
-  button.btn.add-btn{border-color:var(--lucas);color:var(--lucas);background:var(--lucas-dim);}
-  button.btn.add-btn:hover{background:rgba(245,166,35,0.2);}
   button.btn.pending-btn{border-color:var(--pending);color:var(--pending);background:var(--pending-dim);}
   button.btn:disabled{opacity:0.4;cursor:not-allowed;}
 
-  /* PAINEL FILHO */
-  #painel-filho{display:none;background:var(--pending-dim);border:1px solid var(--pending);border-radius:12px;padding:20px;margin-top:24px;}
-  #painel-filho h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--pending);margin-bottom:14px;}
-  .filho-select-wrap{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
-  .filho-select-wrap label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);}
-  .filho-select-wrap select{font-family:'Syne',sans-serif;font-size:13px;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;outline:none;flex:1;}
-  .filho-qty-wrap{display:flex;align-items:center;gap:8px;margin-top:10px;}
-  .filho-qty-wrap label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);}
-  .filho-qty-wrap input{width:60px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--text);font-size:14px;font-family:'Syne',sans-serif;text-align:center;outline:none;}
-  .btn-enviar{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:10px 20px;border-radius:8px;border:1px solid var(--pending);background:var(--pending-dim);color:var(--pending);cursor:pointer;margin-top:12px;width:100%;}
-  .btn-enviar:hover{background:rgba(167,139,250,0.2);}
-
-  /* MODAL GENÉRICO */
-  .modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;padding:20px;}
-  .modal-overlay.show{display:flex;}
-  .modal-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:560px;max-height:85vh;overflow-y:auto;}
-  .modal-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);z-index:1;}
-  .modal-header h2{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;}
-  .modal-close{background:none;border:none;color:var(--text-muted);font-size:20px;cursor:pointer;padding:0;line-height:1;}
-  .modal-body{padding:20px 24px;}
-  .modal-field{margin-bottom:16px;}
-  .modal-field label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:6px;}
-  .modal-field input,.modal-field select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;}
-  .modal-field input:focus,.modal-field select:focus{border-color:var(--text-muted);}
-  .modal-footer{display:flex;gap:10px;padding:16px 24px;border-top:1px solid var(--border);}
-  .btn-modal-save{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:11px 22px;border-radius:8px;border:none;background:var(--success);color:#0f0f13;cursor:pointer;flex:1;}
-  .btn-modal-cancel{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:11px 22px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text-muted);cursor:pointer;}
-
   /* MODAL PENDÊNCIAS */
+  #modal-pendencias{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;padding:20px;}
+  #modal-pendencias.show{display:flex;}
+  .modal-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:600px;max-height:80vh;overflow-y:auto;}
+  .modal-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+  .modal-header h2{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;}
+  .modal-header button{background:none;border:none;color:var(--text-muted);font-size:20px;cursor:pointer;padding:0;}
+  .modal-body{padding:20px 24px;}
   .pendencia-item{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
   .pendencia-info{flex:1;}
   .pendencia-filho{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
@@ -157,7 +134,19 @@
   .btn-rejeitar:hover{background:rgba(255,107,107,0.2);}
   .empty-pendencias{text-align:center;padding:40px;color:var(--text-muted);font-size:13px;}
 
-  /* RELATÓRIO */
+  /* PAINEL FILHO — enviar atividade */
+  #painel-filho{display:none;background:var(--pending-dim);border:1px solid var(--pending);border-radius:12px;padding:20px;margin-top:24px;}
+  #painel-filho h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--pending);margin-bottom:14px;}
+  .filho-select-wrap{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .filho-select-wrap label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);}
+  .filho-select-wrap select{font-family:'Syne',sans-serif;font-size:13px;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;outline:none;flex:1;}
+  .filho-qty-wrap{display:flex;align-items:center;gap:8px;margin-top:10px;}
+  .filho-qty-wrap label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);}
+  .filho-qty-wrap input{width:60px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--text);font-size:14px;font-family:'Syne',sans-serif;text-align:center;outline:none;}
+  .btn-enviar{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:10px 20px;border-radius:8px;border:1px solid var(--pending);background:var(--pending-dim);color:var(--pending);cursor:pointer;margin-top:12px;width:100%;}
+  .btn-enviar:hover{background:rgba(167,139,250,0.2);}
+
+  /* MODAL RELATORIO */
   #relatorio{display:none;position:fixed;inset:0;z-index:300;background:#fff;color:#111;overflow-y:auto;padding:40px;font-family:'DM Sans',sans-serif;font-size:13px;}
   #relatorio h1{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#111;margin-bottom:4px;}
   #relatorio .rel-sub{font-size:12px;color:#888;margin-bottom:24px;}
@@ -199,7 +188,7 @@
   </div>
 </div>
 
-<div id="readonly-banner">👁 Modo filho — registre suas atividades no painel abaixo para aprovação dos pais</div>
+<div id="readonly-banner">👁 Modo leitura parcial — você pode registrar atividades, mas elas precisam ser validadas pelos pais</div>
 
 <div id="app">
   <div id="saldo-bar">
@@ -221,7 +210,9 @@
       <select id="sel-semana" onchange="trocarSemana()"></select>
     </div>
     <div class="badge-btn">
-      <button class="btn pending-btn" id="btn-pendencias" onclick="abrirModal('modal-pendencias')" style="display:none">⏳ Pendências</button>
+      <button class="btn pending-btn" id="btn-pendencias" onclick="abrirPendencias()" style="display:none">
+        ⏳ Pendências
+      </button>
       <span class="badge" id="badge-count"></span>
     </div>
     <button class="btn-logout" onclick="fazerLogout()">Sair</button>
@@ -229,7 +220,7 @@
 
   <div class="container">
     <div class="page-title">Controle Semanal</div>
-    <div class="page-subtitle" id="subtitulo-page"></div>
+    <div class="page-subtitle" id="subtitulo-page">Acompanhe as atividades e saldos da semana</div>
     <div id="sync-status"></div>
 
     <div class="section-label">Atividades</div>
@@ -240,15 +231,12 @@
           <th class="center">Dif.</th><th class="center">Valor</th>
           <th class="center">Limite</th>
           <th class="center">Lucas</th><th class="center">Pedro</th>
-          <th class="center">Ações</th>
         </tr></thead>
         <tbody id="tbody-atividades"></tbody>
       </table>
     </div>
-    <div style="margin-top:12px;display:flex;gap:10px;">
-      <button class="btn add-btn" onclick="abrirModalNovaAtiv()">+ Nova Atividade</button>
-    </div>
 
+    <!-- PAINEL FILHO: registrar atividade -->
     <div id="painel-filho">
       <h3>📝 Registrar atividade realizada</h3>
       <div class="filho-select-wrap">
@@ -269,13 +257,9 @@
           <th>Categoria</th><th>Penalidade</th>
           <th class="center">Desconto</th>
           <th class="center">Lucas</th><th class="center">Pedro</th>
-          <th class="center">Ações</th>
         </tr></thead>
         <tbody id="tbody-penalidades"></tbody>
       </table>
-    </div>
-    <div style="margin-top:12px;display:flex;gap:10px;">
-      <button class="btn add-btn" onclick="abrirModalNovaPen()">+ Nova Penalidade</button>
     </div>
 
     <div class="actions">
@@ -286,90 +270,13 @@
 </div>
 
 <!-- MODAL PENDÊNCIAS -->
-<div class="modal-overlay" id="modal-pendencias">
+<div id="modal-pendencias">
   <div class="modal-box">
     <div class="modal-header">
       <h2>⏳ Pendências para validar</h2>
-      <button class="modal-close" onclick="fecharModal('modal-pendencias')">✕</button>
+      <button onclick="fecharPendencias()">✕</button>
     </div>
-    <div class="modal-body" id="modal-pendencias-body"></div>
-  </div>
-</div>
-
-<!-- MODAL NOVA/EDITAR ATIVIDADE -->
-<div class="modal-overlay" id="modal-ativ">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h2 id="modal-ativ-titulo">Nova Atividade</h2>
-      <button class="modal-close" onclick="fecharModal('modal-ativ')">✕</button>
-    </div>
-    <div class="modal-body">
-      <input type="hidden" id="ativ-edit-idx" value="-1">
-      <div class="modal-field">
-        <label>Categoria</label>
-        <select id="ativ-cat">
-          <option value="Doméstica">Doméstica</option>
-          <option value="Educacional">Educacional</option>
-          <option value="Desenv. Pessoal">Desenv. Pessoal</option>
-        </select>
-      </div>
-      <div class="modal-field">
-        <label>Nome da atividade</label>
-        <input type="text" id="ativ-nome" placeholder="Ex: Organizar o quarto">
-      </div>
-      <div class="modal-field">
-        <label>Dificuldade</label>
-        <select id="ativ-dif">
-          <option value="Fácil">Fácil</option>
-          <option value="Médio">Médio</option>
-          <option value="Difícil">Difícil</option>
-        </select>
-      </div>
-      <div class="modal-field">
-        <label>Valor (R$)</label>
-        <input type="number" id="ativ-valor" placeholder="Ex: 2.00" step="0.50" min="0.50">
-      </div>
-      <div class="modal-field">
-        <label>Limite semanal (vezes)</label>
-        <input type="number" id="ativ-limite" placeholder="Ex: 5" min="1" max="7">
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-modal-cancel" onclick="fecharModal('modal-ativ')">Cancelar</button>
-      <button class="btn-modal-save" onclick="salvarAtiv()">Salvar Atividade</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL NOVA/EDITAR PENALIDADE -->
-<div class="modal-overlay" id="modal-pen">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h2 id="modal-pen-titulo">Nova Penalidade</h2>
-      <button class="modal-close" onclick="fecharModal('modal-pen')">✕</button>
-    </div>
-    <div class="modal-body">
-      <input type="hidden" id="pen-edit-idx" value="-1">
-      <div class="modal-field">
-        <label>Categoria</label>
-        <select id="pen-cat">
-          <option value="Comportamento">Comportamento</option>
-          <option value="Tecnologia">Tecnologia</option>
-        </select>
-      </div>
-      <div class="modal-field">
-        <label>Descrição da penalidade</label>
-        <input type="text" id="pen-nome" placeholder="Ex: Não arrumar o quarto">
-      </div>
-      <div class="modal-field">
-        <label>Valor do desconto (R$)</label>
-        <input type="number" id="pen-valor" placeholder="Ex: 2.00" step="0.50" min="0.50">
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-modal-cancel" onclick="fecharModal('modal-pen')">Cancelar</button>
-      <button class="btn-modal-save" onclick="salvarPen()">Salvar Penalidade</button>
-    </div>
+    <div class="modal-body" id="modal-body"></div>
   </div>
 </div>
 
@@ -378,6 +285,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
 <script>
 firebase.initializeApp({
   apiKey:"AIzaSyDJ8KtuveA7q3Bgs_HHy5myw0G4ZBxxAks",
@@ -393,99 +301,87 @@ const db=firebase.database();
 
 const MAXIMO=50.00;
 const ADMINS=['2PASdYiHAnYpuVcA6vWkMVSNUp73','ZQeG7yATnAf5U0w2jL3ARIEjaWl2'];
-const FILHOS_UID={'rRKR56vU4eeuB2mlTkcDRQBfciW2':'lucas','iwkHUeOzzke2pbCl5TDpjvayVQv2':'pedro'};
+const FILHOS_UID={
+  'rRKR56vU4eeuB2mlTkcDRQBfciW2':'lucas',
+  'iwkHUeOzzke2pbCl5TDpjvayVQv2':'pedro'
+};
 
-// DADOS PADRÃO
-const ATIVIDADES_PADRAO=[
-  {cat:'Doméstica',nome:'Varrer a casa',dif:'Fácil',valor:1.50,limite:7},
-  {cat:'Doméstica',nome:'Lavar o banheiro',dif:'Médio',valor:3.00,limite:7},
-  {cat:'Doméstica',nome:'Ajudar a preparar uma refeição completa',dif:'Médio',valor:3.00,limite:7},
-  {cat:'Doméstica',nome:'Lavar a louça após o jantar',dif:'Fácil',valor:1.50,limite:7},
-  {cat:'Doméstica',nome:'Lavar sua louça após o almoço',dif:'Fácil',valor:1.00,limite:7},
-  {cat:'Educacional',nome:'Fazer a lição de casa',dif:'Fácil',valor:2.00,limite:5},
-  {cat:'Educacional',nome:'Ler um livro por 30 min',dif:'Fácil',valor:1.50,limite:5},
-  {cat:'Educacional',nome:'Ler um livro e resumir a história',dif:'Médio',valor:3.00,limite:5},
-  {cat:'Educacional',nome:'Estudar matemática por 1h',dif:'Médio',valor:3.00,limite:5},
-  {cat:'Educacional',nome:'Estudar um conteúdo além do escolar',dif:'Médio',valor:3.00,limite:5},
-  {cat:'Educacional',nome:'Fazer uma redação sobre um tema do interesse',dif:'Difícil',valor:4.00,limite:5},
-  {cat:'Desenv. Pessoal',nome:'Praticar alongamento ou calistenia por 20 min',dif:'Fácil',valor:1.50,limite:5},
-  {cat:'Desenv. Pessoal',nome:'Instrumento musical por 20 min',dif:'Fácil',valor:1.50,limite:5},
-  {cat:'Desenv. Pessoal',nome:'Idioma por 20 min',dif:'Fácil',valor:1.50,limite:5},
-  {cat:'Desenv. Pessoal',nome:'Programação por 20 min',dif:'Médio',valor:2.00,limite:5},
-  {cat:'Desenv. Pessoal',nome:'Ajudar um irmão ou amigo',dif:'Fácil',valor:1.50,limite:5},
-  {cat:'Desenv. Pessoal',nome:'Ajudar um irmão ou parente sem ser pedido',dif:'Médio',valor:3.00,limite:5},
-  {cat:'Desenv. Pessoal',nome:'Planejar e apresentar um pequeno projeto',dif:'Difícil',valor:5.00,limite:5},
-];
-const PENALIDADES_PADRAO=[
-  {cat:'Comportamento',nome:'Desobedecer os pais',valor:5.00},
-  {cat:'Comportamento',nome:'Deixar calçados fora do lugar correto',valor:1.00},
-  {cat:'Comportamento',nome:'Não lavar as mãos quando necessário',valor:1.00},
-  {cat:'Comportamento',nome:'Não tomar banho no horário determinado',valor:2.00},
-  {cat:'Comportamento',nome:'Não cumprir o horário das atividades programadas',valor:2.00},
-  {cat:'Tecnologia',nome:'Exceder o tempo de tela sem pausar',valor:2.00},
-  {cat:'Tecnologia',nome:'Não soltar o celular para dar atenção a quem está falando',valor:3.00},
-  {cat:'Tecnologia',nome:'Falou "espera aí, rapidinho" e recomeçou o jogo depois',valor:2.00},
+const atividades=[
+  {cat:'Doméstica',      nome:'Varrer a casa',                                  dif:'Fácil',   valor:1.50,limite:7},
+  {cat:'Doméstica',      nome:'Lavar o banheiro',                               dif:'Médio',   valor:3.00,limite:7},
+  {cat:'Doméstica',      nome:'Ajudar a preparar uma refeição completa',        dif:'Médio',   valor:3.00,limite:7},
+  {cat:'Doméstica',      nome:'Lavar a louça após o jantar',                    dif:'Fácil',   valor:1.50,limite:7},
+  {cat:'Doméstica',      nome:'Lavar sua louça após o almoço',                  dif:'Fácil',   valor:1.00,limite:7},
+  {cat:'Educacional',    nome:'Fazer a lição de casa',                          dif:'Fácil',   valor:2.00,limite:5},
+  {cat:'Educacional',    nome:'Ler um livro por 30 min',                        dif:'Fácil',   valor:1.50,limite:5},
+  {cat:'Educacional',    nome:'Ler um livro e resumir a história',              dif:'Médio',   valor:3.00,limite:5},
+  {cat:'Educacional',    nome:'Estudar matemática por 1h',                      dif:'Médio',   valor:3.00,limite:5},
+  {cat:'Educacional',    nome:'Estudar um conteúdo além do escolar',            dif:'Médio',   valor:3.00,limite:5},
+  {cat:'Educacional',    nome:'Fazer uma redação sobre um tema do interesse',   dif:'Difícil', valor:4.00,limite:5},
+  {cat:'Desenv. Pessoal',nome:'Praticar alongamento ou calistenia por 20 min',  dif:'Fácil',   valor:1.50,limite:5},
+  {cat:'Desenv. Pessoal',nome:'Instrumento musical por 20 min',                 dif:'Fácil',   valor:1.50,limite:5},
+  {cat:'Desenv. Pessoal',nome:'Idioma por 20 min',                              dif:'Fácil',   valor:1.50,limite:5},
+  {cat:'Desenv. Pessoal',nome:'Programação por 20 min',                         dif:'Médio',   valor:2.00,limite:5},
+  {cat:'Desenv. Pessoal',nome:'Ajudar um irmão ou amigo',                       dif:'Fácil',   valor:1.50,limite:5},
+  {cat:'Desenv. Pessoal',nome:'Ajudar um irmão ou parente sem ser pedido',      dif:'Médio',   valor:3.00,limite:5},
+  {cat:'Desenv. Pessoal',nome:'Planejar e apresentar um pequeno projeto',       dif:'Difícil', valor:5.00,limite:5},
 ];
 
-// STATE
-let atividades=[...ATIVIDADES_PADRAO.map(a=>({...a}))];
-let penalidades=[...PENALIDADES_PADRAO.map(p=>({...p}))];
-let state={ativ:atividades.map(()=>({lucas:0,pedro:0})),pen:penalidades.map(()=>({lucas:0,pedro:0}))};
+const penalidades=[
+  {cat:'Comportamento',nome:'Desobedecer os pais',                                       valor:5.00},
+  {cat:'Comportamento',nome:'Deixar calçados fora do lugar correto',                     valor:1.00},
+  {cat:'Comportamento',nome:'Não lavar as mãos quando necessário',                       valor:1.00},
+  {cat:'Comportamento',nome:'Não tomar banho no horário determinado',                    valor:2.00},
+  {cat:'Comportamento',nome:'Não cumprir o horário das atividades programadas',          valor:2.00},
+  {cat:'Tecnologia',   nome:'Exceder o tempo de tela sem pausar',                        valor:2.00},
+  {cat:'Tecnologia',   nome:'Não soltar o celular para dar atenção a quem está falando', valor:3.00},
+  {cat:'Tecnologia',   nome:'Falou "espera aí, rapidinho" e recomeçou o jogo depois',   valor:2.00},
+];
+
+let state={
+  ativ:atividades.map(()=>({lucas:0,pedro:0})),
+  pen:penalidades.map(()=>({lucas:0,pedro:0})),
+};
 let pendencias={};
 let semanaAtual=1;
 let isAdmin=false;
-let filhoLogado=null;
-let dbListener=null,pendenciasListener=null,configListener=null;
+let filhoLogado=null; // 'lucas' ou 'pedro'
+let dbListener=null;
+let pendenciasListener=null;
 
-function fmt(v){return parseFloat(v).toFixed(2).replace('.',',');}
+function fmt(v){return v.toFixed(2).replace('.',',');}
 function semanaAtualDoAno(){const d=new Date(),i=new Date(d.getFullYear(),0,1);return Math.ceil(((d-i)/86400000+i.getDay()+1)/7);}
 function totalSemanas(ano){const d=new Date(ano,11,31),dia=d.getDay();return(dia===4||(dia===3&&ano%4===0))?53:52;}
-function chaveDB(sem){return'semanas/sem'+String(sem).padStart(2,'0')+'_'+new Date().getFullYear();}
-function chavePend(sem){return'pendencias/sem'+String(sem).padStart(2,'0')+'_'+new Date().getFullYear();}
+function chaveDB(sem){return 'semanas/sem'+String(sem).padStart(2,'0')+'_'+new Date().getFullYear();}
+function chavePendencias(sem){return 'pendencias/sem'+String(sem).padStart(2,'0')+'_'+new Date().getFullYear();}
 function setSyncStatus(msg,cls){const el=document.getElementById('sync-status');el.textContent=msg;el.className=cls;}
 
-// ── MODAL HELPERS ──
-function abrirModal(id){document.getElementById(id).classList.add('show');}
-function fecharModal(id){document.getElementById(id).classList.remove('show');}
-
-// ── SEMANAS ──
 function popularSemanas(){
   const sel=document.getElementById('sel-semana');
   const ano=new Date().getFullYear(),total=totalSemanas(ano),atual=semanaAtualDoAno();
   sel.innerHTML='';
-  for(let s=1;s<=total;s++){const opt=document.createElement('option');opt.value=s;opt.textContent='Semana '+s+' / '+ano;if(s===atual)opt.selected=true;sel.appendChild(opt);}
+  for(let s=1;s<=total;s++){
+    const opt=document.createElement('option');
+    opt.value=s;opt.textContent='Semana '+s+' / '+ano;
+    if(s===atual)opt.selected=true;
+    sel.appendChild(opt);
+  }
   semanaAtual=atual;
 }
-function trocarSemana(){semanaAtual=parseInt(document.getElementById('sel-semana').value);carregarDados();ouvirPendencias();}
 
-// ── FIREBASE CONFIG (atividades/penalidades globais) ──
-function ouvirConfig(){
-  if(configListener){configListener();configListener=null;}
-  configListener=db.ref('config').on('value',function(snap){
-    const cfg=snap.val();
-    if(cfg){
-      if(cfg.atividades)atividades=cfg.atividades;
-      if(cfg.penalidades)penalidades=cfg.penalidades;
-    } else {
-      atividades=ATIVIDADES_PADRAO.map(a=>({...a}));
-      penalidades=PENALIDADES_PADRAO.map(p=>({...p}));
-    }
-    // garante que state tem tamanho correto
-    while(state.ativ.length<atividades.length)state.ativ.push({lucas:0,pedro:0});
-    while(state.pen.length<penalidades.length)state.pen.push({lucas:0,pedro:0});
-    renderAtividades();renderPenalidades();atualizarSaldos();
-    popularSelectAtividades();
+function popularSelectAtividades(){
+  const sel=document.getElementById('filho-ativ-sel');
+  sel.innerHTML='';
+  atividades.forEach(function(a,i){
+    const opt=document.createElement('option');
+    opt.value=i;
+    opt.textContent=a.cat+' — '+a.nome+' (R$ '+fmt(a.valor)+')';
+    sel.appendChild(opt);
   });
 }
 
-function salvarConfig(){
-  db.ref('config').set({atividades,penalidades})
-    .then(()=>setSyncStatus('✓ Lista salva','ok'))
-    .catch(()=>setSyncStatus('⚠ Erro ao salvar lista','err'));
-}
-
-// ── FIREBASE DADOS SEMANA ──
-function carregarDados(){
+// ── FIREBASE DATA ──
+function carregarDadosSemana(){
   if(dbListener){dbListener();dbListener=null;}
   const r=db.ref(chaveDB(semanaAtual));
   dbListener=r.on('value',function(snap){
@@ -497,12 +393,22 @@ function carregarDados(){
       state.ativ=atividades.map(()=>({lucas:0,pedro:0}));
       state.pen=penalidades.map(()=>({lucas:0,pedro:0}));
     }
-    // garante tamanho
-    while(state.ativ.length<atividades.length)state.ativ.push({lucas:0,pedro:0});
-    while(state.pen.length<penalidades.length)state.pen.push({lucas:0,pedro:0});
     renderAtividades();renderPenalidades();atualizarSaldos();
     setSyncStatus('✓ Sincronizado','ok');
   },function(){setSyncStatus('⚠ Erro de conexão','err');});
+}
+
+function ouvirPendencias(){
+  if(pendenciasListener){pendenciasListener();pendenciasListener=null;}
+  const r=db.ref(chavePendencias(semanaAtual));
+  pendenciasListener=r.on('value',function(snap){
+    pendencias=snap.val()||{};
+    atualizarBadge();
+    // atualiza modal se estiver aberto
+    if(document.getElementById('modal-pendencias').classList.contains('show')){
+      renderModalPendencias();
+    }
+  });
 }
 
 function salvarDados(){
@@ -512,13 +418,10 @@ function salvarDados(){
     .catch(()=>setSyncStatus('⚠ Erro ao salvar','err'));
 }
 
-function ouvirPendencias(){
-  if(pendenciasListener){pendenciasListener();pendenciasListener=null;}
-  pendenciasListener=db.ref(chavePend(semanaAtual)).on('value',function(snap){
-    pendencias=snap.val()||{};
-    atualizarBadge();
-    if(document.getElementById('modal-pendencias').classList.contains('show'))renderPendencias();
-  });
+function trocarSemana(){
+  semanaAtual=parseInt(document.getElementById('sel-semana').value);
+  carregarDadosSemana();
+  ouvirPendencias();
 }
 
 // ── AUTH ──
@@ -526,52 +429,61 @@ function fazerLogin(){
   const email=document.getElementById('login-email').value.trim();
   const senha=document.getElementById('login-senha').value;
   document.getElementById('login-erro').textContent='';
-  auth.signInWithEmailAndPassword(email,senha).catch(function(){document.getElementById('login-erro').textContent='E-mail ou senha incorretos.';});
+  auth.signInWithEmailAndPassword(email,senha).catch(function(){
+    document.getElementById('login-erro').textContent='E-mail ou senha incorretos.';
+  });
 }
 function fazerLogout(){
-  if(dbListener){dbListener();dbListener=null;}
-  if(pendenciasListener){pendenciasListener();pendenciasListener=null;}
-  if(configListener){configListener();configListener=null;}
+  if(dbListener){db.ref(chaveDB(semanaAtual)).off('value',dbListener);dbListener=null;}
+  if(pendenciasListener){db.ref(chavePendencias(semanaAtual)).off('value',pendenciasListener);pendenciasListener=null;}
   auth.signOut();
 }
-document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('login-screen').style.display!=='none')fazerLogin();});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&document.getElementById('login-screen').style.display!=='none')fazerLogin();
+});
 
 auth.onAuthStateChanged(function(user){
   if(user){
     isAdmin=ADMINS.indexOf(user.uid)!==-1;
     filhoLogado=FILHOS_UID[user.uid]||null;
+
     document.getElementById('login-screen').style.display='none';
     document.getElementById('app').style.display='block';
+
+    // banner e painel
     if(isAdmin){
       document.getElementById('readonly-banner').style.display='none';
       document.getElementById('painel-filho').style.display='none';
       document.getElementById('btn-pendencias').style.display='inline-flex';
       document.getElementById('btn-reset').disabled=false;
-      document.getElementById('subtitulo-page').textContent='Gerencie atividades, pendências e saldos da semana';
+      document.getElementById('subtitulo-page').textContent='Gerencie as atividades e valide as pendências dos filhos';
     } else {
       document.getElementById('readonly-banner').style.display='block';
       document.getElementById('painel-filho').style.display='block';
       document.getElementById('btn-pendencias').style.display='none';
       document.getElementById('btn-reset').disabled=true;
       document.getElementById('subtitulo-page').textContent='Registre suas atividades — elas serão validadas pelos pais';
+      popularSelectAtividades();
     }
+
     popularSemanas();
-    ouvirConfig();
-    carregarDados();
+    carregarDadosSemana();
     ouvirPendencias();
   } else {
     document.getElementById('login-screen').style.display='flex';
     document.getElementById('app').style.display='none';
+    document.getElementById('readonly-banner').style.display='none';
   }
 });
 
 // ── CÁLCULO ──
 function calcular(filho){
   let total=0;
-  atividades.forEach(function(a,i){if(state.ativ[i])total+=state.ativ[i][filho]*a.valor;});
-  penalidades.forEach(function(p,i){if(state.pen[i])total-=state.pen[i][filho]*p.valor;});
+  atividades.forEach(function(a,i){total+=state.ativ[i][filho]*a.valor;});
+  penalidades.forEach(function(p,i){total-=state.pen[i][filho]*p.valor;});
   return Math.max(0,Math.min(MAXIMO,total));
 }
+
 function atualizarSaldos(){
   const sL=calcular('lucas'),sP=calcular('pedro');
   document.getElementById('saldo-lucas').textContent='R$ '+fmt(sL);
@@ -586,194 +498,7 @@ function atualizarBadge(){
   const total=Object.keys(pendencias).length;
   const badge=document.getElementById('badge-count');
   if(total>0){badge.textContent=total;badge.classList.add('show');}
-  else badge.classList.remove('show');
-}
-
-// ── RENDER ATIVIDADES ──
-function makeCounter(qty,max,colorClass,onMinus,onPlus,pendQty){
-  const atLimit=max!==null&&qty>=max;
-  const ac=qty>0?colorClass:'';
-  const lTag=atLimit?'<span class="limit-tag">máx</span>':'';
-  const pTag=pendQty>0?'<span class="pending-tag">⏳ '+pendQty+' pend.</span>':'';
-  const dis=!isAdmin;
-  return '<div style="display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap">'+
-    '<div class="counter '+ac+'">'+
-      '<button onclick="'+onMinus+'" '+(qty<=0||dis?'disabled':'')+'>−</button>'+
-      '<span class="count">'+qty+'</span>'+
-      '<button onclick="'+onPlus+'" '+(atLimit||dis?'disabled':'')+'>+</button>'+
-    '</div>'+lTag+pTag+'</div>';
-}
-
-function pendentesAtiv(idx,filho){let t=0;Object.values(pendencias).forEach(function(p){if(p.ativIdx===idx&&p.filho===filho)t+=p.qty;});return t;}
-
-function renderAtividades(){
-  const tbody=document.getElementById('tbody-atividades');
-  tbody.innerHTML='';
-  atividades.forEach(function(a,i){
-    const sL=(state.ativ[i]||{}).lucas||0,sP=(state.ativ[i]||{}).pedro||0;
-    const pL=pendentesAtiv(i,'lucas'),pP=pendentesAtiv(i,'pedro');
-    const dc=a.dif==='Fácil'?'diff-facil':a.dif==='Médio'?'diff-medio':'diff-dificil';
-    const tr=document.createElement('tr');
-    tr.innerHTML=
-      '<td class="cat">'+a.cat+'</td>'+
-      '<td class="nome">'+a.nome+'</td>'+
-      '<td class="center"><span class="diff-badge '+dc+'">'+a.dif+'</span></td>'+
-      '<td class="center valor-ativ">R$&nbsp;'+fmt(a.valor)+'</td>'+
-      '<td class="center" style="color:var(--text-muted);font-family:\'Syne\',sans-serif;font-size:11px;font-weight:700">'+a.limite+'×/sem</td>'+
-      '<td class="center">'+makeCounter(sL,a.limite,'lucas-active',"ajustarAtiv("+i+",'lucas',-1)","ajustarAtiv("+i+",'lucas',1)",pL)+'</td>'+
-      '<td class="center">'+makeCounter(sP,a.limite,'pedro-active',"ajustarAtiv("+i+",'pedro',-1)","ajustarAtiv("+i+",'pedro',1)",pP)+'</td>'+
-      '<td class="acoes"><div class="row-actions">'+
-        '<button class="btn-row edit" title="Editar" onclick="editarAtiv('+i+')">✏️</button>'+
-        '<button class="btn-row del" title="Remover" onclick="removerAtiv('+i+')">🗑️</button>'+
-      '</div></td>';
-    tbody.appendChild(tr);
-  });
-}
-
-function renderPenalidades(){
-  const tbody=document.getElementById('tbody-penalidades');
-  tbody.innerHTML='';
-  penalidades.forEach(function(p,i){
-    const sL=(state.pen[i]||{}).lucas||0,sP=(state.pen[i]||{}).pedro||0;
-    const tr=document.createElement('tr');
-    tr.innerHTML=
-      '<td class="cat">'+p.cat+'</td>'+
-      '<td class="nome">'+p.nome+'</td>'+
-      '<td class="center valor-pen">- R$&nbsp;'+fmt(p.valor)+'</td>'+
-      '<td class="center">'+makeCounter(sL,null,'pen-active',"ajustarPen("+i+",'lucas',-1)","ajustarPen("+i+",'lucas',1)",0)+'</td>'+
-      '<td class="center">'+makeCounter(sP,null,'pen-active',"ajustarPen("+i+",'pedro',-1)","ajustarPen("+i+",'pedro',1)",0)+'</td>'+
-      '<td class="acoes"><div class="row-actions">'+
-        '<button class="btn-row edit" title="Editar" onclick="editarPen('+i+')">✏️</button>'+
-        '<button class="btn-row del" title="Remover" onclick="removerPen('+i+')">🗑️</button>'+
-      '</div></td>';
-    tbody.appendChild(tr);
-  });
-}
-
-function popularSelectAtividades(){
-  const sel=document.getElementById('filho-ativ-sel');
-  if(!sel)return;
-  sel.innerHTML='';
-  atividades.forEach(function(a,i){
-    const opt=document.createElement('option');
-    opt.value=i;opt.textContent=a.cat+' — '+a.nome+' (R$ '+fmt(a.valor)+')';
-    sel.appendChild(opt);
-  });
-}
-
-// ── AJUSTES CONTADORES ──
-function ajustarAtiv(i,filho,delta){
-  if(!isAdmin)return;
-  if(!state.ativ[i])state.ativ[i]={lucas:0,pedro:0};
-  state.ativ[i][filho]=Math.max(0,Math.min(atividades[i].limite,(state.ativ[i][filho]||0)+delta));
-  renderAtividades();atualizarSaldos();salvarDados();
-}
-function ajustarPen(i,filho,delta){
-  if(!isAdmin)return;
-  if(!state.pen[i])state.pen[i]={lucas:0,pedro:0};
-  state.pen[i][filho]=Math.max(0,(state.pen[i][filho]||0)+delta);
-  renderPenalidades();atualizarSaldos();salvarDados();
-}
-function resetarSemana(){
-  if(!isAdmin)return;
-  if(!confirm('Resetar a semana? Todos os contadores voltam para zero.'))return;
-  state.ativ=atividades.map(()=>({lucas:0,pedro:0}));
-  state.pen=penalidades.map(()=>({lucas:0,pedro:0}));
-  renderAtividades();renderPenalidades();atualizarSaldos();salvarDados();
-}
-
-// ── CRUD ATIVIDADES ──
-function abrirModalNovaAtiv(){
-  document.getElementById('modal-ativ-titulo').textContent='Nova Atividade';
-  document.getElementById('ativ-edit-idx').value=-1;
-  document.getElementById('ativ-cat').value='Doméstica';
-  document.getElementById('ativ-nome').value='';
-  document.getElementById('ativ-dif').value='Fácil';
-  document.getElementById('ativ-valor').value='';
-  document.getElementById('ativ-limite').value='5';
-  abrirModal('modal-ativ');
-}
-function editarAtiv(i){
-  const a=atividades[i];
-  document.getElementById('modal-ativ-titulo').textContent='Editar Atividade';
-  document.getElementById('ativ-edit-idx').value=i;
-  document.getElementById('ativ-cat').value=a.cat;
-  document.getElementById('ativ-nome').value=a.nome;
-  document.getElementById('ativ-dif').value=a.dif;
-  document.getElementById('ativ-valor').value=a.valor;
-  document.getElementById('ativ-limite').value=a.limite;
-  abrirModal('modal-ativ');
-}
-function salvarAtiv(){
-  const nome=document.getElementById('ativ-nome').value.trim();
-  const valor=parseFloat(document.getElementById('ativ-valor').value);
-  const limite=parseInt(document.getElementById('ativ-limite').value);
-  if(!nome){alert('Informe o nome da atividade.');return;}
-  if(!valor||valor<=0){alert('Informe um valor válido.');return;}
-  if(!limite||limite<1){alert('Informe um limite válido.');return;}
-  const nova={
-    cat:document.getElementById('ativ-cat').value,
-    nome,
-    dif:document.getElementById('ativ-dif').value,
-    valor,
-    limite
-  };
-  const idx=parseInt(document.getElementById('ativ-edit-idx').value);
-  if(idx===-1){
-    atividades.push(nova);
-    state.ativ.push({lucas:0,pedro:0});
-  } else {
-    atividades[idx]=nova;
-  }
-  salvarConfig();
-  fecharModal('modal-ativ');
-  renderAtividades();atualizarSaldos();popularSelectAtividades();
-}
-function removerAtiv(i){
-  if(!confirm('Remover a atividade "'+atividades[i].nome+'"?\nEsta ação vale para todas as semanas.'))return;
-  atividades.splice(i,1);
-  state.ativ.splice(i,1);
-  salvarConfig();
-  renderAtividades();atualizarSaldos();popularSelectAtividades();
-}
-
-// ── CRUD PENALIDADES ──
-function abrirModalNovaPen(){
-  document.getElementById('modal-pen-titulo').textContent='Nova Penalidade';
-  document.getElementById('pen-edit-idx').value=-1;
-  document.getElementById('pen-cat').value='Comportamento';
-  document.getElementById('pen-nome').value='';
-  document.getElementById('pen-valor').value='';
-  abrirModal('modal-pen');
-}
-function editarPen(i){
-  const p=penalidades[i];
-  document.getElementById('modal-pen-titulo').textContent='Editar Penalidade';
-  document.getElementById('pen-edit-idx').value=i;
-  document.getElementById('pen-cat').value=p.cat;
-  document.getElementById('pen-nome').value=p.nome;
-  document.getElementById('pen-valor').value=p.valor;
-  abrirModal('modal-pen');
-}
-function salvarPen(){
-  const nome=document.getElementById('pen-nome').value.trim();
-  const valor=parseFloat(document.getElementById('pen-valor').value);
-  if(!nome){alert('Informe a descrição da penalidade.');return;}
-  if(!valor||valor<=0){alert('Informe um valor válido.');return;}
-  const nova={cat:document.getElementById('pen-cat').value,nome,valor};
-  const idx=parseInt(document.getElementById('pen-edit-idx').value);
-  if(idx===-1){penalidades.push(nova);state.pen.push({lucas:0,pedro:0});}
-  else penalidades[idx]=nova;
-  salvarConfig();
-  fecharModal('modal-pen');
-  renderPenalidades();atualizarSaldos();
-}
-function removerPen(i){
-  if(!confirm('Remover a penalidade "'+penalidades[i].nome+'"?\nEsta ação vale para todas as semanas.'))return;
-  penalidades.splice(i,1);
-  state.pen.splice(i,1);
-  salvarConfig();
-  renderPenalidades();atualizarSaldos();
+  else{badge.classList.remove('show');}
 }
 
 // ── PENDÊNCIAS FILHO ──
@@ -783,22 +508,44 @@ function enviarPendencia(){
   const qty=parseInt(document.getElementById('filho-qty').value)||1;
   const a=atividades[idxAtiv];
   if(qty<1||qty>a.limite){alert('Quantidade inválida. Máximo: '+a.limite+'×');return;}
+
   const key=Date.now().toString();
-  db.ref(chavePend(semanaAtual)+'/'+key).set({
-    filho:filhoLogado,ativIdx:idxAtiv,ativNome:a.nome,ativCat:a.cat,
-    ativValor:a.valor,qty,total:qty*a.valor,ts:Date.now()
-  }).then(function(){
-    setSyncStatus('✓ Enviado para aprovação!','ok');
-    document.getElementById('filho-qty').value=1;
-    alert('✅ Atividade enviada! Aguarde a validação dos pais.');
-  }).catch(function(){setSyncStatus('⚠ Erro ao enviar','err');});
+  const pendencia={
+    filho:filhoLogado,
+    ativIdx:idxAtiv,
+    ativNome:a.nome,
+    ativCat:a.cat,
+    ativValor:a.valor,
+    qty:qty,
+    total:qty*a.valor,
+    ts:Date.now(),
+  };
+
+  db.ref(chavePendencias(semanaAtual)+'/'+key).set(pendencia)
+    .then(function(){
+      setSyncStatus('✓ Enviado para aprovação!','ok');
+      document.getElementById('filho-qty').value=1;
+      alert('✅ Atividade enviada! Aguarde a validação dos pais.');
+    })
+    .catch(function(){setSyncStatus('⚠ Erro ao enviar','err');});
 }
 
 // ── MODAL PENDÊNCIAS (ADMIN) ──
-function renderPendencias(){
-  const body=document.getElementById('modal-pendencias-body');
+function abrirPendencias(){
+  document.getElementById('modal-pendencias').classList.add('show');
+  renderModalPendencias();
+}
+function fecharPendencias(){
+  document.getElementById('modal-pendencias').classList.remove('show');
+}
+
+function renderModalPendencias(){
+  const body=document.getElementById('modal-body');
   const keys=Object.keys(pendencias);
-  if(keys.length===0){body.innerHTML='<div class="empty-pendencias">🎉 Nenhuma pendência! Tudo validado.</div>';return;}
+  if(keys.length===0){
+    body.innerHTML='<div class="empty-pendencias">🎉 Nenhuma pendência! Tudo validado.</div>';
+    return;
+  }
   body.innerHTML='';
   keys.forEach(function(key){
     const p=pendencias[key];
@@ -821,19 +568,104 @@ function renderPendencias(){
 }
 
 function aprovarPendencia(key){
-  const p=pendencias[key];if(!p)return;
-  if(!state.ativ[p.ativIdx])state.ativ[p.ativIdx]={lucas:0,pedro:0};
+  const p=pendencias[key];
+  if(!p)return;
+  // soma ao saldo
   const atual=state.ativ[p.ativIdx][p.filho]||0;
-  const limite=atividades[p.ativIdx]?atividades[p.ativIdx].limite:7;
+  const limite=atividades[p.ativIdx].limite;
   state.ativ[p.ativIdx][p.filho]=Math.min(limite,atual+p.qty);
+  // salva saldo e remove pendência
   Promise.all([
     db.ref(chaveDB(semanaAtual)).set({ativ:state.ativ,pen:state.pen}),
-    db.ref(chavePend(semanaAtual)+'/'+key).remove()
-  ]).then(()=>setSyncStatus('✓ Aprovado','ok')).catch(()=>setSyncStatus('⚠ Erro','err'));
+    db.ref(chavePendencias(semanaAtual)+'/'+key).remove()
+  ]).then(function(){
+    setSyncStatus('✓ Aprovado e salvo','ok');
+  }).catch(function(){setSyncStatus('⚠ Erro','err');});
 }
+
 function rejeitarPendencia(key){
-  if(!confirm('Rejeitar esta atividade?'))return;
-  db.ref(chavePend(semanaAtual)+'/'+key).remove().then(()=>setSyncStatus('✓ Rejeitado','ok'));
+  if(!confirm('Rejeitar esta atividade? Ela será removida sem contar no saldo.'))return;
+  db.ref(chavePendencias(semanaAtual)+'/'+key).remove()
+    .then(function(){setSyncStatus('✓ Rejeitado','ok');})
+    .catch(function(){setSyncStatus('⚠ Erro','err');});
+}
+
+// ── RENDER ──
+function makeCounter(qty,max,colorClass,onMinus,onPlus,pendQty){
+  const atLimit=max!==null&&qty>=max;
+  const activeClass=qty>0?colorClass:'';
+  const limitTag=atLimit?'<span class="limit-tag">máx</span>':'';
+  const pendTag=pendQty>0?'<span class="pending-tag">⏳ '+pendQty+' pend.</span>':'';
+  const dis=!isAdmin;
+  return '<div style="display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap">'+
+    '<div class="counter '+activeClass+'">'+
+      '<button onclick="'+onMinus+'" '+(qty<=0||dis?'disabled':'')+'>−</button>'+
+      '<span class="count">'+qty+'</span>'+
+      '<button onclick="'+onPlus+'" '+(atLimit||dis?'disabled':'')+'>+</button>'+
+    '</div>'+limitTag+pendTag+
+  '</div>';
+}
+
+function contarPendentesAtiv(idx,filho){
+  let total=0;
+  Object.values(pendencias).forEach(function(p){
+    if(p.ativIdx===idx&&p.filho===filho)total+=p.qty;
+  });
+  return total;
+}
+
+function renderAtividades(){
+  const tbody=document.getElementById('tbody-atividades');
+  tbody.innerHTML='';
+  atividades.forEach(function(a,i){
+    const sL=state.ativ[i].lucas,sP=state.ativ[i].pedro;
+    const pL=contarPendentesAtiv(i,'lucas'),pP=contarPendentesAtiv(i,'pedro');
+    const difClass=a.dif==='Fácil'?'diff-facil':a.dif==='Médio'?'diff-medio':'diff-dificil';
+    const tr=document.createElement('tr');
+    tr.innerHTML=
+      '<td class="cat">'+a.cat+'</td>'+
+      '<td class="nome">'+a.nome+'</td>'+
+      '<td class="center"><span class="diff-badge '+difClass+'">'+a.dif+'</span></td>'+
+      '<td class="center valor-ativ">R$&nbsp;'+fmt(a.valor)+'</td>'+
+      '<td class="center" style="color:var(--text-muted);font-family:\'Syne\',sans-serif;font-size:11px;font-weight:700">'+a.limite+'×/sem</td>'+
+      '<td class="center">'+makeCounter(sL,a.limite,'lucas-active',"ajustarAtiv("+i+",'lucas',-1)","ajustarAtiv("+i+",'lucas',1)",pL)+'</td>'+
+      '<td class="center">'+makeCounter(sP,a.limite,'pedro-active',"ajustarAtiv("+i+",'pedro',-1)","ajustarAtiv("+i+",'pedro',1)",pP)+'</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function renderPenalidades(){
+  const tbody=document.getElementById('tbody-penalidades');
+  tbody.innerHTML='';
+  penalidades.forEach(function(p,i){
+    const sL=state.pen[i].lucas,sP=state.pen[i].pedro;
+    const tr=document.createElement('tr');
+    tr.innerHTML=
+      '<td class="cat">'+p.cat+'</td>'+
+      '<td class="nome">'+p.nome+'</td>'+
+      '<td class="center valor-pen">- R$&nbsp;'+fmt(p.valor)+'</td>'+
+      '<td class="center">'+makeCounter(sL,null,'pen-active',"ajustarPen("+i+",'lucas',-1)","ajustarPen("+i+",'lucas',1)",0)+'</td>'+
+      '<td class="center">'+makeCounter(sP,null,'pen-active',"ajustarPen("+i+",'pedro',-1)","ajustarPen("+i+",'pedro',1)",0)+'</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function ajustarAtiv(i,filho,delta){
+  if(!isAdmin)return;
+  state.ativ[i][filho]=Math.max(0,Math.min(atividades[i].limite,state.ativ[i][filho]+delta));
+  renderAtividades();atualizarSaldos();salvarDados();
+}
+function ajustarPen(i,filho,delta){
+  if(!isAdmin)return;
+  state.pen[i][filho]=Math.max(0,state.pen[i][filho]+delta);
+  renderPenalidades();atualizarSaldos();salvarDados();
+}
+function resetarSemana(){
+  if(!isAdmin)return;
+  if(!confirm('Resetar a semana? Todos os contadores voltam para zero.'))return;
+  state.ativ=atividades.map(()=>({lucas:0,pedro:0}));
+  state.pen=penalidades.map(()=>({lucas:0,pedro:0}));
+  renderAtividades();renderPenalidades();atualizarSaldos();salvarDados();
 }
 
 // ── RELATÓRIO ──
@@ -843,19 +675,24 @@ function gerarRelatorio(){
   const dataGeracao=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
   function blocoFilho(filho,nomeExibir,cssClass){
     const saldo=calcular(filho);
-    let subA=0,lA='';
-    atividades.forEach(function(a,i){const q=(state.ativ[i]||{}).lucas||0;const qty=filho==='lucas'?q:(state.ativ[i]||{}).pedro||0;if(!qty)return;const sub=qty*a.valor;subA+=sub;lA+='<tr><td>'+a.cat+'</td><td>'+a.nome+'</td><td class="rc">'+qty+'×</td><td class="rc">R$&nbsp;'+fmt(a.valor)+'</td><td class="rc">R$&nbsp;'+fmt(sub)+'</td></tr>';});
-    const tA=lA?'<table><thead><tr><th>Categoria</th><th>Atividade</th><th class="rc">Qtd</th><th class="rc">Unit.</th><th class="rc">Total</th></tr></thead><tbody>'+lA+'</tbody></table><div style="text-align:right;font-size:12px;color:#666;padding:4px 10px 0;font-weight:700">Subtotal: R$&nbsp;'+fmt(subA)+'</div>':'<p class="rel-nenhuma">Nenhuma atividade registrada.</p>';
-    let subP=0,lP='';
-    penalidades.forEach(function(p,i){const qty=filho==='lucas'?(state.pen[i]||{}).lucas||0:(state.pen[i]||{}).pedro||0;if(!qty)return;const sub=qty*p.valor;subP+=sub;lP+='<tr><td>'+p.cat+'</td><td>'+p.nome+'</td><td class="rc">'+qty+'×</td><td class="rc">R$&nbsp;'+fmt(p.valor)+'</td><td class="rc" style="color:#cc3333">- R$&nbsp;'+fmt(sub)+'</td></tr>';});
-    const tP=lP?'<table><thead><tr><th>Categoria</th><th>Penalidade</th><th class="rc">Qtd</th><th class="rc">Unit.</th><th class="rc">Desconto</th></tr></thead><tbody>'+lP+'</tbody></table><div style="text-align:right;font-size:12px;color:#cc3333;padding:4px 10px 0;font-weight:700">Total descontos: - R$&nbsp;'+fmt(subP)+'</div>':'<p class="rel-nenhuma">Nenhuma penalidade aplicada. ✓</p>';
-    return '<div class="rel-filho '+cssClass+'"><h2>'+nomeExibir+'</h2><div class="rel-section">Atividades Realizadas</div>'+tA+'<div class="rel-section">Penalidades Aplicadas</div>'+tP+'<div class="rel-total '+cssClass+'">Total a receber: R$&nbsp;'+fmt(saldo)+'</div></div>';
+    let subAtiv=0,linhasAtiv='';
+    atividades.forEach(function(a,i){const qty=state.ativ[i][filho];if(!qty)return;const sub=qty*a.valor;subAtiv+=sub;linhasAtiv+='<tr><td>'+a.cat+'</td><td>'+a.nome+'</td><td class="rc">'+qty+'×</td><td class="rc">R$&nbsp;'+fmt(a.valor)+'</td><td class="rc">R$&nbsp;'+fmt(sub)+'</td></tr>';});
+    const tAtiv=linhasAtiv?'<table><thead><tr><th>Categoria</th><th>Atividade</th><th class="rc">Qtd</th><th class="rc">Unit.</th><th class="rc">Total</th></tr></thead><tbody>'+linhasAtiv+'</tbody></table><div style="text-align:right;font-size:12px;color:#666;padding:4px 10px 0;font-family:Syne,sans-serif;font-weight:700">Subtotal: R$&nbsp;'+fmt(subAtiv)+'</div>':'<p class="rel-nenhuma">Nenhuma atividade registrada.</p>';
+    let subPen=0,linhasPen='';
+    penalidades.forEach(function(p,i){const qty=state.pen[i][filho];if(!qty)return;const sub=qty*p.valor;subPen+=sub;linhasPen+='<tr><td>'+p.cat+'</td><td>'+p.nome+'</td><td class="rc">'+qty+'×</td><td class="rc">R$&nbsp;'+fmt(p.valor)+'</td><td class="rc" style="color:#cc3333">- R$&nbsp;'+fmt(sub)+'</td></tr>';});
+    const tPen=linhasPen?'<table><thead><tr><th>Categoria</th><th>Penalidade</th><th class="rc">Qtd</th><th class="rc">Unit.</th><th class="rc">Desconto</th></tr></thead><tbody>'+linhasPen+'</tbody></table><div style="text-align:right;font-size:12px;color:#cc3333;padding:4px 10px 0;font-family:Syne,sans-serif;font-weight:700">Total descontos: - R$&nbsp;'+fmt(subPen)+'</div>':'<p class="rel-nenhuma">Nenhuma penalidade aplicada. ✓</p>';
+    return '<div class="rel-filho '+cssClass+'"><h2>'+nomeExibir+'</h2><div class="rel-section">Atividades Realizadas</div>'+tAtiv+'<div class="rel-section">Penalidades Aplicadas</div>'+tPen+'<div class="rel-total '+cssClass+'">Total a receber: R$&nbsp;'+fmt(saldo)+'</div></div>';
   }
   document.getElementById('relatorio').innerHTML=
-    '<h1>Relatório de Mesada</h1><p class="rel-sub">Semana '+semana+' / '+ano+' &nbsp;·&nbsp; Gerado em '+dataGeracao+'</p>'+
-    '<div class="rel-actions"><button class="rel-btn imprimir" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>'+
-    '<button class="rel-btn fechar" onclick="document.getElementById(\'relatorio\').style.display=\'none\'">✕ Fechar</button></div>'+
-    blocoFilho('lucas','Lucas','lucas')+'<hr class="rel-divider">'+blocoFilho('pedro','Pedro','pedro');
+    '<h1>Relatório de Mesada</h1>'+
+    '<p class="rel-sub">Semana '+semana+' / '+ano+' &nbsp;·&nbsp; Gerado em '+dataGeracao+'</p>'+
+    '<div class="rel-actions">'+
+      '<button class="rel-btn imprimir" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>'+
+      '<button class="rel-btn fechar" onclick="document.getElementById(\'relatorio\').style.display=\'none\'">✕ Fechar</button>'+
+    '</div>'+
+    blocoFilho('lucas','Lucas','lucas')+
+    '<hr class="rel-divider">'+
+    blocoFilho('pedro','Pedro','pedro');
   document.getElementById('relatorio').style.display='block';
 }
 </script>
