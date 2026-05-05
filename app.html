@@ -744,6 +744,7 @@ auth.onAuthStateChanged(function(user){
     familiaId=u.familiaId;
     isAdm=u.perfil==='admin';
     filhoNome=u.perfil==='filho'?u.nome.toLowerCase():null;
+    console.log('Auth OK - perfil:', u.perfil, 'isAdm:', isAdm, 'familiaId:', familiaId);
     iniciarApp();
 
   }).catch(function(){
