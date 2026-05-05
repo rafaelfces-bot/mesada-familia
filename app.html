@@ -339,6 +339,34 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);}
   </div>
 </div>
 
+<!-- ENTRAR NA FAMÍLIA (usuário sem familiaId) -->
+<div id="pg-entrar-familia" class="fullscreen">
+  <div class="auth-box">
+    <div class="auth-logo">👨‍👩‍👧‍👦 Entrar na família</div>
+    <div class="auth-tagline">Sua conta foi criada. Agora escolha como prosseguir.</div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+      <!-- Opção 1: Criar nova família -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer" onclick="mostrarTela('pg-setup')">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:4px">🏠 Criar minha família</div>
+        <div style="font-size:12px;color:var(--muted)">Sou o responsável e quero configurar um novo sistema do zero.</div>
+      </div>
+
+      <!-- Opção 2: Entrar em família existente -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:4px">👥 Entrar em uma família</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:12px">O responsável já criou a família e me adicionou.</div>
+        <div style="font-size:12px;color:var(--muted);background:rgba(86,217,138,0.07);border:1px solid rgba(86,217,138,0.2);border-radius:8px;padding:10px;line-height:1.6">
+          💡 Peça ao responsável para acessar <strong style="color:var(--success)">⚙️ Família → Membros</strong> e adicionar você pelo e-mail cadastrado.
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-p" style="margin-top:20px;background:none;border:1px solid var(--border);color:var(--muted)" onclick="auth.signOut()">Sair</button>
+    <div id="ef-msg" class="msg-e"></div>
+  </div>
+</div>
+
 <!-- ══ APP ══ -->
 
 <!-- HOME -->
@@ -442,7 +470,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);}
   <div class="sheet">
     <div class="sheet-handle"></div>
     <div class="sheet-head"><h2>👥 Membros</h2><button class="sheet-close" onclick="fecharSheet('sh-users')">✕</button></div>
-    <div class="sheet-body" id="sh-users-body"></div>
+    <div class="sheet-body">
+      <div class="sec-sub">Adicionar membro por e-mail</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <input type="email" id="add-mbr-email" placeholder="email@exemplo.com" inputmode="email"
+          style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none">
+        <select id="add-mbr-perfil" style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 10px;color:var(--text);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;outline:none;cursor:pointer">
+          <option value="filho">Filho</option>
+          <option value="admin">Admin</option>
+        </select>
+        <button onclick="adicionarMembroPorEmail()" style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:9px 12px;border-radius:8px;border:1px solid var(--success);background:rgba(86,217,138,0.1);color:var(--success);cursor:pointer;white-space:nowrap">+ Add</button>
+      </div>
+      <div id="add-mbr-msg" style="font-size:12px;margin-bottom:10px;min-height:16px;text-align:center"></div>
+      <div id="sh-users-body"></div>
+    </div>
   </div>
 </div>
 
@@ -613,10 +654,11 @@ function authAba(a){
 }
 
 function mostrarTela(id){
-  // Auth, setup, wait
-  document.getElementById('pg-auth').style.display=id==='pg-auth'?'flex':'none';
-  document.getElementById('pg-setup').style.display=id==='pg-setup'?'flex':'none';
-  document.getElementById('pg-wait').style.display=id==='pg-wait'?'flex':'none';
+  // Telas fullscreen
+  ['pg-auth','pg-setup','pg-wait','pg-entrar-familia'].forEach(function(p){
+    var el=document.getElementById(p);
+    if(el)el.style.display=p===id?'flex':'none';
+  });
   // App pages
   var isApp=id==='app';
   document.getElementById('navbar').classList.toggle('show',isApp);
@@ -665,19 +707,32 @@ auth.onAuthStateChanged(function(user){
   uid=user.uid;
   db.ref('usuarios/'+uid).once('value').then(function(snap){
     var u=snap.val();
-    // Usuário não tem registro — vai para setup criar família
-    if(!u){mostrarTela('pg-setup');return;}
-    // Usuário com registro mas sem família — vai para setup
-    if(u.perfil==='novo'||!u.familiaId){mostrarTela('pg-setup');return;}
-    // Usuário pendente de aprovação
+    // Sem registro — acabou de criar conta, escolhe o que fazer
+    if(!u){
+      // Cria registro básico e vai para tela de escolha
+      db.ref('usuarios/'+uid).set({
+        nome:auth.currentUser.displayName||auth.currentUser.email.split('@')[0],
+        email:auth.currentUser.email,
+        familiaId:null,
+        perfil:'novo',
+        ts:Date.now()
+      });
+      mostrarTela('pg-entrar-familia');
+      return;
+    }
+    // Tem registro mas sem família — tela de escolha
+    if(!u.familiaId||u.perfil==='novo'){
+      mostrarTela('pg-entrar-familia');
+      return;
+    }
+    // Pendente de aprovação
     if(u.perfil==='pendente'){mostrarTela('pg-wait');return;}
-    // Usuário aprovado — entra no app
+    // Aprovado — entra no app
     familiaId=u.familiaId;
     isAdm=u.perfil==='admin';
     filhoNome=u.perfil==='filho'?u.nome.toLowerCase():null;
     iniciarApp();
   }).catch(function(){
-    // Erro de leitura — mostra login para tentar novamente
     auth.signOut();
     mostrarTela('pg-auth');
   });
@@ -1103,6 +1158,42 @@ function ouvirMembros(){
     if(pend>0){b.textContent=pend;b.classList.add('on');}else b.classList.remove('on');
   });
 }
+function adicionarMembroPorEmail(){
+  var email=document.getElementById('add-mbr-email').value.trim().toLowerCase();
+  var perfil=document.getElementById('add-mbr-perfil').value;
+  var msg=document.getElementById('add-mbr-msg');
+  msg.style.color='var(--muted)';msg.textContent='Buscando...';
+  if(!email){msg.style.color='var(--penalty)';msg.textContent='Informe o e-mail.';return;}
+
+  // Buscar usuário pelo email no nó usuarios
+  db.ref('usuarios').orderByChild('email').equalTo(email).once('value').then(function(snap){
+    var dados=snap.val();
+    if(!dados){
+      msg.style.color='var(--penalty)';
+      msg.textContent='Usuário não encontrado. Peça para criar conta primeiro.';
+      return;
+    }
+    var uid=Object.keys(dados)[0];
+    var u=dados[uid];
+    // Adicionar à família
+    return Promise.all([
+      db.ref('familias/'+familiaId+'/membros/'+uid).set({
+        nome:u.nome,email:u.email,perfil:perfil,ts:Date.now()
+      }),
+      db.ref('usuarios/'+uid).update({
+        familiaId:familiaId,perfil:perfil
+      })
+    ]).then(function(){
+      msg.style.color='var(--success)';
+      msg.textContent='✅ '+u.nome+' adicionado como '+perfil+'!';
+      document.getElementById('add-mbr-email').value='';
+      renderUsers();
+    });
+  }).catch(function(){
+    msg.style.color='var(--penalty)';msg.textContent='Erro ao buscar usuário.';
+  });
+}
+
 function renderUsers(){
   var body=document.getElementById('sh-users-body');
   db.ref('familias/'+familiaId+'/membros').once('value').then(function(snap){
