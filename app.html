@@ -2,469 +2,510 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Mesada Família</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
-  :root{
-    --bg:#0f0f13;--surface:#1a1a22;--surface2:#22222e;--border:#2e2e3e;
-    --lucas:#f5a623;--lucas-dim:rgba(245,166,35,0.12);
-    --pedro:#4fc3f7;--pedro-dim:rgba(79,195,247,0.12);
-    --penalty:#ff6b6b;--penalty-dim:rgba(255,107,107,0.10);
-    --text:#e8e8f0;--text-muted:#7a7a9a;--success:#56d98a;
-    --pending:#a78bfa;--pending-dim:rgba(167,139,250,0.12);
-    --filho1:#f5a623;--filho1-dim:rgba(245,166,35,0.12);
-    --filho2:#4fc3f7;--filho2-dim:rgba(79,195,247,0.12);
-    --filho3:#56d98a;--filho3-dim:rgba(86,217,138,0.12);
-    --filho4:#a78bfa;--filho4-dim:rgba(167,139,250,0.12);
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+:root{
+  --bg:#0f0f13;--surface:#1a1a22;--surface2:#22222e;--border:#2e2e3e;
+  --text:#e8e8f0;--muted:#7a7a9a;--success:#56d98a;
+  --penalty:#ff6b6b;--penalty-dim:rgba(255,107,107,0.10);
+  --pending:#a78bfa;--pending-dim:rgba(167,139,250,0.12);
+  --nav-h:64px;--top-h:56px;
+  --cores:#f5a623,#4fc3f7,#56d98a,#a78bfa,#ff6b6b,#f472b6;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);}
 
-  /* ── TELAS ── */
-  .tela{display:none;}
-  .tela.ativa{display:block;}
-  #tela-auth{display:none;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
-  #tela-auth.ativa{display:flex;}
+/* ── PÁGINAS ── */
+.pg{display:none;position:fixed;inset:0;overflow-y:auto;padding-bottom:calc(var(--nav-h) + 16px);}
+.pg.ativa{display:block;}
+/* telas sem nav */
+.pg.fullscreen{padding-bottom:0;}
 
-  /* ── AUTH ── */
-  .auth-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;width:100%;max-width:400px;}
-  .auth-logo{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--success);margin-bottom:4px;}
-  .auth-sub{font-size:13px;color:var(--text-muted);margin-bottom:24px;}
-  .auth-tabs{display:flex;border-radius:10px;overflow:hidden;border:1px solid var(--border);margin-bottom:24px;}
-  .auth-tab{flex:1;background:var(--surface2);border:none;color:var(--text-muted);font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:10px;cursor:pointer;transition:all 0.15s;}
-  .auth-tab.active{background:var(--success);color:#0f0f13;}
-  .field{margin-bottom:14px;}
-  .field label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:5px;}
-  .field input,.field select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;}
-  .field input:focus,.field select:focus{border-color:var(--text-muted);}
-  .btn-primary{width:100%;background:var(--success);color:#0f0f13;border:none;border-radius:8px;padding:12px;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:4px;transition:opacity 0.15s;}
-  .btn-primary:hover{opacity:0.85;}
-  .msg-erro{color:var(--penalty);font-size:12px;margin-top:10px;min-height:16px;text-align:center;}
-  .msg-ok{color:var(--success);font-size:12px;margin-top:10px;min-height:16px;text-align:center;}
-  .auth-divider{text-align:center;color:var(--text-muted);font-size:12px;margin:16px 0;position:relative;}
-  .auth-divider::before,.auth-divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--border);}
-  .auth-divider::before{left:0;}
-  .auth-divider::after{right:0;}
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(15,15,19,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:var(--top-h);display:flex;align-items:center;padding:0 16px;gap:10px;}
+.topbar-title{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;flex:1;}
+.topbar-sub{font-size:11px;color:var(--muted);}
+.top-btn{background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);padding:6px 10px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;position:relative;}
+.top-btn:hover{border-color:var(--muted);}
+.tbadge{position:absolute;top:-6px;right:-6px;background:var(--penalty);color:#fff;border-radius:99px;font-size:9px;font-weight:800;padding:1px 5px;display:none;}
+.tbadge.on{display:block;}
 
-  /* ── SETUP FAMÍLIA ── */
-  #tela-setup{display:none;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
-  #tela-setup.ativa{display:flex;}
-  .setup-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;width:100%;max-width:480px;}
-  .setup-step{display:none;}
-  .setup-step.ativa{display:block;}
-  .setup-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px;}
-  .setup-desc{font-size:13px;color:var(--text-muted);margin-bottom:24px;}
-  .step-indicator{display:flex;gap:6px;margin-bottom:24px;}
-  .step-dot{width:8px;height:8px;border-radius:99px;background:var(--border);transition:background 0.3s;}
-  .step-dot.active{background:var(--success);}
-  .step-dot.done{background:var(--success);opacity:0.4;}
-  .tooltip-balao{background:rgba(86,217,138,0.08);border:1px solid rgba(86,217,138,0.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
-  .tooltip-balao strong{color:var(--success);}
-  .convite-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;margin:16px 0;}
-  .convite-code{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--success);letter-spacing:6px;}
-  .convite-sub{font-size:12px;color:var(--text-muted);margin-top:6px;}
-  .btn-copy{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:8px 16px;border-radius:6px;border:1px solid var(--success);background:rgba(86,217,138,0.1);color:var(--success);cursor:pointer;margin-top:10px;}
-  .filho-chip{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:99px;padding:4px 12px;margin:4px;font-size:13px;}
-  .filho-chip button{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:14px;padding:0;line-height:1;}
-  .add-filho-row{display:flex;gap:8px;margin-top:10px;}
-  .add-filho-row input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;}
-  .add-filho-row button{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:8px 14px;border-radius:8px;border:1px solid var(--success);background:rgba(86,217,138,0.1);color:var(--success);cursor:pointer;white-space:nowrap;}
+/* ── NAVBAR INFERIOR ── */
+#navbar{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(15,15,19,0.97);backdrop-filter:blur(16px);border-top:1px solid var(--border);height:var(--nav-h);display:none;align-items:stretch;}
+#navbar.show{display:flex;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;border:none;background:none;color:var(--muted);padding:0;transition:color 0.15s;position:relative;}
+.nav-item.active{color:var(--success);}
+.nav-icon{font-size:22px;line-height:1;}
+.nav-label{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.nav-dot{position:absolute;top:8px;right:calc(50% - 16px);width:7px;height:7px;background:var(--penalty);border-radius:99px;display:none;}
+.nav-dot.on{display:block;}
 
-  /* ── AGUARDANDO ── */
-  #tela-aguardando{display:none;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
-  #tela-aguardando.ativa{display:flex;}
-  .aguardando-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;width:100%;max-width:400px;text-align:center;}
-  .aguardando-box h2{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:10px;}
-  .aguardando-box p{font-size:13px;color:var(--text-muted);margin-bottom:20px;}
+/* ── AUTH ── */
+#pg-auth{display:none;align-items:center;justify-content:center;min-height:100%;padding:20px;}
+#pg-auth.ativa{display:flex;}
+.auth-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px 24px;width:100%;max-width:380px;}
+.auth-logo{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--success);margin-bottom:2px;}
+.auth-tagline{font-size:12px;color:var(--muted);margin-bottom:22px;}
+.auth-tabs{display:flex;border-radius:10px;overflow:hidden;border:1px solid var(--border);margin-bottom:20px;}
+.auth-tab{flex:1;background:var(--surface2);border:none;color:var(--muted);font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:10px;cursor:pointer;transition:all 0.15s;}
+.auth-tab.active{background:var(--success);color:#0f0f13;}
+.field{margin-bottom:12px;}
+.field label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px;}
+.field input,.field select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:15px;font-family:'DM Sans',sans-serif;outline:none;}
+.field input:focus{border-color:var(--muted);}
+.btn-p{width:100%;background:var(--success);color:#0f0f13;border:none;border-radius:10px;padding:13px;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:6px;}
+.msg-e{color:var(--penalty);font-size:12px;margin-top:8px;min-height:16px;text-align:center;}
+.msg-ok{color:var(--success);font-size:12px;margin-top:8px;text-align:center;}
 
-  /* ── SALDO BAR ── */
-  #saldo-bar{position:sticky;top:0;z-index:100;background:rgba(15,15,19,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-  .saldo-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);flex-shrink:0;}
-  .saldo-cards{display:flex;gap:8px;flex-wrap:wrap;flex:1;}
-  .saldo-card{display:flex;align-items:center;gap:8px;background:var(--surface);border-radius:10px;padding:7px 14px;border:1px solid var(--border);flex:1;min-width:130px;}
-  .saldo-card .snome{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;flex-shrink:0;}
-  .saldo-card .svalor{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-left:auto;}
-  .prog-wrap{width:40px;height:4px;background:var(--border);border-radius:99px;overflow:hidden;}
-  .prog-bar{height:100%;border-radius:99px;transition:width 0.4s;}
-  .semana-wrap{display:flex;align-items:center;gap:6px;}
-  .semana-wrap label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;}
-  .semana-wrap select{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:5px 8px;cursor:pointer;outline:none;}
-  .topbar-btns{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
-  .tbtn{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:none;color:var(--text-muted);cursor:pointer;white-space:nowrap;position:relative;}
-  .tbtn:hover{border-color:var(--text-muted);}
-  .tbtn.pend{border-color:var(--pending);color:var(--pending);background:var(--pending-dim);}
-  .tbtn.users{border-color:var(--lucas);color:var(--lucas);background:var(--lucas-dim);}
-  .tbtn.conf{border-color:var(--text-muted);}
-  .tbtn-badge{position:absolute;top:-7px;right:-7px;background:var(--penalty);color:#fff;border-radius:99px;font-size:9px;font-weight:800;padding:1px 5px;display:none;}
-  .tbtn-badge.show{display:block;}
+/* ── SETUP ── */
+#pg-setup{display:none;align-items:flex-start;justify-content:center;min-height:100%;padding:20px;}
+#pg-setup.ativa{display:flex;}
+.setup-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 22px;width:100%;max-width:420px;margin:auto;}
+.step{display:none;}
+.step.ativa{display:block;}
+.step-dots{display:flex;gap:6px;margin-bottom:22px;}
+.sdot{width:8px;height:8px;border-radius:99px;background:var(--border);transition:all 0.3s;}
+.sdot.active{background:var(--success);width:20px;}
+.sdot.done{background:var(--success);opacity:0.35;}
+.setup-h{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;}
+.setup-d{font-size:13px;color:var(--muted);margin-bottom:20px;}
+.tip-box{background:rgba(86,217,138,0.07);border:1px solid rgba(86,217,138,0.2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6;}
+.tip-box strong{color:var(--success);}
+.chip-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.chip{display:inline-flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border);border-radius:99px;padding:5px 12px;font-size:13px;}
+.chip button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;line-height:1;}
+.add-row{display:flex;gap:8px;}
+.add-row input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;}
+.add-row button{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:9px 14px;border-radius:8px;border:1px solid var(--success);background:rgba(86,217,138,0.1);color:var(--success);cursor:pointer;white-space:nowrap;}
+.convite-display{background:var(--bg);border:2px dashed var(--success);border-radius:12px;padding:20px;text-align:center;margin:16px 0;}
+.convite-code{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--success);letter-spacing:8px;}
+.convite-sub{font-size:11px;color:var(--muted);margin-top:4px;}
+.btn-copy{margin-top:10px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:8px 16px;border-radius:6px;border:1px solid var(--success);background:rgba(86,217,138,0.1);color:var(--success);cursor:pointer;}
 
-  /* ── LAYOUT ── */
-  .container{max-width:960px;margin:0 auto;padding:20px 16px 80px;}
-  .page-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;}
-  .page-sub{font-size:13px;color:var(--text-muted);margin-top:3px;}
-  .sec-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--text-muted);margin:28px 0 10px;display:flex;align-items:center;gap:10px;}
-  .sec-label::after{content:'';flex:1;height:1px;background:var(--border);}
-  #sync-st{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--text-muted);padding:3px 0 0;text-align:right;}
-  #sync-st.ok{color:var(--success);}
-  #sync-st.err{color:var(--penalty);}
+/* ── AGUARDANDO ── */
+#pg-wait{display:none;align-items:center;justify-content:center;min-height:100%;}
+#pg-wait.ativa{display:flex;}
+.wait-box{text-align:center;padding:32px 24px;max-width:320px;}
+.wait-box h2{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin:12px 0 8px;}
+.wait-box p{font-size:13px;color:var(--muted);line-height:1.6;}
 
-  /* ── TABELA ── */
-  .table-wrap{border-radius:12px;border:1px solid var(--border);overflow:hidden;}
-  table{width:100%;border-collapse:collapse;font-size:13px;}
-  thead th{background:var(--surface2);padding:9px 11px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);white-space:nowrap;text-align:left;}
-  thead th.c{text-align:center;}
-  tbody tr{border-bottom:1px solid var(--border);transition:background 0.15s;}
-  tbody tr:last-child{border-bottom:none;}
-  tbody tr:hover{background:var(--surface);}
-  td{padding:9px 11px;vertical-align:middle;}
-  td.cat{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;width:1%;}
-  td.nome-td{color:var(--text);font-size:13px;}
-  td.c{text-align:center;white-space:nowrap;width:1%;}
-  td.ac{width:1%;white-space:nowrap;}
-  .diff-b{display:inline-block;padding:2px 7px;border-radius:99px;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;text-transform:uppercase;letter-spacing:1px;}
-  .df{background:rgba(86,217,138,0.15);color:var(--success);}
-  .dm{background:rgba(245,166,35,0.15);color:var(--lucas);}
-  .dd{background:rgba(255,107,107,0.15);color:var(--penalty);}
-  .vativ{font-family:'Syne',sans-serif;font-weight:700;color:var(--success);}
-  .vpen{font-family:'Syne',sans-serif;font-weight:700;color:var(--penalty);}
+/* ── HOME ── */
+.home-header{padding:20px 16px 12px;}
+.home-familia{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);}
+.home-titulo{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-top:2px;}
+.semana-sel{display:flex;align-items:center;gap:8px;margin-top:10px;}
+.semana-sel label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.semana-sel select{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;outline:none;flex:1;}
 
-  /* ── CONTADOR ── */
-  .ctr{display:inline-flex;align-items:center;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg);}
-  .ctr button{background:none;border:none;color:var(--text-muted);font-size:15px;font-weight:700;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-family:'Syne',sans-serif;}
-  .ctr button:hover{background:var(--surface2);}
-  .ctr button:disabled{opacity:0.2;cursor:not-allowed;}
-  .ctr .cnt{min-width:26px;text-align:center;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:var(--text);border-left:1px solid var(--border);border-right:1px solid var(--border);padding:0 3px;height:28px;line-height:28px;}
-  .lim-tag{display:inline-block;font-size:9px;font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;color:var(--penalty);background:var(--penalty-dim);border-radius:4px;padding:1px 5px;margin-left:3px;vertical-align:middle;}
-  .pend-tag{display:inline-block;font-size:9px;font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;color:var(--pending);background:var(--pending-dim);border-radius:4px;padding:1px 5px;margin-left:3px;vertical-align:middle;}
+/* SALDO CARDS NA HOME */
+.saldo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;padding:0 16px 16px;}
+.saldo-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px;}
+.sc-nome{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;margin-bottom:8px;}
+.sc-valor{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;margin-bottom:6px;}
+.sc-prog{height:4px;background:var(--border);border-radius:99px;overflow:hidden;}
+.sc-bar{height:100%;border-radius:99px;transition:width 0.5s;}
+.sc-limite{font-size:10px;color:var(--muted);margin-top:4px;}
 
-  /* ── BOTÕES LINHA ── */
-  .row-acts{display:flex;gap:3px;justify-content:center;}
-  .rbtn{background:none;border:1px solid var(--border);border-radius:5px;color:var(--text-muted);font-size:12px;width:26px;height:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
-  .rbtn:hover.ed{border-color:var(--lucas);color:var(--lucas);}
-  .rbtn:hover.rm{border-color:var(--penalty);color:var(--penalty);}
-  .rbtn.np{opacity:0.15;cursor:not-allowed;filter:grayscale(1);}
-  .rbtn.np:hover{border-color:var(--border)!important;color:var(--text-muted)!important;}
+/* ── ATIVIDADES ── */
+.filho-selector{display:flex;gap:8px;padding:16px 16px 8px;overflow-x:auto;scrollbar-width:none;}
+.filho-selector::-webkit-scrollbar{display:none;}
+.filho-btn{flex-shrink:0;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:8px 16px;border-radius:99px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.filho-btn.active{color:#0f0f13;}
 
-  /* ── BOTÕES PRINCIPAIS ── */
-  .actions{margin-top:28px;display:flex;gap:10px;flex-wrap:wrap;}
-  .btn{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:10px 20px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text-muted);cursor:pointer;transition:all 0.15s;}
-  .btn:hover{border-color:var(--penalty);color:var(--penalty);}
-  .btn.ok{border-color:var(--success);color:var(--success);background:rgba(86,217,138,0.08);}
-  .btn.ok:hover{background:rgba(86,217,138,0.18);}
-  .btn.add{border-color:var(--lucas);color:var(--lucas);background:var(--lucas-dim);}
-  .btn.np{opacity:0.2;cursor:not-allowed;filter:grayscale(1);}
+/* CARDS DE ATIVIDADE */
+.ativ-list{padding:0 16px 16px;display:flex;flex-direction:column;gap:8px;}
+.ativ-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;}
+.ativ-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;}
+.ativ-cat{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.ativ-nome{font-size:14px;font-weight:500;margin-top:2px;line-height:1.3;}
+.ativ-meta{display:flex;gap:6px;align-items:center;margin-top:4px;flex-wrap:wrap;}
+.diff-tag{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:99px;}
+.df{background:rgba(86,217,138,0.15);color:var(--success);}
+.dm{background:rgba(245,166,35,0.15);color:#f5a623;}
+.dd{background:rgba(255,107,107,0.15);color:var(--penalty);}
+.ativ-valor{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--success);}
+.ativ-lim{font-size:11px;color:var(--muted);}
+.ativ-bottom{display:flex;align-items:center;justify-content:space-between;}
+.ativ-acts{display:flex;gap:6px;}
+.abtn{background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:13px;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.abtn:hover.ed{border-color:#f5a623;color:#f5a623;}
+.abtn:hover.rm{border-color:var(--penalty);color:var(--penalty);}
+.abtn.np{opacity:0.15;cursor:not-allowed;}
 
-  /* ── PAINEL FILHO ── */
-  #painel-filho{display:none;background:var(--pending-dim);border:1px solid var(--pending);border-radius:12px;padding:18px;margin-top:20px;}
-  #painel-filho h3{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--pending);margin-bottom:12px;}
-  .pf-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;}
-  .pf-row label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;}
-  .pf-row select,.pf-row input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;}
-  .btn-enviar{width:100%;font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:10px;border-radius:8px;border:1px solid var(--pending);background:var(--pending-dim);color:var(--pending);cursor:pointer;}
+/* CONTADOR */
+.ctr{display:inline-flex;align-items:center;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg);}
+.ctr button{background:none;border:none;color:var(--muted);font-size:18px;font-weight:700;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-family:'Syne',sans-serif;transition:background 0.15s;}
+.ctr button:active{background:var(--surface2);}
+.ctr button:disabled{opacity:0.2;cursor:not-allowed;}
+.ctr .cnt{min-width:36px;text-align:center;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:var(--text);border-left:1px solid var(--border);border-right:1px solid var(--border);height:36px;line-height:36px;}
+.pend-chip{font-size:9px;font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;color:var(--pending);background:var(--pending-dim);border-radius:4px;padding:2px 6px;margin-left:4px;}
+.lim-chip{font-size:9px;font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;color:var(--penalty);background:var(--penalty-dim);border-radius:4px;padding:2px 6px;margin-left:4px;}
 
-  /* ── MODAIS ── */
-  .overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;padding:16px;}
-  .overlay.show{display:flex;}
-  .mbox{background:var(--surface);border:1px solid var(--border);border-radius:14px;width:100%;max-width:520px;max-height:88vh;overflow-y:auto;}
-  .mhead{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);z-index:1;}
-  .mhead h2{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;}
-  .mclose{background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;padding:0;}
-  .mbody{padding:18px 22px;}
-  .mfoot{display:flex;gap:8px;padding:14px 22px;border-top:1px solid var(--border);}
-  .btn-save{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:10px 20px;border-radius:8px;border:none;background:var(--success);color:#0f0f13;cursor:pointer;flex:1;}
-  .btn-cancel{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:10px 20px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text-muted);cursor:pointer;}
-  .sec-sub{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);margin:14px 0 8px;}
+/* ADD NOVO */
+.add-card{background:none;border:1px dashed var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;color:var(--muted);font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;width:100%;}
+.add-card:active{background:var(--surface);}
 
-  /* USUÁRIOS NO MODAL */
-  .usr-item{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:11px 14px;margin-bottom:7px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-  .usr-info{flex:1;}
-  .usr-nome{font-size:13px;font-weight:600;}
-  .usr-email{font-size:11px;color:var(--text-muted);margin-top:2px;}
-  .perfil-tag{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:99px;}
-  .pt-admin{background:var(--lucas-dim);color:var(--lucas);}
-  .pt-filho{background:var(--pedro-dim);color:var(--pedro);}
-  .pt-pendente{background:var(--penalty-dim);color:var(--penalty);}
-  .usr-acts{display:flex;gap:5px;flex-wrap:wrap;}
-  .ubtn{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 10px;border-radius:5px;cursor:pointer;border:1px solid;}
-  .ubtn.ua{border-color:var(--lucas);background:var(--lucas-dim);color:var(--lucas);}
-  .ubtn.uf{border-color:var(--pedro);background:var(--pedro-dim);color:var(--pedro);}
-  .ubtn.ur{border-color:var(--penalty);background:var(--penalty-dim);color:var(--penalty);}
-  .ubtn.um{border-color:var(--border);background:none;color:var(--text-muted);}
-  .empty-msg{text-align:center;padding:24px;color:var(--text-muted);font-size:13px;}
+/* PAINEL FILHO (envio pendência) */
+.send-panel{margin:0 16px 16px;background:var(--pending-dim);border:1px solid var(--pending);border-radius:12px;padding:16px;}
+.send-panel h3{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--pending);margin-bottom:12px;}
+.pf-field{margin-bottom:10px;}
+.pf-field label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px;}
+.pf-field select,.pf-field input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;}
+.btn-enviar{width:100%;font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:12px;border-radius:8px;border:1px solid var(--pending);background:var(--pending-dim);color:var(--pending);cursor:pointer;margin-top:4px;}
 
-  /* PENDÊNCIAS */
-  .pend-item{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 14px;margin-bottom:7px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-  .pend-info{flex:1;}
-  .pend-filho{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}
-  .pend-nome{font-size:13px;}
-  .pend-qty{font-size:11px;color:var(--text-muted);margin-top:2px;}
-  .pend-val{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:var(--success);}
-  .pend-acts{display:flex;gap:6px;}
-  .pbtn{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:6px 12px;border-radius:5px;cursor:pointer;border:1px solid;}
-  .pbtn.ap{border-color:var(--success);background:rgba(86,217,138,0.1);color:var(--success);}
-  .pbtn.rj{border-color:var(--penalty);background:rgba(255,107,107,0.1);color:var(--penalty);}
+/* ── PENALIDADES (mesmo padrão das atividades) ── */
 
-  /* RELATÓRIO */
-  #relatorio{display:none;position:fixed;inset:0;z-index:300;background:#fff;color:#111;overflow-y:auto;padding:36px;font-family:'DM Sans',sans-serif;font-size:13px;}
-  #relatorio h1{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px;}
-  #relatorio .rs{font-size:11px;color:#888;margin-bottom:22px;}
-  #relatorio .ra{display:flex;gap:8px;margin-bottom:24px;}
-  #relatorio .rb{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:9px 18px;border-radius:7px;border:none;cursor:pointer;}
-  #relatorio .rb.imp{background:#111;color:#fff;}
-  #relatorio .rb.fch{background:#eee;color:#444;}
-  #relatorio .rf{margin-bottom:32px;}
-  #relatorio .rfh{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;padding:7px 12px;border-radius:5px;margin-bottom:12px;}
-  #relatorio .rsc{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#aaa;margin:14px 0 7px;}
-  #relatorio table{width:100%;border-collapse:collapse;}
-  #relatorio thead th{background:#f5f5f5;padding:6px 9px;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;text-transform:uppercase;color:#888;border-bottom:1px solid #e0e0e0;text-align:left;}
-  #relatorio thead th.rc{text-align:right;}
-  #relatorio tbody td{padding:6px 9px;border-bottom:1px solid #f0f0f0;}
-  #relatorio tbody td.rc{text-align:right;font-family:'Syne',sans-serif;font-weight:700;}
-  #relatorio .rtot{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;text-align:right;padding:10px 0 0;border-top:2px solid #e0e0e0;margin-top:4px;}
-  #relatorio .rdiv{border:none;border-top:1px solid #eee;margin:24px 0;}
-  #relatorio .rnn{color:#aaa;font-style:italic;font-size:12px;padding:5px 9px;}
-  @media print{body>*:not(#relatorio){display:none!important;}#relatorio{position:static;padding:20px;}#relatorio .ra{display:none!important;}}
+/* ── RELATÓRIO ── */
+.rel-wrap{padding:16px;}
+.rel-filho-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;}
+.rel-filho-header{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
+.rel-filho-nome{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;}
+.rel-filho-total{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;}
+.rel-filho-body{padding:0 16px 14px;display:none;}
+.rel-filho-body.open{display:block;}
+.rel-sec{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin:12px 0 6px;}
+.rel-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.rel-item:last-child{border-bottom:none;}
+.rel-item-nome{flex:1;color:var(--text);}
+.rel-item-qty{color:var(--muted);font-size:12px;white-space:nowrap;}
+.rel-item-val{font-family:'Syne',sans-serif;font-weight:700;white-space:nowrap;}
+.rel-nenhuma{color:var(--muted);font-size:12px;font-style:italic;padding:6px 0;}
+.rel-acoes{display:flex;gap:8px;padding:0 16px 16px;}
+.btn-pdf{flex:1;font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:12px;border-radius:10px;border:none;background:#111;color:#fff;cursor:pointer;}
+
+/* ── MODAIS ── */
+.overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.7);align-items:flex-end;justify-content:center;}
+.overlay.show{display:flex;}
+.sheet{background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom,16px);}
+.sheet-handle{width:36px;height:4px;background:var(--border);border-radius:99px;margin:12px auto 16px;}
+.sheet-head{padding:0 20px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.sheet-head h2{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;}
+.sheet-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;}
+.sheet-body{padding:16px 20px;}
+.sheet-foot{display:flex;gap:8px;padding:12px 20px;border-top:1px solid var(--border);}
+.btn-save{flex:1;font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:12px;border-radius:8px;border:none;background:var(--success);color:#0f0f13;cursor:pointer;}
+.btn-cancel{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:12px 18px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;}
+.sec-sub{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin:14px 0 8px;}
+
+/* MEMBROS */
+.usr-item{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.usr-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.usr-nome{font-size:14px;font-weight:600;flex:1;}
+.usr-email{font-size:11px;color:var(--muted);}
+.perfil-tag{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:99px;}
+.pt-admin{background:rgba(245,166,35,0.15);color:#f5a623;}
+.pt-filho{background:rgba(79,195,247,0.15);color:#4fc3f7;}
+.pt-pendente{background:var(--penalty-dim);color:var(--penalty);}
+.usr-acts{display:flex;gap:6px;flex-wrap:wrap;}
+.ubtn{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:6px 10px;border-radius:6px;cursor:pointer;border:1px solid;}
+.ubtn.ua{border-color:#f5a623;background:rgba(245,166,35,0.1);color:#f5a623;}
+.ubtn.uf{border-color:#4fc3f7;background:rgba(79,195,247,0.1);color:#4fc3f7;}
+.ubtn.ur{border-color:var(--penalty);background:var(--penalty-dim);color:var(--penalty);}
+.ubtn.um{border-color:var(--border);background:none;color:var(--muted);}
+.empty-msg{text-align:center;padding:24px;color:var(--muted);font-size:13px;}
+
+/* PENDÊNCIAS */
+.pend-item{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.pend-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.pend-filho{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+.pend-dt{font-size:11px;color:var(--muted);margin-left:auto;}
+.pend-nome{font-size:14px;margin-bottom:4px;}
+.pend-qty{font-size:12px;color:var(--muted);}
+.pend-bot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
+.pend-val{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:var(--success);}
+.pend-acts{display:flex;gap:6px;}
+.pbtn{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:7px 14px;border-radius:6px;cursor:pointer;border:1px solid;}
+.pbtn.ap{border-color:var(--success);background:rgba(86,217,138,0.1);color:var(--success);}
+.pbtn.rj{border-color:var(--penalty);background:var(--penalty-dim);color:var(--penalty);}
+
+/* PDF */
+#pdf-view{display:none;position:fixed;inset:0;z-index:300;background:#fff;color:#111;overflow-y:auto;padding:28px 20px;font-family:'DM Sans',sans-serif;font-size:13px;}
+#pdf-view h1{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:4px;}
+#pdf-view .ps{font-size:11px;color:#888;margin-bottom:18px;}
+#pdf-view .pa{display:flex;gap:8px;margin-bottom:20px;}
+#pdf-view .pb{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:9px 16px;border-radius:7px;border:none;cursor:pointer;}
+#pdf-view .pb.imp{background:#111;color:#fff;}
+#pdf-view .pb.fch{background:#eee;color:#444;}
+#pdf-view .pf{margin-bottom:28px;}
+#pdf-view .pfh{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;padding:7px 10px;border-radius:5px;margin-bottom:10px;}
+#pdf-view .psc{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#aaa;margin:12px 0 6px;}
+#pdf-view table{width:100%;border-collapse:collapse;}
+#pdf-view thead th{background:#f5f5f5;padding:5px 8px;font-size:9px;font-weight:700;text-transform:uppercase;color:#888;border-bottom:1px solid #e0e0e0;text-align:left;}
+#pdf-view thead th.rc{text-align:right;}
+#pdf-view tbody td{padding:5px 8px;border-bottom:1px solid #f0f0f0;}
+#pdf-view tbody td.rc{text-align:right;font-weight:700;}
+#pdf-view .ptot{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;text-align:right;padding:10px 0 0;border-top:2px solid #e0e0e0;}
+#pdf-view .pdiv{border:none;border-top:1px solid #eee;margin:20px 0;}
+#pdf-view .pnn{color:#aaa;font-style:italic;font-size:11px;}
+@media print{body>*:not(#pdf-view){display:none!important;}#pdf-view{position:static;}#pdf-view .pa{display:none!important;}}
+
+/* ── DESKTOP OVERRIDE ── */
+@media(min-width:640px){
+  .overlay{align-items:center;}
+  .sheet{border-radius:16px;margin:20px;}
+  .pg{padding-bottom:calc(var(--nav-h) + 16px);}
+}
 </style>
 </head>
 <body>
 
-<!-- ══ TELA AUTH ══ -->
-<div id="tela-auth" class="ativa">
+<!-- AUTH -->
+<div id="pg-auth" class="fullscreen">
   <div class="auth-box">
     <div class="auth-logo">💰 Mesada Família</div>
-    <div class="auth-sub">Controle de mesada educativa</div>
+    <div class="auth-tagline">Controle de mesada educativa</div>
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="authAba('entrar')">Entrar</button>
       <button class="auth-tab" onclick="authAba('cadastro')">Criar conta</button>
     </div>
-    <!-- ENTRAR -->
     <div id="auth-entrar">
-      <div class="field"><label>E-mail</label><input type="email" id="ae-email" placeholder="seu@email.com"></div>
+      <div class="field"><label>E-mail</label><input type="email" id="ae-email" placeholder="seu@email.com" inputmode="email"></div>
       <div class="field"><label>Senha</label><input type="password" id="ae-senha" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
-      <button class="btn-primary" onclick="doLogin()">Entrar</button>
-      <div id="ae-msg" class="msg-erro"></div>
+      <button class="btn-p" onclick="doLogin()">Entrar</button>
+      <div id="ae-msg" class="msg-e"></div>
     </div>
-    <!-- CADASTRO -->
     <div id="auth-cadastro" style="display:none">
       <div class="field"><label>Nome completo</label><input type="text" id="ac-nome" placeholder="Seu nome"></div>
-      <div class="field"><label>E-mail</label><input type="email" id="ac-email" placeholder="seu@email.com"></div>
+      <div class="field"><label>E-mail</label><input type="email" id="ac-email" placeholder="seu@email.com" inputmode="email"></div>
       <div class="field"><label>Senha</label><input type="password" id="ac-senha" placeholder="Mínimo 6 caracteres"></div>
       <div class="field"><label>Confirmar senha</label><input type="password" id="ac-senha2" placeholder="Repita a senha"></div>
-      <div class="auth-divider">ou entre com convite</div>
       <div class="field"><label>Código de convite (opcional)</label><input type="text" id="ac-convite" placeholder="Ex: ABC123" style="text-transform:uppercase;letter-spacing:3px"></div>
-      <button class="btn-primary" onclick="doCadastro()">Criar conta</button>
-      <div id="ac-msg" class="msg-erro"></div>
+      <button class="btn-p" onclick="doCadastro()">Criar conta</button>
+      <div id="ac-msg" class="msg-e"></div>
     </div>
   </div>
 </div>
 
-<!-- ══ TELA SETUP FAMÍLIA ══ -->
-<div id="tela-setup">
+<!-- SETUP -->
+<div id="pg-setup" class="fullscreen">
   <div class="setup-box">
-    <div class="step-indicator">
-      <div class="step-dot active" id="dot0"></div>
-      <div class="step-dot" id="dot1"></div>
-      <div class="step-dot" id="dot2"></div>
+    <div class="step-dots">
+      <div class="sdot active" id="dot0"></div>
+      <div class="sdot" id="dot1"></div>
+      <div class="sdot" id="dot2"></div>
     </div>
-
-    <!-- STEP 0: Nome da família -->
-    <div class="setup-step ativa" id="step0">
-      <div class="setup-title">🏠 Bem-vindo!</div>
-      <div class="setup-desc">Vamos configurar a sua família. Como ela se chama?</div>
-      <div class="field"><label>Nome da família</label><input type="text" id="s-nome-familia" placeholder="Ex: Família Silva"></div>
+    <!-- step 0 -->
+    <div class="step ativa" id="step0">
+      <div class="setup-h">🏠 Bem-vindo!</div>
+      <div class="setup-d">Vamos configurar sua família. Como ela se chama?</div>
+      <div class="field"><label>Nome da família</label><input type="text" id="s-fam" placeholder="Ex: Família Silva"></div>
       <div class="field">
         <label>Limite semanal por filho (R$)</label>
-        <input type="number" id="s-limite" value="50" min="10" step="5">
-        <div class="tooltip-balao">
-          💡 <strong>O que é o limite semanal?</strong><br>
-          É o valor máximo que cada filho pode ganhar por semana, somando todas as atividades realizadas.
-          Penalidades são descontadas desse valor. O saldo nunca passa desse limite nem fica negativo.<br>
-          <span style="color:var(--text-muted)">Ex: R$ 50,00 significa que cada filho pode ganhar no máximo R$ 50,00 por semana.</span>
-        </div>
+        <input type="number" id="s-lim" value="50" min="10" step="5">
+        <div class="tip-box">💡 <strong>O que é o limite semanal?</strong><br>É o valor máximo que cada filho pode ganhar por semana somando todas as atividades. Penalidades são descontadas desse total. O saldo nunca ultrapassa esse limite.<br><span style="color:var(--muted)">Ex: R$ 50,00 → cada filho ganha no máximo R$ 50,00/semana.</span></div>
       </div>
-      <button class="btn-primary" onclick="setupStep1()">Continuar →</button>
-      <div id="s0-msg" class="msg-erro"></div>
+      <button class="btn-p" onclick="sStep1()">Continuar →</button>
+      <div id="s0-msg" class="msg-e"></div>
     </div>
-
-    <!-- STEP 1: Filhos -->
-    <div class="setup-step" id="step1">
-      <div class="setup-title">👦 Quem são os filhos?</div>
-      <div class="setup-desc">Adicione os filhos que participam do sistema de mesada.</div>
-      <div id="filhos-chips"></div>
-      <div class="add-filho-row">
-        <input type="text" id="s-filho-nome" placeholder="Nome do filho" onkeydown="if(event.key==='Enter')addFilhoSetup()">
-        <button onclick="addFilhoSetup()">+ Adicionar</button>
+    <!-- step 1 -->
+    <div class="step" id="step1">
+      <div class="setup-h">👦 Quem são os filhos?</div>
+      <div class="setup-d">Adicione os filhos que participam do sistema de mesada.</div>
+      <div class="chip-wrap" id="filhos-chips"></div>
+      <div class="add-row">
+        <input type="text" id="s-filho" placeholder="Nome do filho" onkeydown="if(event.key==='Enter')addFilho()">
+        <button onclick="addFilho()">+ Add</button>
       </div>
-      <div id="s1-msg" class="msg-erro" style="margin-top:10px"></div>
-      <button class="btn-primary" style="margin-top:20px" onclick="setupStep2()">Continuar →</button>
+      <div id="s1-msg" class="msg-e" style="margin-top:8px"></div>
+      <button class="btn-p" style="margin-top:18px" onclick="sStep2()">Continuar →</button>
     </div>
-
-    <!-- STEP 2: Convite -->
-    <div class="setup-step" id="step2">
-      <div class="setup-title">🎉 Família criada!</div>
-      <div class="setup-desc">Compartilhe o código abaixo no grupo da família para convidar os demais membros.</div>
-      <div class="convite-box">
-        <div class="convite-code" id="s-codigo-convite">------</div>
+    <!-- step 2 -->
+    <div class="step" id="step2">
+      <div class="setup-h">🎉 Família criada!</div>
+      <div class="setup-d">Compartilhe o código no grupo da família para convidar os demais membros.</div>
+      <div class="convite-display">
+        <div class="convite-code" id="s-codigo">------</div>
         <div class="convite-sub">Código válido por 7 dias</div>
-        <button class="btn-copy" onclick="copiarConvite()">📋 Copiar código</button>
+        <button class="btn-copy" onclick="copiarCodigo()">📋 Copiar código</button>
       </div>
-      <button class="btn-primary" style="margin-top:20px" onclick="irParaApp()">Entrar no app →</button>
+      <button class="btn-p" onclick="irApp()">Entrar no app →</button>
     </div>
   </div>
 </div>
 
-<!-- ══ TELA AGUARDANDO ══ -->
-<div id="tela-aguardando">
-  <div class="aguardando-box">
-    <div style="font-size:48px;margin-bottom:16px">⏳</div>
+<!-- AGUARDANDO -->
+<div id="pg-wait" class="fullscreen">
+  <div class="wait-box">
+    <div style="font-size:52px">⏳</div>
     <h2>Aguardando aprovação</h2>
     <p>Sua conta foi criada. Um administrador da família precisa aprovar seu acesso.</p>
-    <p style="font-size:12px;color:var(--text-muted);margin-top:10px">Se você tem um código de convite, insira-o ao criar a conta.</p>
-    <button class="btn-primary" style="margin-top:24px" onclick="auth.signOut()">Sair</button>
+    <button class="btn-p" style="margin-top:24px" onclick="auth.signOut()">Sair</button>
   </div>
 </div>
 
-<!-- ══ APP PRINCIPAL ══ -->
-<div id="tela-app" class="tela">
+<!-- ══ APP ══ -->
 
-  <div id="saldo-bar">
-    <div class="saldo-title" id="familia-nome-top">Mesada</div>
-    <div class="saldo-cards" id="saldo-cards"></div>
-    <div class="semana-wrap">
+<!-- HOME -->
+<div id="pg-home" class="pg">
+  <div class="topbar">
+    <div>
+      <div class="topbar-sub" id="home-fam-label">Mesada</div>
+      <div class="topbar-title">Controle Semanal</div>
+    </div>
+    <div style="display:flex;gap:6px">
+      <button class="top-btn" id="btn-pend" onclick="abrirSheet('sh-pend')" style="display:none">⏳<span class="tbadge" id="bdg-pend"></span></button>
+      <button class="top-btn" id="btn-conf" onclick="abrirSheet('sh-conf')" style="display:none">⚙️</button>
+    </div>
+  </div>
+  <div class="home-header">
+    <div class="semana-sel">
       <label>Semana</label>
       <select id="sel-semana" onchange="trocarSemana()"></select>
     </div>
-    <div class="topbar-btns">
-      <button class="tbtn pend" id="btn-pend" onclick="abrirM('m-pend')" style="display:none">⏳ Pendências<span class="tbtn-badge" id="bdg-pend"></span></button>
-      <button class="tbtn users" id="btn-users" onclick="abrirM('m-users')" style="display:none">👥 Membros<span class="tbtn-badge" id="bdg-users"></span></button>
-      <button class="tbtn conf" id="btn-conf" onclick="abrirM('m-conf')" style="display:none">⚙️ Família</button>
-      <button class="tbtn" onclick="auth.signOut()">Sair</button>
-    </div>
   </div>
+  <div class="saldo-grid" id="saldo-grid"></div>
+  <div id="sync-st" style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--muted);text-align:center;padding:0 16px 8px;"></div>
+</div>
 
-  <div class="container">
-    <div class="page-title" id="pg-title">Controle Semanal</div>
-    <div class="page-sub" id="pg-sub"></div>
-    <div id="sync-st"></div>
+<!-- ATIVIDADES -->
+<div id="pg-ativ" class="pg">
+  <div class="topbar">
+    <div class="topbar-title">Atividades</div>
+    <button class="top-btn" id="btn-users" onclick="abrirSheet('sh-users')" style="display:none">👥<span class="tbadge" id="bdg-users"></span></button>
+  </div>
+  <div class="filho-selector" id="filho-tabs-ativ"></div>
+  <div class="ativ-list" id="ativ-list"></div>
+  <div style="padding:0 16px 8px">
+    <button class="add-card" id="btn-add-ativ" onclick="isAdm?abrirModalAtiv(-1):semPerm()">＋ Nova Atividade</button>
+  </div>
+  <div id="send-panel-wrap"></div>
+</div>
 
-    <div class="sec-label">Atividades</div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr>
-          <th>Categoria</th><th>Atividade</th>
-          <th class="c">Dif.</th><th class="c">Valor</th><th class="c">Limite</th>
-          <th class="c" id="th-filhos-ativ"></th>
-          <th class="c">Ações</th>
-        </tr></thead>
-        <tbody id="tb-ativ"></tbody>
-      </table>
-    </div>
-    <div style="margin-top:10px">
-      <button class="btn add" id="btn-nova-ativ" onclick="isAdm?abrirModalAtiv(-1):semPerm()">+ Nova Atividade</button>
-    </div>
+<!-- PENALIDADES -->
+<div id="pg-pen" class="pg">
+  <div class="topbar">
+    <div class="topbar-title">Penalidades</div>
+  </div>
+  <div class="filho-selector" id="filho-tabs-pen"></div>
+  <div class="ativ-list" id="pen-list"></div>
+  <div style="padding:0 16px 8px">
+    <button class="add-card" id="btn-add-pen" onclick="isAdm?abrirModalPen(-1):semPerm()">＋ Nova Penalidade</button>
+  </div>
+</div>
 
-    <div id="painel-filho">
-      <h3>📝 Registrar atividade realizada</h3>
-      <div class="pf-row"><label>Atividade</label><select id="pf-ativ-sel"></select></div>
-      <div class="pf-row"><label>Quantas vezes?</label><input type="number" id="pf-qty" value="1" min="1" max="7" style="max-width:80px"></div>
-      <button class="btn-enviar" onclick="enviarPend()">📤 Enviar para aprovação</button>
+<!-- RELATÓRIO -->
+<div id="pg-rel" class="pg">
+  <div class="topbar">
+    <div class="topbar-title">Relatório</div>
+  </div>
+  <div class="rel-wrap">
+    <div id="rel-cards"></div>
+    <div class="rel-acoes">
+      <button class="btn-pdf" onclick="gerarPDF()">🖨️ Salvar / Imprimir PDF</button>
     </div>
-
-    <div class="sec-label">Penalidades</div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr>
-          <th>Categoria</th><th>Penalidade</th>
-          <th class="c">Desconto</th>
-          <th class="c" id="th-filhos-pen"></th>
-          <th class="c">Ações</th>
-        </tr></thead>
-        <tbody id="tb-pen"></tbody>
-      </table>
-    </div>
-    <div style="margin-top:10px">
-      <button class="btn add" id="btn-nova-pen" onclick="isAdm?abrirModalPen(-1):semPerm()">+ Nova Penalidade</button>
-    </div>
-
-    <div class="actions">
-      <button class="btn ok" onclick="gerarRel()">📄 Relatório Semanal</button>
-      <button class="btn" id="btn-reset" onclick="resetSemana()">🔄 Resetar Semana</button>
+    <div style="margin-top:8px">
+      <button class="add-card" onclick="resetSemana()">🔄 Resetar Semana</button>
     </div>
   </div>
 </div>
 
-<!-- ══ MODAL PENDÊNCIAS ══ -->
-<div class="overlay" id="m-pend">
-  <div class="mbox">
-    <div class="mhead"><h2>⏳ Pendências</h2><button class="mclose" onclick="fecharM('m-pend')">✕</button></div>
-    <div class="mbody" id="m-pend-body"></div>
+<!-- NAVBAR -->
+<nav id="navbar">
+  <button class="nav-item active" id="nav-home" onclick="irPg('home')">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Home</span>
+  </button>
+  <button class="nav-item" id="nav-ativ" onclick="irPg('ativ')">
+    <span class="nav-icon">✅</span>
+    <span class="nav-label">Atividades</span>
+    <span class="nav-dot" id="ndot-pend"></span>
+  </button>
+  <button class="nav-item" id="nav-pen" onclick="irPg('pen')">
+    <span class="nav-icon">⚠️</span>
+    <span class="nav-label">Penalidades</span>
+  </button>
+  <button class="nav-item" id="nav-rel" onclick="irPg('rel')">
+    <span class="nav-icon">📄</span>
+    <span class="nav-label">Relatório</span>
+  </button>
+</nav>
+
+<!-- SHEETS (bottom sheets) -->
+
+<!-- Pendências -->
+<div class="overlay" id="sh-pend">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head"><h2>⏳ Pendências</h2><button class="sheet-close" onclick="fecharSheet('sh-pend')">✕</button></div>
+    <div class="sheet-body" id="sh-pend-body"></div>
   </div>
 </div>
 
-<!-- ══ MODAL MEMBROS ══ -->
-<div class="overlay" id="m-users">
-  <div class="mbox">
-    <div class="mhead"><h2>👥 Membros da Família</h2><button class="mclose" onclick="fecharM('m-users')">✕</button></div>
-    <div class="mbody" id="m-users-body"></div>
+<!-- Membros -->
+<div class="overlay" id="sh-users">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head"><h2>👥 Membros</h2><button class="sheet-close" onclick="fecharSheet('sh-users')">✕</button></div>
+    <div class="sheet-body" id="sh-users-body"></div>
   </div>
 </div>
 
-<!-- ══ MODAL CONFIG FAMÍLIA ══ -->
-<div class="overlay" id="m-conf">
-  <div class="mbox">
-    <div class="mhead"><h2>⚙️ Configurações da Família</h2><button class="mclose" onclick="fecharM('m-conf')">✕</button></div>
-    <div class="mbody">
-      <div class="field"><label>Nome da família</label><input type="text" id="conf-nome-fam" placeholder="Nome da família"></div>
-      <div class="field"><label>Limite semanal (R$)</label><input type="number" id="conf-limite" value="50" min="10" step="5"></div>
-      <div class="sec-sub">Código de convite atual</div>
-      <div class="convite-box" style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
-        <div class="convite-code" id="conf-codigo" style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--success);letter-spacing:5px"></div>
-        <div style="font-size:11px;color:var(--text-muted);margin-top:4px" id="conf-exp"></div>
-        <button class="btn-copy" onclick="copiarConvite()" style="margin-top:8px;background:none;border:1px solid var(--success);border-radius:6px;color:var(--success);padding:6px 14px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;cursor:pointer">📋 Copiar</button>
-        <button class="btn-copy" onclick="renovarConvite()" style="margin-top:8px;margin-left:6px;background:none;border:1px solid var(--border);border-radius:6px;color:var(--text-muted);padding:6px 14px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;cursor:pointer">🔄 Renovar</button>
+<!-- Config -->
+<div class="overlay" id="sh-conf">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head"><h2>⚙️ Família</h2><button class="sheet-close" onclick="fecharSheet('sh-conf')">✕</button></div>
+    <div class="sheet-body">
+      <div class="field"><label>Nome da família</label><input type="text" id="conf-nome" placeholder="Nome"></div>
+      <div class="field"><label>Limite semanal (R$)</label><input type="number" id="conf-lim" min="10" step="5"></div>
+      <div class="sec-sub">Código de convite</div>
+      <div class="convite-display" style="margin:0 0 12px">
+        <div class="convite-code" id="conf-code" style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--success);letter-spacing:6px"></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px" id="conf-exp"></div>
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+          <button class="btn-copy" onclick="copiarCodigo()">📋 Copiar</button>
+          <button class="btn-copy" onclick="renovarConvite()" style="border-color:var(--border);color:var(--muted)">🔄 Renovar</button>
+        </div>
       </div>
     </div>
-    <div class="mfoot">
-      <button class="btn-cancel" onclick="fecharM('m-conf')">Fechar</button>
+    <div class="sheet-foot">
+      <button class="btn-cancel" onclick="fecharSheet('sh-conf')">Fechar</button>
       <button class="btn-save" onclick="salvarConf()">Salvar</button>
     </div>
   </div>
 </div>
 
-<!-- ══ MODAL ATIVIDADE ══ -->
-<div class="overlay" id="m-ativ">
-  <div class="mbox">
-    <div class="mhead"><h2 id="m-ativ-tit">Nova Atividade</h2><button class="mclose" onclick="fecharM('m-ativ')">✕</button></div>
-    <div class="mbody">
+<!-- Modal Atividade -->
+<div class="overlay" id="sh-ativ">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head"><h2 id="sh-ativ-tit">Nova Atividade</h2><button class="sheet-close" onclick="fecharSheet('sh-ativ')">✕</button></div>
+    <div class="sheet-body">
       <input type="hidden" id="ma-idx" value="-1">
       <div class="field"><label>Categoria</label><select id="ma-cat"><option>Doméstica</option><option>Educacional</option><option>Desenv. Pessoal</option></select></div>
       <div class="field"><label>Nome</label><input type="text" id="ma-nome" placeholder="Ex: Organizar o quarto"></div>
       <div class="field"><label>Dificuldade</label><select id="ma-dif"><option>Fácil</option><option>Médio</option><option>Difícil</option></select></div>
-      <div class="field"><label>Valor (R$)</label><input type="number" id="ma-valor" step="0.5" min="0.5" placeholder="Ex: 2.00"></div>
-      <div class="field"><label>Limite semanal</label><input type="number" id="ma-lim" min="1" max="7" placeholder="Ex: 5"></div>
+      <div class="field"><label>Valor (R$)</label><input type="number" id="ma-val" step="0.5" min="0.5" inputmode="decimal"></div>
+      <div class="field"><label>Limite semanal</label><input type="number" id="ma-lim" min="1" max="7" inputmode="numeric"></div>
     </div>
-    <div class="mfoot"><button class="btn-cancel" onclick="fecharM('m-ativ')">Cancelar</button><button class="btn-save" onclick="salvarAtiv()">Salvar</button></div>
+    <div class="sheet-foot"><button class="btn-cancel" onclick="fecharSheet('sh-ativ')">Cancelar</button><button class="btn-save" onclick="salvarAtiv()">Salvar</button></div>
   </div>
 </div>
 
-<!-- ══ MODAL PENALIDADE ══ -->
-<div class="overlay" id="m-pen">
-  <div class="mbox">
-    <div class="mhead"><h2 id="m-pen-tit">Nova Penalidade</h2><button class="mclose" onclick="fecharM('m-pen')">✕</button></div>
-    <div class="mbody">
+<!-- Modal Penalidade -->
+<div class="overlay" id="sh-pen">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head"><h2 id="sh-pen-tit">Nova Penalidade</h2><button class="sheet-close" onclick="fecharSheet('sh-pen')">✕</button></div>
+    <div class="sheet-body">
       <input type="hidden" id="mp-idx" value="-1">
       <div class="field"><label>Categoria</label><select id="mp-cat"><option>Comportamento</option><option>Tecnologia</option></select></div>
       <div class="field"><label>Descrição</label><input type="text" id="mp-nome" placeholder="Ex: Não arrumar o quarto"></div>
-      <div class="field"><label>Desconto (R$)</label><input type="number" id="mp-valor" step="0.5" min="0.5" placeholder="Ex: 2.00"></div>
+      <div class="field"><label>Desconto (R$)</label><input type="number" id="mp-val" step="0.5" min="0.5" inputmode="decimal"></div>
     </div>
-    <div class="mfoot"><button class="btn-cancel" onclick="fecharM('m-pen')">Cancelar</button><button class="btn-save" onclick="salvarPen()">Salvar</button></div>
+    <div class="sheet-foot"><button class="btn-cancel" onclick="fecharSheet('sh-pen')">Cancelar</button><button class="btn-save" onclick="salvarPen()">Salvar</button></div>
   </div>
 </div>
 
-<div id="relatorio"></div>
+<!-- PDF print -->
+<div id="pdf-view"></div>
 
-<!-- ══ FIREBASE ══ -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -478,14 +519,11 @@ firebase.initializeApp({
   messagingSenderId:"587453263333",
   appId:"1:587453263333:web:c59f9cadc031b4c396530c"
 });
-var auth=firebase.auth();
-var db=firebase.database();
+var auth=firebase.auth(),db=firebase.database();
 
-// ── CORES DINÂMICAS POR FILHO ──
 var CORES=['#f5a623','#4fc3f7','#56d98a','#a78bfa','#ff6b6b','#f472b6'];
 var CORES_DIM=['rgba(245,166,35,0.12)','rgba(79,195,247,0.12)','rgba(86,217,138,0.12)','rgba(167,139,250,0.12)','rgba(255,107,107,0.10)','rgba(244,114,182,0.12)'];
 
-// ── TEMPLATES PADRÃO ──
 var ATIV_TPL=[
   {cat:'Doméstica',nome:'Botar o lixo na rua',dif:'Fácil',valor:1.5,limite:7},
   {cat:'Doméstica',nome:'Retirar o lixo do banheiro',dif:'Médio',valor:3,limite:7},
@@ -518,46 +556,75 @@ var PEN_TPL=[
   {cat:'Tecnologia',nome:'Usar o celular conectado no carregador (exceto comunicação necessária)',valor:20},
 ];
 
-// ── STATE GLOBAL ──
-var currentUser=null,familiaId=null,isAdm=false,filhoNome=null;
-var familia={nome:'',limite:50,filhos:[],membros:{}};
+// STATE
+var uid=null,familiaId=null,isAdm=false,filhoNome=null;
+var familia={nome:'',limite:50,filhos:[]};
 var atividades=[],penalidades=[];
-var stateAtiv={},statePen={};
-var pendencias={};
-var semanaAtual=1;
+var stateAtiv={},statePen={},pendencias={};
+var semanaAtual=1,filhoSelAtiv=0,filhoSelPen=0;
 var setupFilhos=[];
-var listeners={db:null,pend:null,cfg:null,mbr:null};
+var L={db:null,pend:null,cfg:null,mbr:null};
 
 function fmt(v){return parseFloat(v).toFixed(2).replace('.',',');}
 function semAtual(){var d=new Date(),i=new Date(d.getFullYear(),0,1);return Math.ceil(((d-i)/86400000+i.getDay()+1)/7);}
 function totSem(ano){var d=new Date(ano,11,31),dia=d.getDay();return(dia===4||(dia===3&&ano%4===0))?53:52;}
 function chvDB(s){return'familias/'+familiaId+'/semanas/sem'+String(s).padStart(2,'0')+'_'+new Date().getFullYear();}
 function chvPend(s){return'familias/'+familiaId+'/pendencias/sem'+String(s).padStart(2,'0')+'_'+new Date().getFullYear();}
-function gerarCodigo(){return Math.random().toString(36).substr(2,6).toUpperCase();}
-function setSt(msg,cls){var e=document.getElementById('sync-st');if(e){e.textContent=msg;e.className=cls;}}
-
-// ── MODAIS ──
-function abrirM(id){document.getElementById(id).classList.add('show');if(id==='m-pend')renderPend();if(id==='m-users')renderUsers();if(id==='m-conf')carregarConf();}
-function fecharM(id){document.getElementById(id).classList.remove('show');}
+function gerarCod(){return Math.random().toString(36).substr(2,6).toUpperCase();}
+function setSt(m,c){var e=document.getElementById('sync-st');if(e){e.textContent=m;e.style.color=c==='ok'?'var(--success)':c==='err'?'var(--penalty)':'var(--muted)';}}
 function semPerm(){alert('🔒 Apenas administradores possuem permissão para esta ação.');}
 
-// ── AUTH ABA ──
-function authAba(aba){
-  document.getElementById('auth-entrar').style.display=aba==='entrar'?'block':'none';
-  document.getElementById('auth-cadastro').style.display=aba==='cadastro'?'block':'none';
-  document.querySelectorAll('.auth-tab').forEach(function(t,i){t.classList.toggle('active',i===(aba==='entrar'?0:1));});
+// ── NAVEGAÇÃO PÁGINAS ──
+var pgAtual='home';
+function irPg(pg){
+  ['home','ativ','pen','rel'].forEach(function(p){
+    document.getElementById('pg-'+p).classList.toggle('ativa',p===pg);
+    document.getElementById('nav-'+p).classList.toggle('active',p===pg);
+  });
+  pgAtual=pg;
+  if(pg==='ativ'){renderAtiv();renderSendPanel();}
+  if(pg==='pen'){renderPen();}
+  if(pg==='rel'){renderRel();}
 }
 
-// ── LOGIN ──
+// ── SHEETS ──
+function abrirSheet(id){
+  document.getElementById(id).classList.add('show');
+  if(id==='sh-pend')renderPendencias();
+  if(id==='sh-users')renderUsers();
+  if(id==='sh-conf')carregarConf();
+}
+function fecharSheet(id){document.getElementById(id).classList.remove('show');}
+
+// ── AUTH ABA ──
+function authAba(a){
+  document.getElementById('auth-entrar').style.display=a==='entrar'?'block':'none';
+  document.getElementById('auth-cadastro').style.display=a==='cadastro'?'block':'none';
+  document.querySelectorAll('.auth-tab').forEach(function(t,i){t.classList.toggle('active',i===(a==='entrar'?0:1));});
+}
+
+function mostrarTela(id){
+  ['pg-auth','pg-setup','pg-wait'].forEach(function(p){
+    var el=document.getElementById(p);
+    el.style.display=p===id?'flex':'none';
+  });
+  document.getElementById('navbar').classList.toggle('show',id==='app');
+  ['pg-home','pg-ativ','pg-pen','pg-rel'].forEach(function(p){
+    document.getElementById(p).style.display=p==='pg-home'&&id==='app'?'block':'none';
+    if(id==='app')document.getElementById(p).classList.toggle('ativa',p==='pg-home');
+  });
+  if(id==='app')document.getElementById('navbar').classList.add('show');
+}
+
+// LOGIN
 function doLogin(){
   var e=document.getElementById('ae-email').value.trim();
   var s=document.getElementById('ae-senha').value;
-  var msg=document.getElementById('ae-msg');
-  msg.textContent='';
-  auth.signInWithEmailAndPassword(e,s).catch(function(){msg.textContent='E-mail ou senha incorretos.';});
+  document.getElementById('ae-msg').textContent='';
+  auth.signInWithEmailAndPassword(e,s).catch(function(){document.getElementById('ae-msg').textContent='E-mail ou senha incorretos.';});
 }
 
-// ── CADASTRO ──
+// CADASTRO
 function doCadastro(){
   var nome=document.getElementById('ac-nome').value.trim();
   var email=document.getElementById('ac-email').value.trim();
@@ -565,202 +632,123 @@ function doCadastro(){
   var senha2=document.getElementById('ac-senha2').value;
   var convite=document.getElementById('ac-convite').value.trim().toUpperCase();
   var msg=document.getElementById('ac-msg');
-  msg.className='msg-erro';msg.textContent='';
+  msg.className='msg-e';msg.textContent='';
   if(!nome){msg.textContent='Informe seu nome.';return;}
   if(senha.length<6){msg.textContent='Senha mínima: 6 caracteres.';return;}
   if(senha!==senha2){msg.textContent='As senhas não coincidem.';return;}
-
   auth.createUserWithEmailAndPassword(email,senha).then(function(cred){
-    var uid=cred.user.uid;
+    var u=cred.user;
     if(convite){
-      // Verificar código de convite
       return db.ref('convites/'+convite).once('value').then(function(snap){
         var inv=snap.val();
-        if(!inv||inv.expiraEm<Date.now()){
-          auth.signOut();
-          msg.textContent='Código de convite inválido ou expirado.';
-          return;
-        }
+        if(!inv||inv.expiraEm<Date.now()){auth.signOut();msg.textContent='Código inválido ou expirado.';return;}
         var fid=inv.familiaId;
-        return db.ref('familias/'+fid+'/membros/'+uid).set({
-          nome:nome,email:email,perfil:'pendente',ts:Date.now()
-        }).then(function(){
-          return db.ref('usuarios/'+uid).set({nome:nome,email:email,familiaId:fid,perfil:'pendente',ts:Date.now()});
-        });
+        return Promise.all([
+          db.ref('familias/'+fid+'/membros/'+u.uid).set({nome:nome,email:email,perfil:'pendente',ts:Date.now()}),
+          db.ref('usuarios/'+u.uid).set({nome:nome,email:email,familiaId:fid,perfil:'pendente',ts:Date.now()})
+        ]);
       });
     } else {
-      // Sem convite — vai criar família nova
-      return db.ref('usuarios/'+uid).set({nome:nome,email:email,familiaId:null,perfil:'novo',ts:Date.now()});
+      return db.ref('usuarios/'+u.uid).set({nome:nome,email:email,familiaId:null,perfil:'novo',ts:Date.now()});
     }
   }).catch(function(er){
-    if(er.code==='auth/email-already-in-use')msg.textContent='E-mail já cadastrado.';
-    else msg.textContent='Erro ao criar conta.';
+    msg.textContent=er.code==='auth/email-already-in-use'?'E-mail já cadastrado.':'Erro ao criar conta.';
   });
 }
 
-// ── AUTH STATE ──
+// AUTH STATE
 auth.onAuthStateChanged(function(user){
-  if(!user){
-    mostrarTela('tela-auth');return;
-  }
-  currentUser=user;
-  db.ref('usuarios/'+user.uid).once('value').then(function(snap){
+  if(!user){mostrarTela('pg-auth');return;}
+  uid=user.uid;
+  db.ref('usuarios/'+uid).once('value').then(function(snap){
     var u=snap.val();
-    if(!u){
-      // Primeiro login sem registro — criar família
-      mostrarTela('tela-setup');return;
-    }
-    if(u.perfil==='novo'||!u.familiaId){
-      mostrarTela('tela-setup');return;
-    }
-    if(u.perfil==='pendente'){
-      mostrarTela('tela-aguardando');return;
-    }
-    // Aprovado — carregar família
+    if(!u||u.perfil==='novo'||!u.familiaId){mostrarTela('pg-setup');return;}
+    if(u.perfil==='pendente'){mostrarTela('pg-wait');return;}
     familiaId=u.familiaId;
     isAdm=u.perfil==='admin';
-    filhoNome=u.perfil==='filho'?u.nome:null;
+    filhoNome=u.perfil==='filho'?u.nome.toLowerCase():null;
     iniciarApp();
   });
 });
 
-function mostrarTela(id){
-  ['tela-auth','tela-setup','tela-aguardando','tela-app'].forEach(function(t){
-    var el=document.getElementById(t);
-    if(t==='tela-auth'||t==='tela-setup'||t==='tela-aguardando'){
-      el.className=t===(id)?t+' ativa':t;
-    } else {
-      el.className=t===id?'tela ativa':'tela';
-    }
-  });
-}
-
-// ── SETUP FAMÍLIA ──
-function setupStep1(){
-  var nome=document.getElementById('s-nome-familia').value.trim();
-  if(!nome){document.getElementById('s0-msg').textContent='Informe o nome da família.';return;}
+// ── SETUP ──
+function sStep1(){
+  var n=document.getElementById('s-fam').value.trim();
+  if(!n){document.getElementById('s0-msg').textContent='Informe o nome da família.';return;}
   document.getElementById('step0').classList.remove('ativa');
   document.getElementById('step1').classList.add('ativa');
   document.getElementById('dot0').classList.replace('active','done');
   document.getElementById('dot1').classList.add('active');
 }
-
-function addFilhoSetup(){
-  var n=document.getElementById('s-filho-nome').value.trim();
-  if(!n)return;
-  if(setupFilhos.indexOf(n)!==-1){document.getElementById('s1-msg').textContent='Nome já adicionado.';return;}
+function addFilho(){
+  var n=document.getElementById('s-filho').value.trim();
+  if(!n||setupFilhos.indexOf(n)!==-1)return;
   setupFilhos.push(n);
-  document.getElementById('s-filho-nome').value='';
-  document.getElementById('s1-msg').textContent='';
-  renderFilhosChips();
+  document.getElementById('s-filho').value='';
+  renderChips();
 }
-
-function renderFilhosChips(){
-  var c=document.getElementById('filhos-chips');
-  c.innerHTML='';
+function renderChips(){
+  var c=document.getElementById('filhos-chips');c.innerHTML='';
   setupFilhos.forEach(function(n,i){
-    var chip=document.createElement('span');
-    chip.className='filho-chip';
-    chip.innerHTML=n+'<button onclick="setupFilhos.splice('+i+',1);renderFilhosChips()">✕</button>';
-    c.appendChild(chip);
+    var ch=document.createElement('span');ch.className='chip';
+    ch.innerHTML=n+'<button onclick="setupFilhos.splice('+i+',1);renderChips()">✕</button>';
+    c.appendChild(ch);
   });
 }
-
-function setupStep2(){
+function sStep2(){
   if(setupFilhos.length===0){document.getElementById('s1-msg').textContent='Adicione pelo menos um filho.';return;}
-  var nomeFam=document.getElementById('s-nome-familia').value.trim();
-  var uid=currentUser.uid;
-  var lim=parseFloat(document.getElementById('s-limite').value)||50;
+  var nomeFam=document.getElementById('s-fam').value.trim();
+  var lim=parseFloat(document.getElementById('s-lim').value)||50;
   var fid=db.ref('familias').push().key;
   familiaId=fid;
-  familia.limite=lim;
-  var codigo=gerarCodigo();
-  var expira=Date.now()+(7*24*60*60*1000);
-
-  // Montar membros
-  var membros={};
-  membros[uid]={nome:currentUser.displayName||'Admin',email:currentUser.email,perfil:'admin',ts:Date.now()};
-
-  // Montar filhos como objetos
+  var cod=gerarCod();
+  var exp=Date.now()+(7*24*60*60*1000);
   var filhosObj={};
-  setupFilhos.forEach(function(n,i){filhosObj['filho_'+i]={nome:n,cor:i};});
-
+  setupFilhos.forEach(function(n,i){filhosObj['f'+i]={nome:n,cor:i};});
+  var membros={};
+  membros[uid]={nome:'Admin',email:auth.currentUser.email,perfil:'admin',ts:Date.now()};
   db.ref('familias/'+fid).set({
     info:{nome:nomeFam,limite:lim,criadoEm:Date.now()},
-    membros:membros,
-    filhos:filhosObj,
-    atividades:ATIV_TPL,
-    penalidades:PEN_TPL,
+    membros:membros,filhos:filhosObj,
+    atividades:ATIV_TPL,penalidades:PEN_TPL
   }).then(function(){
-    return db.ref('convites/'+codigo).set({familiaId:fid,criadoPor:uid,expiraEm:expira});
+    return db.ref('convites/'+cod).set({familiaId:fid,criadoPor:uid,expiraEm:exp});
   }).then(function(){
-    return db.ref('usuarios/'+uid).set({
-      nome:currentUser.displayName||'Admin',
-      email:currentUser.email,
-      familiaId:fid,
-      perfil:'admin',
-      ts:Date.now()
-    });
+    return db.ref('usuarios/'+uid).set({nome:'Admin',email:auth.currentUser.email,familiaId:fid,perfil:'admin',ts:Date.now()});
   }).then(function(){
-    document.getElementById('s-codigo-convite').textContent=codigo;
+    document.getElementById('s-codigo').textContent=cod;
     document.getElementById('step1').classList.remove('ativa');
     document.getElementById('step2').classList.add('ativa');
     document.getElementById('dot1').classList.replace('active','done');
     document.getElementById('dot2').classList.add('active');
   });
 }
-
-function copiarConvite(){
-  var codigo=document.getElementById('s-codigo-convite').textContent||document.getElementById('conf-codigo').textContent;
-  navigator.clipboard.writeText(codigo).then(function(){alert('✅ Código copiado: '+codigo);}).catch(function(){alert('Código: '+codigo);});
+function copiarCodigo(){
+  var c=document.getElementById('s-codigo').textContent||document.getElementById('conf-code').textContent;
+  navigator.clipboard.writeText(c).then(function(){alert('✅ Código copiado: '+c);}).catch(function(){alert('Código: '+c);});
 }
-
-function irParaApp(){
-  isAdm=true;
-  iniciarApp();
-}
+function irApp(){isAdm=true;iniciarApp();}
 
 // ── INICIAR APP ──
 function iniciarApp(){
-  mostrarTela('tela-app');
-
-  // Carregar dados da família
-  db.ref('familias/'+familiaId+'/info').once('value').then(function(snap){
-    var info=snap.val()||{};
-    familia.nome=info.nome||'Família';
-    familia.limite=info.limite||50;
-    document.getElementById('familia-nome-top').textContent=familia.nome;
-    document.getElementById('pg-title').textContent='Controle Semanal';
-  });
-
-  // Configurar UI por perfil
+  mostrarTela('app');
   if(isAdm){
-    document.getElementById('btn-pend').style.display='inline-flex';
-    document.getElementById('btn-users').style.display='inline-flex';
-    document.getElementById('btn-conf').style.display='inline-flex';
-    document.getElementById('btn-reset').disabled=false;
-    document.getElementById('btn-nova-ativ').classList.remove('np');
-    document.getElementById('btn-nova-pen').classList.remove('np');
-    document.getElementById('pg-sub').textContent='Gerencie atividades, valide pendências e acompanhe os saldos';
-    document.getElementById('painel-filho').style.display='none';
+    document.getElementById('btn-pend').style.display='flex';
+    document.getElementById('btn-conf').style.display='flex';
+    document.getElementById('btn-users').style.display='flex';
+    document.getElementById('btn-add-ativ').classList.remove('np');
+    document.getElementById('btn-add-pen').classList.remove('np');
   } else {
-    document.getElementById('btn-pend').style.display='none';
-    document.getElementById('btn-users').style.display='none';
-    document.getElementById('btn-conf').style.display='none';
-    document.getElementById('btn-reset').disabled=true;
-    document.getElementById('btn-nova-ativ').classList.add('np');
-    document.getElementById('btn-nova-pen').classList.add('np');
-    document.getElementById('pg-sub').textContent='Registre suas atividades — os pais vão aprovar';
-    document.getElementById('painel-filho').style.display='block';
+    document.getElementById('btn-add-ativ').classList.add('np');
+    document.getElementById('btn-add-pen').classList.add('np');
   }
-
   popularSemanas();
   ouvirConfig();
   ouvirPendencias();
   if(isAdm)ouvirMembros();
 }
 
-// ── SEMANAS ──
+// SEMANAS
 function popularSemanas(){
   var sel=document.getElementById('sel-semana');
   var ano=new Date().getFullYear(),tot=totSem(ano),at=semAtual();
@@ -768,159 +756,197 @@ function popularSemanas(){
   for(var s=1;s<=tot;s++){var o=document.createElement('option');o.value=s;o.textContent='Semana '+s+' / '+ano;if(s===at)o.selected=true;sel.appendChild(o);}
   semanaAtual=at;
 }
-function trocarSemana(){semanaAtual=parseInt(document.getElementById('sel-semana').value);carregarDados();}
+function trocarSemana(){semanaAtual=parseInt(document.getElementById('sel-semana').value);carregarDados();ouvirPendencias();}
 
-// ── OUVIR CONFIG (atividades, penalidades, filhos) ──
+// OUVIR CONFIG
 function ouvirConfig(){
-  if(listeners.cfg){listeners.cfg();listeners.cfg=null;}
-  listeners.cfg=db.ref('familias/'+familiaId).on('value',function(snap){
-    var f=snap.val();
-    if(!f)return;
+  if(L.cfg){L.cfg();L.cfg=null;}
+  L.cfg=db.ref('familias/'+familiaId).on('value',function(snap){
+    var f=snap.val();if(!f)return;
     familia.nome=f.info&&f.info.nome?f.info.nome:'Família';
     familia.limite=f.info&&f.info.limite?f.info.limite:50;
-    familia.filhos=f.filhos?Object.values(f.filhos):[]; 
-    atividades=f.atividades||ATIV_TPL;
-    penalidades=f.penalidades||PEN_TPL;
-    document.getElementById('familia-nome-top').textContent=familia.nome;
-    // Garantir state tem tamanho correto
-    while(Object.keys(stateAtiv).length<atividades.length){stateAtiv[Object.keys(stateAtiv).length]={};}
-    renderCabecalhoFilhos();
+    familia.filhos=f.filhos?Object.values(f.filhos):[];
+    atividades=Array.isArray(f.atividades)?f.atividades:Object.values(f.atividades||{});
+    penalidades=Array.isArray(f.penalidades)?f.penalidades:Object.values(f.penalidades||{});
+    document.getElementById('home-fam-label').textContent=familia.nome;
+    renderTabsFilhos();
     carregarDados();
-    popularSelectFilho();
+    renderSendPanel();
   });
 }
 
-function renderCabecalhoFilhos(){
-  var thA=document.getElementById('th-filhos-ativ');
-  var thP=document.getElementById('th-filhos-pen');
-  if(!thA)return;
-  var html='';
-  familia.filhos.forEach(function(f,i){
-    html+='<th class="c" style="color:'+CORES[i%CORES.length]+'">'+f.nome+'</th>';
+function renderTabsFilhos(){
+  ['ativ','pen'].forEach(function(tipo){
+    var wrap=document.getElementById('filho-tabs-'+tipo);
+    if(!wrap)return;
+    wrap.innerHTML='';
+    familia.filhos.forEach(function(f,i){
+      var btn=document.createElement('button');
+      btn.className='filho-btn'+(i===(tipo==='ativ'?filhoSelAtiv:filhoSelPen)?' active':'');
+      btn.textContent=f.nome;
+      var cor=CORES[i%CORES.length];
+      if(i===(tipo==='ativ'?filhoSelAtiv:filhoSelPen)){btn.style.background=cor;btn.style.borderColor=cor;}
+      btn.onclick=(function(idx,t,c){return function(){
+        if(t==='ativ'){filhoSelAtiv=idx;renderAtiv();}else{filhoSelPen=idx;renderPen();}
+        renderTabsFilhos();
+      };})(i,tipo,cor);
+      wrap.appendChild(btn);
+    });
   });
-  thA.outerHTML=html+'<th class="c">Ações</th>';
-  thP.outerHTML=html+'<th class="c">Ações</th>';
 }
 
-// ── CARREGAR DADOS SEMANA ──
+// CARREGAR DADOS
 function carregarDados(){
-  if(listeners.db){listeners.db();listeners.db=null;}
-  listeners.db=db.ref(chvDB(semanaAtual)).on('value',function(snap){
+  if(L.db){L.db();L.db=null;}
+  L.db=db.ref(chvDB(semanaAtual)).on('value',function(snap){
     var d=snap.val()||{};
-    stateAtiv=d.ativ||{};
-    statePen=d.pen||{};
-    renderAtiv();renderPen();renderSaldos();
+    stateAtiv=d.ativ||{};statePen=d.pen||{};
+    renderSaldos();
+    if(pgAtual==='ativ')renderAtiv();
+    if(pgAtual==='pen')renderPen();
+    if(pgAtual==='rel')renderRel();
     setSt('✓ Sincronizado','ok');
   },function(){setSt('⚠ Erro','err');});
 }
-
 function salvarDados(){
   if(!isAdm)return;
   db.ref(chvDB(semanaAtual)).set({ativ:stateAtiv,pen:statePen})
     .then(function(){setSt('✓ Salvo','ok');}).catch(function(){setSt('⚠ Erro','err');});
 }
 
-// ── SALDOS ──
-function calcSaldo(filhoIdx){
-  var total=0;
-  atividades.forEach(function(a,i){
-    var q=(stateAtiv[i]&&stateAtiv[i][filhoIdx])||0;
-    total+=q*a.valor;
-  });
-  penalidades.forEach(function(p,i){
-    var q=(statePen[i]&&statePen[i][filhoIdx])||0;
-    total-=q*p.valor;
-  });
-  return Math.max(0,Math.min(familia.limite,total));
-}
-
-function renderSaldos(){
-  var cards=document.getElementById('saldo-cards');
-  cards.innerHTML='';
-  familia.filhos.forEach(function(f,i){
-    var s=calcSaldo(i);
-    var cor=CORES[i%CORES.length];
-    var div=document.createElement('div');
-    div.className='saldo-card';
-    div.innerHTML=
-      '<span class="snome" style="color:'+cor+'">'+f.nome+'</span>'+
-      '<div class="prog-wrap"><div class="prog-bar" style="width:'+(s/familia.limite*100)+'%;background:'+cor+'"></div></div>'+
-      '<span class="svalor" style="color:'+cor+'">R$&nbsp;'+fmt(s)+'</span>';
-    cards.appendChild(div);
-  });
-}
-
-// ── RENDER ATIVIDADES ──
-function pendAtiv(idx,filhoIdx){
+// SALDOS
+function calcSaldo(fi){
   var t=0;
-  Object.values(pendencias).forEach(function(p){if(p.ativIdx===idx&&p.filhoIdx===filhoIdx)t+=p.qty;});
-  return t;
+  atividades.forEach(function(a,i){t+=(stateAtiv[i]&&stateAtiv[i][fi]?stateAtiv[i][fi]:0)*a.valor;});
+  penalidades.forEach(function(p,i){t-=(statePen[i]&&statePen[i][fi]?statePen[i][fi]:0)*p.valor;});
+  return Math.max(0,Math.min(familia.limite,t));
 }
-
-function renderAtiv(){
-  var tb=document.getElementById('tb-ativ');
-  tb.innerHTML='';
-  atividades.forEach(function(a,i){
-    var dc=a.dif==='Fácil'?'df':a.dif==='Médio'?'dm':'dd';
-    var tr=document.createElement('tr');
-    var cols='<td class="cat">'+a.cat+'</td><td class="nome-td">'+a.nome+'</td>'+
-      '<td class="c"><span class="diff-b '+dc+'">'+a.dif+'</span></td>'+
-      '<td class="c vativ">R$&nbsp;'+fmt(a.valor)+'</td>'+
-      '<td class="c" style="color:var(--text-muted);font-family:Syne,sans-serif;font-size:11px;font-weight:700">'+a.limite+'×</td>';
-    familia.filhos.forEach(function(f,fi){
-      var q=(stateAtiv[i]&&stateAtiv[i][fi])||0;
-      var pt=pendAtiv(i,fi);
-      var cor=CORES[fi%CORES.length];
-      var atLim=q>=a.limite;
-      var dis=!isAdm;
-      cols+='<td class="c">'+
-        '<div style="display:flex;align-items:center;justify-content:center;gap:3px;flex-wrap:wrap">'+
-        '<div class="ctr" style="'+(q>0?'border-color:'+cor:'')+'">'+
-          '<button onclick="adjAtiv('+i+','+fi+',-1)" '+(q<=0||dis?'disabled':'')+' style="'+(q>0?'color:'+cor:'')+'">−</button>'+
-          '<span class="cnt" style="'+(q>0?'color:'+cor+';background:'+CORES_DIM[fi%CORES_DIM.length]:'')+'">'+q+'</span>'+
-          '<button onclick="adjAtiv('+i+','+fi+',1)" '+(atLim||dis?'disabled':'')+' style="'+(q>0?'color:'+cor:'')+'">+</button>'+
-        '</div>'+
-        (atLim?'<span class="lim-tag">máx</span>':'')+
-        (pt>0?'<span class="pend-tag">⏳'+pt+'</span>':'')+
-        '</div></td>';
-    });
-    cols+='<td class="ac"><div class="row-acts">'+
-      '<button class="rbtn ed'+(isAdm?'':' np')+'" onclick="'+(isAdm?'abrirModalAtiv('+i+')':'semPerm()')+'">✏️</button>'+
-      '<button class="rbtn rm'+(isAdm?'':' np')+'" onclick="'+(isAdm?'remAtiv('+i+')':'semPerm()')+'">🗑️</button>'+
-    '</div></td>';
-    tr.innerHTML=cols;
-    tb.appendChild(tr);
+function renderSaldos(){
+  var g=document.getElementById('saldo-grid');g.innerHTML='';
+  familia.filhos.forEach(function(f,i){
+    var s=calcSaldo(i),cor=CORES[i%CORES.length];
+    var d=document.createElement('div');d.className='saldo-card';
+    d.innerHTML=
+      '<div class="sc-nome" style="color:'+cor+'">'+f.nome+'</div>'+
+      '<div class="sc-valor" style="color:'+cor+'">R$&nbsp;'+fmt(s)+'</div>'+
+      '<div class="sc-prog"><div class="sc-bar" style="width:'+(s/familia.limite*100)+'%;background:'+cor+'"></div></div>'+
+      '<div class="sc-limite">de R$&nbsp;'+fmt(familia.limite)+'</div>';
+    g.appendChild(d);
   });
 }
 
-// ── RENDER PENALIDADES ──
+// RENDER ATIVIDADES (cards por filho)
+function pendAtiv(idx,fi){
+  var t=0;Object.values(pendencias).forEach(function(p){if(p.ativIdx===idx&&p.filhoIdx===fi)t+=p.qty;});return t;
+}
+function renderAtiv(){
+  var list=document.getElementById('ativ-list');list.innerHTML='';
+  var fi=filhoSelAtiv;
+  var cor=CORES[fi%CORES.length];
+  renderTabsFilhos();
+  atividades.forEach(function(a,i){
+    var q=(stateAtiv[i]&&stateAtiv[i][fi])||0;
+    var pt=pendAtiv(i,fi);
+    var atLim=q>=a.limite;
+    var dis=!isAdm;
+    var dc=a.dif==='Fácil'?'df':a.dif==='Médio'?'dm':'dd';
+    var card=document.createElement('div');card.className='ativ-card';
+    var borderStyle=q>0?'border-color:'+cor+';background:'+CORES_DIM[fi%CORES_DIM.length]:'';
+    card.style.cssText=borderStyle;
+    card.innerHTML=
+      '<div class="ativ-top">'+
+        '<div style="flex:1">'+
+          '<div class="ativ-cat">'+a.cat+'</div>'+
+          '<div class="ativ-nome">'+a.nome+'</div>'+
+          '<div class="ativ-meta">'+
+            '<span class="diff-tag '+dc+'">'+a.dif+'</span>'+
+            '<span class="ativ-valor">R$&nbsp;'+fmt(a.valor)+'</span>'+
+            '<span class="ativ-lim">máx '+a.limite+'×</span>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="ativ-bottom">'+
+        '<div style="display:flex;align-items:center;gap:6px">'+
+          '<div class="ctr" style="'+(q>0?'border-color:'+cor:'')+'">'+
+            '<button onclick="adjAtiv('+i+','+fi+',-1)" '+(q<=0||dis?'disabled':'')+' style="'+(q>0?'color:'+cor:'')+'">−</button>'+
+            '<span class="cnt" style="'+(q>0?'color:'+cor+';background:'+CORES_DIM[fi%CORES_DIM.length]:'')+'">'+q+'</span>'+
+            '<button onclick="adjAtiv('+i+','+fi+',1)" '+(atLim||dis?'disabled':'')+' style="'+(q>0?'color:'+cor:'')+'">+</button>'+
+          '</div>'+
+          (atLim?'<span class="lim-chip">máx</span>':'')+
+          (pt>0?'<span class="pend-chip">⏳ '+pt+' pend.</span>':'')+
+        '</div>'+
+        '<div class="ativ-acts">'+
+          '<button class="abtn ed'+(isAdm?'':' np')+'" onclick="'+(isAdm?'abrirModalAtiv('+i+')':'semPerm()')+'">✏️</button>'+
+          '<button class="abtn rm'+(isAdm?'':' np')+'" onclick="'+(isAdm?'remAtiv('+i+')':'semPerm()')+'">🗑️</button>'+
+        '</div>'+
+      '</div>';
+    list.appendChild(card);
+  });
+}
+
+// RENDER PENALIDADES (cards por filho)
 function renderPen(){
-  var tb=document.getElementById('tb-pen');
-  tb.innerHTML='';
+  var list=document.getElementById('pen-list');list.innerHTML='';
+  var fi=filhoSelPen;
+  renderTabsFilhos();
   penalidades.forEach(function(p,i){
-    var tr=document.createElement('tr');
-    var cols='<td class="cat">'+p.cat+'</td><td class="nome-td">'+p.nome+'</td>'+
-      '<td class="c vpen">- R$&nbsp;'+fmt(p.valor)+'</td>';
-    familia.filhos.forEach(function(f,fi){
-      var q=(statePen[i]&&statePen[i][fi])||0;
-      var dis=!isAdm;
-      cols+='<td class="c">'+
-        '<div class="ctr '+(q>0?'':'')+'">'+
+    var q=(statePen[i]&&statePen[i][fi])||0;
+    var dis=!isAdm;
+    var card=document.createElement('div');card.className='ativ-card';
+    if(q>0){card.style.borderColor='var(--penalty)';card.style.background='var(--penalty-dim)';}
+    card.innerHTML=
+      '<div class="ativ-top">'+
+        '<div style="flex:1">'+
+          '<div class="ativ-cat">'+p.cat+'</div>'+
+          '<div class="ativ-nome">'+p.nome+'</div>'+
+          '<div class="ativ-meta"><span class="ativ-valor" style="color:var(--penalty)">- R$&nbsp;'+fmt(p.valor)+'</span></div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="ativ-bottom">'+
+        '<div class="ctr" style="'+(q>0?'border-color:var(--penalty)':'')+'">'+
           '<button onclick="adjPen('+i+','+fi+',-1)" '+(q<=0||dis?'disabled':'')+' style="'+(q>0?'color:var(--penalty)':'')+'">−</button>'+
           '<span class="cnt" style="'+(q>0?'color:var(--penalty);background:var(--penalty-dim)':'')+'">'+q+'</span>'+
           '<button onclick="adjPen('+i+','+fi+',1)" '+(dis?'disabled':'')+' style="'+(q>0?'color:var(--penalty)':'')+'">+</button>'+
-        '</div></td>';
-    });
-    cols+='<td class="ac"><div class="row-acts">'+
-      '<button class="rbtn ed'+(isAdm?'':' np')+'" onclick="'+(isAdm?'abrirModalPen('+i+')':'semPerm()')+'">✏️</button>'+
-      '<button class="rbtn rm'+(isAdm?'':' np')+'" onclick="'+(isAdm?'remPen('+i+')':'semPerm()')+'">🗑️</button>'+
-    '</div></td>';
-    tr.innerHTML=cols;
-    tb.appendChild(tr);
+        '</div>'+
+        '<div class="ativ-acts">'+
+          '<button class="abtn ed'+(isAdm?'':' np')+'" onclick="'+(isAdm?'abrirModalPen('+i+')':'semPerm()')+'">✏️</button>'+
+          '<button class="abtn rm'+(isAdm?'':' np')+'" onclick="'+(isAdm?'remPen('+i+')':'semPerm()')+'">🗑️</button>'+
+        '</div>'+
+      '</div>';
+    list.appendChild(card);
   });
 }
 
-// ── AJUSTES ──
+// PAINEL ENVIO FILHO
+function renderSendPanel(){
+  var wrap=document.getElementById('send-panel-wrap');
+  if(!wrap)return;
+  if(isAdm){wrap.innerHTML='';return;}
+  var fi=familia.filhos.findIndex(function(f){return f.nome.toLowerCase()===filhoNome;});
+  if(fi<0)fi=0;
+  var opts=atividades.map(function(a,i){return'<option value="'+i+'">'+a.cat+' — '+a.nome+' (R$ '+fmt(a.valor)+')</option>';}).join('');
+  wrap.innerHTML='<div class="send-panel">'+
+    '<h3>📝 Registrar atividade realizada</h3>'+
+    '<div class="pf-field"><label>Atividade</label><select id="pf-sel">'+opts+'</select></div>'+
+    '<div class="pf-field"><label>Quantas vezes?</label><input type="number" id="pf-qty" value="1" min="1" max="7" inputmode="numeric" style="max-width:100px"></div>'+
+    '<button class="btn-enviar" onclick="enviarPend('+fi+')">📤 Enviar para aprovação</button>'+
+  '</div>';
+}
+
+function enviarPend(fi){
+  var ativIdx=parseInt(document.getElementById('pf-sel').value);
+  var qty=parseInt(document.getElementById('pf-qty').value)||1;
+  var a=atividades[ativIdx];
+  if(qty<1||qty>a.limite){alert('Quantidade inválida. Máximo: '+a.limite+'×');return;}
+  var k=Date.now().toString();
+  db.ref(chvPend(semanaAtual)+'/'+k).set({
+    filhoIdx:fi,filhoNome:filhoNome||'filho',
+    ativIdx:ativIdx,ativNome:a.nome,ativCat:a.cat,ativValor:a.valor,
+    qty:qty,total:qty*a.valor,ts:Date.now()
+  }).then(function(){document.getElementById('pf-qty').value=1;alert('✅ Enviado! Aguarde aprovação.');});
+}
+
+// AJUSTES
 function adjAtiv(i,fi,d){
   if(!isAdm)return;
   if(!stateAtiv[i])stateAtiv[i]={};
@@ -934,34 +960,34 @@ function adjPen(i,fi,d){
   renderPen();renderSaldos();salvarDados();
 }
 function resetSemana(){
-  if(!isAdm)return;
+  if(!isAdm){semPerm();return;}
   if(!confirm('Resetar a semana? Todos os contadores voltam para zero.'))return;
   stateAtiv={};statePen={};
   renderAtiv();renderPen();renderSaldos();salvarDados();
 }
 
-// ── CRUD ATIVIDADES ──
+// CRUD ATIVIDADES
 function abrirModalAtiv(idx){
-  document.getElementById('m-ativ-tit').textContent=idx===-1?'Nova Atividade':'Editar Atividade';
+  document.getElementById('sh-ativ-tit').textContent=idx===-1?'Nova Atividade':'Editar Atividade';
   document.getElementById('ma-idx').value=idx;
   var a=idx===-1?{}:atividades[idx];
   document.getElementById('ma-cat').value=a.cat||'Doméstica';
   document.getElementById('ma-nome').value=a.nome||'';
   document.getElementById('ma-dif').value=a.dif||'Fácil';
-  document.getElementById('ma-valor').value=a.valor||'';
+  document.getElementById('ma-val').value=a.valor||'';
   document.getElementById('ma-lim').value=a.limite||5;
-  abrirM('m-ativ');
+  abrirSheet('sh-ativ');
 }
 function salvarAtiv(){
   var nome=document.getElementById('ma-nome').value.trim();
-  var valor=parseFloat(document.getElementById('ma-valor').value);
+  var val=parseFloat(document.getElementById('ma-val').value);
   var lim=parseInt(document.getElementById('ma-lim').value);
-  if(!nome||!valor||!lim){alert('Preencha todos os campos.');return;}
-  var obj={cat:document.getElementById('ma-cat').value,nome:nome,dif:document.getElementById('ma-dif').value,valor:valor,limite:lim};
+  if(!nome||!val||!lim){alert('Preencha todos os campos.');return;}
+  var obj={cat:document.getElementById('ma-cat').value,nome:nome,dif:document.getElementById('ma-dif').value,valor:val,limite:lim};
   var idx=parseInt(document.getElementById('ma-idx').value);
   if(idx===-1)atividades.push(obj);else atividades[idx]=obj;
-  db.ref('familias/'+familiaId+'/atividades').set(atividades).then(function(){setSt('✓ Salvo','ok');});
-  fecharM('m-ativ');
+  db.ref('familias/'+familiaId+'/atividades').set(atividades);
+  fecharSheet('sh-ativ');
 }
 function remAtiv(i){
   if(!confirm('Remover "'+atividades[i].nome+'"?'))return;
@@ -969,25 +995,25 @@ function remAtiv(i){
   db.ref('familias/'+familiaId+'/atividades').set(atividades);
 }
 
-// ── CRUD PENALIDADES ──
+// CRUD PENALIDADES
 function abrirModalPen(idx){
-  document.getElementById('m-pen-tit').textContent=idx===-1?'Nova Penalidade':'Editar Penalidade';
+  document.getElementById('sh-pen-tit').textContent=idx===-1?'Nova Penalidade':'Editar Penalidade';
   document.getElementById('mp-idx').value=idx;
   var p=idx===-1?{}:penalidades[idx];
   document.getElementById('mp-cat').value=p.cat||'Comportamento';
   document.getElementById('mp-nome').value=p.nome||'';
-  document.getElementById('mp-valor').value=p.valor||'';
-  abrirM('m-pen');
+  document.getElementById('mp-val').value=p.valor||'';
+  abrirSheet('sh-pen');
 }
 function salvarPen(){
   var nome=document.getElementById('mp-nome').value.trim();
-  var valor=parseFloat(document.getElementById('mp-valor').value);
-  if(!nome||!valor){alert('Preencha todos os campos.');return;}
-  var obj={cat:document.getElementById('mp-cat').value,nome:nome,valor:valor};
+  var val=parseFloat(document.getElementById('mp-val').value);
+  if(!nome||!val){alert('Preencha todos os campos.');return;}
+  var obj={cat:document.getElementById('mp-cat').value,nome:nome,valor:val};
   var idx=parseInt(document.getElementById('mp-idx').value);
   if(idx===-1)penalidades.push(obj);else penalidades[idx]=obj;
-  db.ref('familias/'+familiaId+'/penalidades').set(penalidades).then(function(){setSt('✓ Salvo','ok');});
-  fecharM('m-pen');
+  db.ref('familias/'+familiaId+'/penalidades').set(penalidades);
+  fecharSheet('sh-pen');
 }
 function remPen(i){
   if(!confirm('Remover "'+penalidades[i].nome+'"?'))return;
@@ -995,75 +1021,47 @@ function remPen(i){
   db.ref('familias/'+familiaId+'/penalidades').set(penalidades);
 }
 
-// ── PENDÊNCIAS FILHO ──
-function popularSelectFilho(){
-  var sel=document.getElementById('pf-ativ-sel');
-  if(!sel)return;
-  sel.innerHTML='';
-  atividades.forEach(function(a,i){
-    var o=document.createElement('option');o.value=i;o.textContent=a.cat+' — '+a.nome+' (R$ '+fmt(a.valor)+')';sel.appendChild(o);
-  });
-}
-function enviarPend(){
-  var filhoIdx=familia.filhos.findIndex(function(f){return f.nome.toLowerCase()===filhoNome;});
-  if(filhoIdx<0){
-    // Tentar pelo uid no membro
-    filhoIdx=0; // fallback
-  }
-  var ativIdx=parseInt(document.getElementById('pf-ativ-sel').value);
-  var qty=parseInt(document.getElementById('pf-qty').value)||1;
-  var a=atividades[ativIdx];
-  if(qty<1||qty>a.limite){alert('Quantidade inválida.');return;}
-  var key=Date.now().toString();
-  db.ref(chvPend(semanaAtual)+'/'+key).set({
-    filhoIdx:filhoIdx,filhoNome:filhoNome||'filho',
-    ativIdx:ativIdx,ativNome:a.nome,ativCat:a.cat,ativValor:a.valor,
-    qty:qty,total:qty*a.valor,ts:Date.now()
-  }).then(function(){
-    document.getElementById('pf-qty').value=1;
-    alert('✅ Enviado! Aguarde a aprovação.');
-  });
-}
-
-// ── OUVIR PENDÊNCIAS ──
+// PENDÊNCIAS
 function ouvirPendencias(){
-  if(listeners.pend){listeners.pend();listeners.pend=null;}
-  listeners.pend=db.ref(chvPend(semanaAtual)).on('value',function(snap){
+  if(L.pend){L.pend();L.pend=null;}
+  L.pend=db.ref(chvPend(semanaAtual)).on('value',function(snap){
     pendencias=snap.val()||{};
     var n=Object.keys(pendencias).length;
     var b=document.getElementById('bdg-pend');
-    if(n>0){b.textContent=n;b.classList.add('show');}else b.classList.remove('show');
-    if(document.getElementById('m-pend').classList.contains('show'))renderPend();
-    renderAtiv();
+    var nd=document.getElementById('ndot-pend');
+    if(n>0){b.textContent=n;b.classList.add('on');nd.classList.add('on');}
+    else{b.classList.remove('on');nd.classList.remove('on');}
+    if(document.getElementById('sh-pend').classList.contains('show'))renderPendencias();
+    if(pgAtual==='ativ')renderAtiv();
   });
 }
-
-function renderPend(){
-  var body=document.getElementById('m-pend-body');
+function renderPendencias(){
+  var body=document.getElementById('sh-pend-body');
   var keys=Object.keys(pendencias);
   if(keys.length===0){body.innerHTML='<div class="empty-msg">🎉 Nenhuma pendência!</div>';return;}
   body.innerHTML='';
   keys.forEach(function(k){
     var p=pendencias[k];
     var cor=CORES[p.filhoIdx%CORES.length];
-    var d=new Date(p.ts).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-    var div=document.createElement('div');
-    div.className='pend-item';
-    div.innerHTML=
-      '<div class="pend-info">'+
-        '<div class="pend-filho" style="color:'+cor+'">'+(p.filhoNome||'filho').toUpperCase()+' • '+d+'</div>'+
-        '<div class="pend-nome">'+p.ativCat+' — '+p.ativNome+'</div>'+
-        '<div class="pend-qty">'+p.qty+'× • R$ '+fmt(p.ativValor)+'/vez</div>'+
+    var dt=new Date(p.ts).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    var d=document.createElement('div');d.className='pend-item';
+    d.innerHTML=
+      '<div class="pend-top">'+
+        '<span class="pend-filho" style="color:'+cor+'">'+(p.filhoNome||'filho').toUpperCase()+'</span>'+
+        '<span class="pend-dt">'+dt+'</span>'+
       '</div>'+
-      '<div class="pend-val">R$ '+fmt(p.total)+'</div>'+
-      '<div class="pend-acts">'+
-        '<button class="pbtn ap" onclick="aprovarPend(\''+k+'\')">✓ Aprovar</button>'+
-        '<button class="pbtn rj" onclick="rejeitarPend(\''+k+'\')">✕ Rejeitar</button>'+
+      '<div class="pend-nome">'+p.ativCat+' — '+p.ativNome+'</div>'+
+      '<div class="pend-qty">'+p.qty+'× • R$&nbsp;'+fmt(p.ativValor)+'/vez</div>'+
+      '<div class="pend-bot">'+
+        '<span class="pend-val">R$&nbsp;'+fmt(p.total)+'</span>'+
+        '<div class="pend-acts">'+
+          '<button class="pbtn ap" onclick="aprovarPend(\''+k+'\')">✓ Aprovar</button>'+
+          '<button class="pbtn rj" onclick="rejeitarPend(\''+k+'\')">✕ Rejeitar</button>'+
+        '</div>'+
       '</div>';
-    body.appendChild(div);
+    body.appendChild(d);
   });
 }
-
 function aprovarPend(k){
   var p=pendencias[k];if(!p)return;
   if(!stateAtiv[p.ativIdx])stateAtiv[p.ativIdx]={};
@@ -1075,156 +1073,170 @@ function aprovarPend(k){
   ]).then(function(){setSt('✓ Aprovado','ok');});
 }
 function rejeitarPend(k){
-  if(!confirm('Rejeitar esta atividade?'))return;
+  if(!confirm('Rejeitar?'))return;
   db.ref(chvPend(semanaAtual)+'/'+k).remove();
 }
 
-// ── MEMBROS ──
+// MEMBROS
 function ouvirMembros(){
-  if(listeners.mbr){listeners.mbr();listeners.mbr=null;}
-  listeners.mbr=db.ref('familias/'+familiaId+'/membros').on('value',function(snap){
-    var membros=snap.val()||{};
-    var pend=Object.values(membros).filter(function(m){return m.perfil==='pendente';}).length;
+  if(L.mbr){L.mbr();L.mbr=null;}
+  L.mbr=db.ref('familias/'+familiaId+'/membros').on('value',function(snap){
+    var m=snap.val()||{};
+    var pend=Object.values(m).filter(function(x){return x.perfil==='pendente';}).length;
     var b=document.getElementById('bdg-users');
-    if(pend>0){b.textContent=pend;b.classList.add('show');}else b.classList.remove('show');
-    if(document.getElementById('m-users').classList.contains('show'))renderUsers();
+    if(pend>0){b.textContent=pend;b.classList.add('on');}else b.classList.remove('on');
   });
 }
-
 function renderUsers(){
-  var body=document.getElementById('m-users-body');
+  var body=document.getElementById('sh-users-body');
   db.ref('familias/'+familiaId+'/membros').once('value').then(function(snap){
-    var membros=snap.val()||{};
+    var m=snap.val()||{};
     var pend=[],aprov=[];
-    Object.entries(membros).forEach(function(e){
-      var uid=e[0],m=e[1];
-      if(m.perfil==='pendente')pend.push({uid:uid,...m});
-      else aprov.push({uid:uid,...m});
+    Object.entries(m).forEach(function(e){
+      var o=Object.assign({uid:e[0]},e[1]);
+      if(o.perfil==='pendente')pend.push(o);else aprov.push(o);
     });
-
-    body.innerHTML='<div class="sec-sub">Aguardando aprovação</div>';
-    if(pend.length===0){body.innerHTML+='<div class="empty-msg">Nenhuma conta pendente.</div>';}
-    pend.forEach(function(m){
-      body.innerHTML+=
-        '<div class="usr-item">'+
-          '<div class="usr-info"><div class="usr-nome">'+m.nome+'</div><div class="usr-email">'+m.email+'</div></div>'+
-          '<span class="perfil-tag pt-pendente">Pendente</span>'+
-          '<div class="usr-acts">'+
-            '<button class="ubtn ua" onclick="aprovarMembro(\''+m.uid+'\',\'admin\')">✏️ Admin</button>'+
-            '<button class="ubtn uf" onclick="aprovarMembro(\''+m.uid+'\',\'filho\')">👦 Filho</button>'+
-            '<button class="ubtn ur" onclick="rejeitarMembro(\''+m.uid+'\',\''+m.nome+'\')">✕</button>'+
-          '</div>'+
-        '</div>';
-    });
-
-    body.innerHTML+='<div class="sec-sub" style="margin-top:16px">Membros aprovados</div>';
+    body.innerHTML='';
+    if(pend.length>0){
+      body.innerHTML+='<div class="sec-sub">Aguardando aprovação</div>';
+      pend.forEach(function(u){
+        body.innerHTML+='<div class="usr-item">'+
+          '<div class="usr-top"><span class="usr-nome">'+u.nome+'</span><span class="perfil-tag pt-pendente">Pendente</span></div>'+
+          '<div class="usr-email">'+u.email+'</div>'+
+          '<div class="usr-acts" style="margin-top:8px">'+
+            '<button class="ubtn ua" onclick="aprovarMbr(\''+u.uid+'\',\'admin\')">✏️ Admin</button>'+
+            '<button class="ubtn uf" onclick="aprovarMbr(\''+u.uid+'\',\'filho\')">👦 Filho</button>'+
+            '<button class="ubtn ur" onclick="rejeitarMbr(\''+u.uid+'\',\''+u.nome+'\')">✕ Rejeitar</button>'+
+          '</div></div>';
+      });
+    }
+    body.innerHTML+='<div class="sec-sub" style="margin-top:12px">Membros aprovados</div>';
     if(aprov.length===0){body.innerHTML+='<div class="empty-msg">Nenhum membro aprovado.</div>';}
-    aprov.forEach(function(m){
-      var ptag=m.perfil==='admin'?'pt-admin':'pt-filho';
-      var plabel=m.perfil==='admin'?'Admin':'Filho';
-      body.innerHTML+=
-        '<div class="usr-item">'+
-          '<div class="usr-info"><div class="usr-nome">'+m.nome+'</div><div class="usr-email">'+m.email+'</div></div>'+
-          '<span class="perfil-tag '+ptag+'">'+plabel+'</span>'+
-          '<div class="usr-acts">'+
-            '<button class="ubtn um" onclick="removerMembro(\''+m.uid+'\',\''+m.nome+'\')">🗑 Remover</button>'+
-          '</div>'+
-        '</div>';
+    aprov.forEach(function(u){
+      var ptag=u.perfil==='admin'?'pt-admin':'pt-filho';
+      var pl=u.perfil==='admin'?'Admin':'Filho';
+      body.innerHTML+='<div class="usr-item">'+
+        '<div class="usr-top"><span class="usr-nome">'+u.nome+'</span><span class="perfil-tag '+ptag+'">'+pl+'</span></div>'+
+        '<div class="usr-email">'+u.email+'</div>'+
+        '<div class="usr-acts" style="margin-top:8px">'+
+          '<button class="ubtn um" onclick="removerMbr(\''+u.uid+'\',\''+u.nome+'\')">🗑 Remover</button>'+
+        '</div></div>';
     });
   });
 }
-
-function aprovarMembro(uid,perfil){
+function aprovarMbr(id,perfil){
   Promise.all([
-    db.ref('familias/'+familiaId+'/membros/'+uid+'/perfil').set(perfil),
-    db.ref('usuarios/'+uid+'/perfil').set(perfil)
+    db.ref('familias/'+familiaId+'/membros/'+id+'/perfil').set(perfil),
+    db.ref('usuarios/'+id+'/perfil').set(perfil)
   ]).then(function(){setSt('✓ Aprovado','ok');renderUsers();});
 }
-function rejeitarMembro(uid,nome){
+function rejeitarMbr(id,nome){
   if(!confirm('Rejeitar '+nome+'?'))return;
-  Promise.all([
-    db.ref('familias/'+familiaId+'/membros/'+uid).remove(),
-    db.ref('usuarios/'+uid).remove()
-  ]).then(function(){renderUsers();});
+  Promise.all([db.ref('familias/'+familiaId+'/membros/'+id).remove(),db.ref('usuarios/'+id).remove()]).then(function(){renderUsers();});
 }
-function removerMembro(uid,nome){
+function removerMbr(id,nome){
   if(!confirm('Remover '+nome+' da família?'))return;
-  Promise.all([
-    db.ref('familias/'+familiaId+'/membros/'+uid).remove(),
-    db.ref('usuarios/'+uid).remove()
-  ]).then(function(){renderUsers();});
+  Promise.all([db.ref('familias/'+familiaId+'/membros/'+id).remove(),db.ref('usuarios/'+id).remove()]).then(function(){renderUsers();});
 }
 
-// ── CONFIG FAMÍLIA ──
+// CONFIG
 function carregarConf(){
-  document.getElementById('conf-nome-fam').value=familia.nome;
-  document.getElementById('conf-limite').value=familia.limite;
+  document.getElementById('conf-nome').value=familia.nome;
+  document.getElementById('conf-lim').value=familia.limite;
   db.ref('convites').orderByChild('familiaId').equalTo(familiaId).limitToLast(1).once('value').then(function(snap){
     var convs=snap.val();
-    if(convs){
-      var k=Object.keys(convs)[0];
-      var c=convs[k];
-      document.getElementById('conf-codigo').textContent=k;
-      var exp=new Date(c.expiraEm);
-      document.getElementById('conf-exp').textContent='Expira em '+exp.toLocaleDateString('pt-BR');
+    if(convs){var k=Object.keys(convs)[0],c=convs[k];
+      document.getElementById('conf-code').textContent=k;
+      document.getElementById('conf-exp').textContent='Expira em '+new Date(c.expiraEm).toLocaleDateString('pt-BR');
     }
   });
 }
 function salvarConf(){
-  var nome=document.getElementById('conf-nome-fam').value.trim();
-  var lim=parseFloat(document.getElementById('conf-limite').value);
-  if(!nome||!lim){alert('Preencha os campos.');return;}
+  var nome=document.getElementById('conf-nome').value.trim();
+  var lim=parseFloat(document.getElementById('conf-lim').value);
+  if(!nome||!lim)return;
   db.ref('familias/'+familiaId+'/info').update({nome:nome,limite:lim}).then(function(){
     familia.nome=nome;familia.limite=lim;
-    document.getElementById('familia-nome-top').textContent=nome;
-    setSt('✓ Salvo','ok');fecharM('m-conf');
+    document.getElementById('home-fam-label').textContent=nome;
+    setSt('✓ Salvo','ok');fecharSheet('sh-conf');
   });
 }
 function renovarConvite(){
-  var codigo=gerarCodigo();
-  var expira=Date.now()+(7*24*60*60*1000);
-  db.ref('convites/'+codigo).set({familiaId:familiaId,criadoPor:currentUser.uid,expiraEm:expira}).then(function(){
-    document.getElementById('conf-codigo').textContent=codigo;
-    document.getElementById('conf-exp').textContent='Expira em '+new Date(expira).toLocaleDateString('pt-BR');
-    alert('✅ Novo código gerado: '+codigo);
+  var cod=gerarCod(),exp=Date.now()+(7*24*60*60*1000);
+  db.ref('convites/'+cod).set({familiaId:familiaId,criadoPor:uid,expiraEm:exp}).then(function(){
+    document.getElementById('conf-code').textContent=cod;
+    document.getElementById('conf-exp').textContent='Expira em '+new Date(exp).toLocaleDateString('pt-BR');
+    alert('✅ Novo código: '+cod);
   });
 }
 
-// ── RELATÓRIO ──
-function gerarRel(){
+// RELATÓRIO
+function renderRel(){
+  var cards=document.getElementById('rel-cards');cards.innerHTML='';
+  familia.filhos.forEach(function(f,fi){
+    var saldo=calcSaldo(fi),cor=CORES[fi%CORES.length];
+    var div=document.createElement('div');div.className='rel-filho-card';
+    var bodyHTML='<div class="rel-filho-body" id="rb-'+fi+'">';
+    bodyHTML+='<div class="rel-sec">Atividades realizadas</div>';
+    var temAtiv=false;
+    atividades.forEach(function(a,i){
+      var q=(stateAtiv[i]&&stateAtiv[i][fi])||0;if(!q)return;temAtiv=true;
+      bodyHTML+='<div class="rel-item">'+
+        '<span class="rel-item-nome">'+a.nome+'</span>'+
+        '<span class="rel-item-qty">'+q+'×</span>'+
+        '<span class="rel-item-val" style="color:var(--success)">R$&nbsp;'+fmt(q*a.valor)+'</span>'+
+      '</div>';
+    });
+    if(!temAtiv)bodyHTML+='<div class="rel-nenhuma">Nenhuma atividade registrada.</div>';
+    bodyHTML+='<div class="rel-sec">Penalidades</div>';
+    var temPen=false;
+    penalidades.forEach(function(p,i){
+      var q=(statePen[i]&&statePen[i][fi])||0;if(!q)return;temPen=true;
+      bodyHTML+='<div class="rel-item">'+
+        '<span class="rel-item-nome">'+p.nome+'</span>'+
+        '<span class="rel-item-qty">'+q+'×</span>'+
+        '<span class="rel-item-val" style="color:var(--penalty)">- R$&nbsp;'+fmt(q*p.valor)+'</span>'+
+      '</div>';
+    });
+    if(!temPen)bodyHTML+='<div class="rel-nenhuma">Nenhuma penalidade. ✓</div>';
+    bodyHTML+='</div>';
+    div.innerHTML=
+      '<div class="rel-filho-header" onclick="toggleRelFilho('+fi+')" style="border-left:3px solid '+cor+'">'+
+        '<span class="rel-filho-nome" style="color:'+cor+'">'+f.nome+'</span>'+
+        '<span class="rel-filho-total" style="color:'+cor+'">R$&nbsp;'+fmt(saldo)+'</span>'+
+      '</div>'+bodyHTML;
+    cards.appendChild(div);
+  });
+}
+function toggleRelFilho(fi){
+  var b=document.getElementById('rb-'+fi);
+  b.classList.toggle('open');
+}
+
+// PDF
+function gerarPDF(){
   var sem=document.getElementById('sel-semana').value;
   var ano=new Date().getFullYear();
   var dt=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-  var html='<h1>Relatório de Mesada</h1><p class="rs">Semana '+sem+' / '+ano+' &nbsp;·&nbsp; '+dt+'</p>'+
-    '<div class="ra"><button class="rb imp" onclick="window.print()">🖨️ Imprimir / PDF</button>'+
-    '<button class="rb fch" onclick="document.getElementById(\'relatorio\').style.display=\'none\'">✕ Fechar</button></div>';
-
+  var html='<h1>Relatório de Mesada</h1><p class="ps">Semana '+sem+' / '+ano+' · '+dt+'</p>'+
+    '<div class="pa"><button class="pb imp" onclick="window.print()">🖨️ Imprimir / PDF</button>'+
+    '<button class="pb fch" onclick="document.getElementById(\'pdf-view\').style.display=\'none\'">✕ Fechar</button></div>';
   familia.filhos.forEach(function(f,fi){
-    var saldo=calcSaldo(fi);
-    var cor=fi===0?'#b07000':'#006fa8';
-    var bg=fi===0?'#fff4e0':'#e0f4ff';
-    var lA='',subA=0;
-    atividades.forEach(function(a,i){
-      var q=(stateAtiv[i]&&stateAtiv[i][fi])||0;if(!q)return;
-      var s=q*a.valor;subA+=s;
-      lA+='<tr><td>'+a.cat+'</td><td>'+a.nome+'</td><td class="rc">'+q+'×</td><td class="rc">R$&nbsp;'+fmt(a.valor)+'</td><td class="rc">R$&nbsp;'+fmt(s)+'</td></tr>';
-    });
-    var tA=lA?'<table><thead><tr><th>Cat.</th><th>Atividade</th><th class="rc">Qtd</th><th class="rc">Unit.</th><th class="rc">Total</th></tr></thead><tbody>'+lA+'</tbody></table><div style="text-align:right;font-size:11px;color:#666;padding:3px 9px 0;font-weight:700">Subtotal: R$&nbsp;'+fmt(subA)+'</div>':'<p class="rnn">Nenhuma atividade.</p>';
-    var lP='',subP=0;
-    penalidades.forEach(function(p,i){
-      var q=(statePen[i]&&statePen[i][fi])||0;if(!q)return;
-      var s=q*p.valor;subP+=s;
-      lP+='<tr><td>'+p.cat+'</td><td>'+p.nome+'</td><td class="rc">'+q+'×</td><td class="rc">R$&nbsp;'+fmt(p.valor)+'</td><td class="rc" style="color:#cc3333">- R$&nbsp;'+fmt(s)+'</td></tr>';
-    });
-    var tP=lP?'<table><thead><tr><th>Cat.</th><th>Penalidade</th><th class="rc">Qtd</th><th class="rc">Unit.</th><th class="rc">Desc.</th></tr></thead><tbody>'+lP+'</tbody></table><div style="text-align:right;font-size:11px;color:#cc3333;padding:3px 9px 0;font-weight:700">Descontos: - R$&nbsp;'+fmt(subP)+'</div>':'<p class="rnn">Nenhuma penalidade. ✓</p>';
-    if(fi>0)html+='<hr class="rdiv">';
-    html+='<div class="rf"><div class="rfh" style="background:'+bg+';color:'+cor+'">'+f.nome+'</div>'+
-      '<div class="rsc">Atividades</div>'+tA+'<div class="rsc">Penalidades</div>'+tP+
-      '<div class="rtot" style="color:'+cor+'">Total a receber: R$&nbsp;'+fmt(saldo)+'</div></div>';
+    var s=calcSaldo(fi);
+    var cor=fi%2===0?'#b07000':'#006fa8',bg=fi%2===0?'#fff4e0':'#e0f4ff';
+    var lA='',subA=0,lP='',subP=0;
+    atividades.forEach(function(a,i){var q=(stateAtiv[i]&&stateAtiv[i][fi])||0;if(!q)return;var sv=q*a.valor;subA+=sv;lA+='<tr><td>'+a.nome+'</td><td class="rc">'+q+'×</td><td class="rc">R$&nbsp;'+fmt(sv)+'</td></tr>';});
+    penalidades.forEach(function(p,i){var q=(statePen[i]&&statePen[i][fi])||0;if(!q)return;var sv=q*p.valor;subP+=sv;lP+='<tr><td>'+p.nome+'</td><td class="rc">'+q+'×</td><td class="rc" style="color:#cc3333">-R$&nbsp;'+fmt(sv)+'</td></tr>';});
+    if(fi>0)html+='<hr class="pdiv">';
+    html+='<div class="pf"><div class="pfh" style="background:'+bg+';color:'+cor+'">'+f.nome+'</div>'+
+      '<div class="psc">Atividades</div>'+
+      (lA?'<table><thead><tr><th>Atividade</th><th class="rc">Qtd</th><th class="rc">Total</th></tr></thead><tbody>'+lA+'</tbody></table><div style="text-align:right;font-size:11px;color:#666;padding:3px 0">Subtotal: R$&nbsp;'+fmt(subA)+'</div>':'<p class="pnn">Nenhuma atividade.</p>')+
+      '<div class="psc">Penalidades</div>'+
+      (lP?'<table><thead><tr><th>Penalidade</th><th class="rc">Qtd</th><th class="rc">Desc.</th></tr></thead><tbody>'+lP+'</tbody></table><div style="text-align:right;font-size:11px;color:#cc3333;padding:3px 0">Descontos: -R$&nbsp;'+fmt(subP)+'</div>':'<p class="pnn">Nenhuma penalidade. ✓</p>')+
+      '<div class="ptot" style="color:'+cor+'">Total: R$&nbsp;'+fmt(s)+'</div></div>';
   });
-
-  document.getElementById('relatorio').innerHTML=html;
-  document.getElementById('relatorio').style.display='block';
+  document.getElementById('pdf-view').innerHTML=html;
+  document.getElementById('pdf-view').style.display='block';
 }
 </script>
 </body>
