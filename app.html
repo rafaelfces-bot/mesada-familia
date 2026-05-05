@@ -578,8 +578,17 @@ function semPerm(){alert('🔒 Apenas administradores possuem permissão para es
 var pgAtual='home';
 function irPg(pg){
   ['home','ativ','pen','rel'].forEach(function(p){
-    document.getElementById('pg-'+p).classList.toggle('ativa',p===pg);
-    document.getElementById('nav-'+p).classList.toggle('active',p===pg);
+    var el=document.getElementById('pg-'+p);
+    var nav=document.getElementById('nav-'+p);
+    if(p===pg){
+      el.classList.add('ativa');
+      el.style.display='block';
+      nav.classList.add('active');
+    } else {
+      el.classList.remove('ativa');
+      el.style.display='none';
+      nav.classList.remove('active');
+    }
   });
   pgAtual=pg;
   if(pg==='ativ'){renderAtiv();renderSendPanel();}
@@ -604,16 +613,20 @@ function authAba(a){
 }
 
 function mostrarTela(id){
-  ['pg-auth','pg-setup','pg-wait'].forEach(function(p){
-    var el=document.getElementById(p);
-    el.style.display=p===id?'flex':'none';
-  });
-  document.getElementById('navbar').classList.toggle('show',id==='app');
+  // Auth, setup, wait
+  document.getElementById('pg-auth').style.display=id==='pg-auth'?'flex':'none';
+  document.getElementById('pg-setup').style.display=id==='pg-setup'?'flex':'none';
+  document.getElementById('pg-wait').style.display=id==='pg-wait'?'flex':'none';
+  // App pages
+  var isApp=id==='app';
+  document.getElementById('navbar').classList.toggle('show',isApp);
   ['pg-home','pg-ativ','pg-pen','pg-rel'].forEach(function(p){
-    document.getElementById(p).style.display=p==='pg-home'&&id==='app'?'block':'none';
-    if(id==='app')document.getElementById(p).classList.toggle('ativa',p==='pg-home');
+    var el=document.getElementById(p);
+    var isHome=p==='pg-home';
+    el.style.display=isApp&&isHome?'block':'none';
+    el.classList.toggle('ativa',isApp&&isHome);
   });
-  if(id==='app')document.getElementById('navbar').classList.add('show');
+  if(isApp){pgAtual='home';}
 }
 
 // LOGIN
@@ -662,12 +675,21 @@ auth.onAuthStateChanged(function(user){
   uid=user.uid;
   db.ref('usuarios/'+uid).once('value').then(function(snap){
     var u=snap.val();
-    if(!u||u.perfil==='novo'||!u.familiaId){mostrarTela('pg-setup');return;}
+    // Usuário não tem registro — vai para setup criar família
+    if(!u){mostrarTela('pg-setup');return;}
+    // Usuário com registro mas sem família — vai para setup
+    if(u.perfil==='novo'||!u.familiaId){mostrarTela('pg-setup');return;}
+    // Usuário pendente de aprovação
     if(u.perfil==='pendente'){mostrarTela('pg-wait');return;}
+    // Usuário aprovado — entra no app
     familiaId=u.familiaId;
     isAdm=u.perfil==='admin';
     filhoNome=u.perfil==='filho'?u.nome.toLowerCase():null;
     iniciarApp();
+  }).catch(function(){
+    // Erro de leitura — mostra login para tentar novamente
+    auth.signOut();
+    mostrarTela('pg-auth');
   });
 });
 
