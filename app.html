@@ -846,6 +846,7 @@ function trocarSemana(){semanaAtual=parseInt(document.getElementById('sel-semana
 // OUVIR CONFIG
 function ouvirConfig(){
   if(L.cfg){L.cfg();L.cfg=null;}
+  var primeiraVez=true;
   L.cfg=db.ref('familias/'+familiaId).on('value',function(snap){
     var f=snap.val();if(!f)return;
     familia.nome=f.info&&f.info.nome?f.info.nome:'Família';
@@ -854,9 +855,20 @@ function ouvirConfig(){
     atividades=Array.isArray(f.atividades)?f.atividades:Object.values(f.atividades||{});
     penalidades=Array.isArray(f.penalidades)?f.penalidades:Object.values(f.penalidades||{});
     document.getElementById('home-fam-label').textContent=familia.nome;
+    // Garantir que botões admin continuem visíveis após atualização
+    configurarUI();
     renderTabsFilhos();
-    carregarDados();
     renderSendPanel();
+    if(primeiraVez){
+      carregarDados();
+      primeiraVez=false;
+    } else {
+      // Apenas re-renderiza sem recarregar dados do servidor
+      renderSaldos();
+      if(pgAtual==='ativ')renderAtiv();
+      if(pgAtual==='pen')renderPen();
+      if(pgAtual==='rel')renderRel();
+    }
   });
 }
 
