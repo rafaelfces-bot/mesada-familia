@@ -728,22 +728,25 @@ auth.onAuthStateChanged(function(user){
       });
     }
 
+    // Normalizar perfil para minúsculo
+    var perfil=(u.perfil||'').toLowerCase();
+
     // Tem registro mas sem família definida
-    if(!u.familiaId||u.familiaId==='null'||u.perfil==='novo'){
+    if(!u.familiaId||u.familiaId==='null'||perfil==='novo'){
       mostrarTela('pg-entrar-familia');
       return;
     }
 
     // Pendente de aprovação
-    if(u.perfil==='pendente'){
+    if(perfil==='pendente'){
       mostrarTela('pg-wait');
       return;
     }
 
     // Aprovado — entra no app
     familiaId=u.familiaId;
-    isAdm=u.perfil==='admin';
-    filhoNome=u.perfil==='filho'?u.nome.toLowerCase():null;
+    isAdm=perfil==='admin';
+    filhoNome=perfil==='filho'?u.nome.toLowerCase():null;
     console.log('Auth OK - perfil:', u.perfil, 'isAdm:', isAdm, 'familiaId:', familiaId);
     iniciarApp();
 
@@ -814,6 +817,26 @@ function copiarCodigo(){
   navigator.clipboard.writeText(c).then(function(){alert('✅ Código copiado: '+c);}).catch(function(){alert('Código: '+c);});
 }
 function irApp(){isAdm=true;iniciarApp();}
+
+// ── CONFIGURAR UI ──
+function configurarUI(){
+  if(isAdm){
+    document.getElementById('btn-pend').style.display='flex';
+    document.getElementById('btn-conf').style.display='flex';
+    var bu=document.getElementById('btn-users');if(bu)bu.style.display='flex';
+    var br=document.getElementById('btn-reset');if(br)br.disabled=false;
+    var ba=document.getElementById('btn-add-ativ');if(ba)ba.classList.remove('np');
+    var bp=document.getElementById('btn-add-pen');if(bp)bp.classList.remove('np');
+  } else {
+    document.getElementById('btn-pend').style.display='none';
+    document.getElementById('btn-conf').style.display='none';
+    var bu=document.getElementById('btn-users');if(bu)bu.style.display='none';
+    var br=document.getElementById('btn-reset');if(br)br.disabled=true;
+    var ba=document.getElementById('btn-add-ativ');if(ba)ba.classList.add('np');
+    var bp=document.getElementById('btn-add-pen');if(bp)bp.classList.add('np');
+  }
+  console.log('configurarUI OK - isAdm:', isAdm);
+}
 
 // ── INICIAR APP ──
 function iniciarApp(){
