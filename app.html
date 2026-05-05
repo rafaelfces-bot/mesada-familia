@@ -275,7 +275,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);}
       <div class="field"><label>E-mail</label><input type="email" id="ac-email" placeholder="seu@email.com" inputmode="email"></div>
       <div class="field"><label>Senha</label><input type="password" id="ac-senha" placeholder="Mínimo 6 caracteres"></div>
       <div class="field"><label>Confirmar senha</label><input type="password" id="ac-senha2" placeholder="Repita a senha"></div>
-      <div class="field"><label>Código de convite (opcional)</label><input type="text" id="ac-convite" placeholder="Ex: ABC123" style="text-transform:uppercase;letter-spacing:3px"></div>
+
       <button class="btn-p" onclick="doCadastro()">Criar conta</button>
       <div id="ac-msg" class="msg-e"></div>
     </div>
@@ -318,11 +318,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);}
     <!-- step 2 -->
     <div class="step" id="step2">
       <div class="setup-h">🎉 Família criada!</div>
-      <div class="setup-d">Compartilhe o código no grupo da família para convidar os demais membros.</div>
+      <div class="setup-d">Sua família está pronta! Compartilhe o link do app com os membros da família.</div>
       <div class="convite-display">
-        <div class="convite-code" id="s-codigo">------</div>
-        <div class="convite-sub">Código válido por 7 dias</div>
-        <button class="btn-copy" onclick="copiarCodigo()">📋 Copiar código</button>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:10px">Link do app para compartilhar:</div>
+        <div style="font-family:'Syne',sans-serif;font-size:12px;color:var(--success);word-break:break-all" id="s-link-app">rafaelfces-bot.github.io/mesada-familia/app.html</div>
+        <button class="btn-copy" onclick="copiarLink()" style="margin-top:10px">📋 Copiar link</button>
       </div>
       <button class="btn-p" onclick="irApp()">Entrar no app →</button>
     </div>
@@ -643,7 +643,6 @@ function doCadastro(){
   var email=document.getElementById('ac-email').value.trim();
   var senha=document.getElementById('ac-senha').value;
   var senha2=document.getElementById('ac-senha2').value;
-  var convite=document.getElementById('ac-convite').value.trim().toUpperCase();
   var msg=document.getElementById('ac-msg');
   msg.className='msg-e';msg.textContent='';
   if(!nome){msg.textContent='Informe seu nome.';return;}
@@ -651,19 +650,10 @@ function doCadastro(){
   if(senha!==senha2){msg.textContent='As senhas não coincidem.';return;}
   auth.createUserWithEmailAndPassword(email,senha).then(function(cred){
     var u=cred.user;
-    if(convite){
-      return db.ref('convites/'+convite).once('value').then(function(snap){
-        var inv=snap.val();
-        if(!inv||inv.expiraEm<Date.now()){auth.signOut();msg.textContent='Código inválido ou expirado.';return;}
-        var fid=inv.familiaId;
-        return Promise.all([
-          db.ref('familias/'+fid+'/membros/'+u.uid).set({nome:nome,email:email,perfil:'pendente',ts:Date.now()}),
-          db.ref('usuarios/'+u.uid).set({nome:nome,email:email,familiaId:fid,perfil:'pendente',ts:Date.now()})
-        ]);
-      });
-    } else {
-      return db.ref('usuarios/'+u.uid).set({nome:nome,email:email,familiaId:null,perfil:'novo',ts:Date.now()});
-    }
+    // Registra direto como 'novo' — vai para setup criar a família
+    return db.ref('usuarios/'+u.uid).set({
+      nome:nome,email:email,familiaId:null,perfil:'novo',ts:Date.now()
+    });
   }).catch(function(er){
     msg.textContent=er.code==='auth/email-already-in-use'?'E-mail já cadastrado.':'Erro ao criar conta.';
   });
@@ -745,8 +735,12 @@ function sStep2(){
     document.getElementById('dot2').classList.add('active');
   });
 }
+function copiarLink(){
+  var link='https://rafaelfces-bot.github.io/mesada-familia/app.html';
+  navigator.clipboard.writeText(link).then(function(){alert('✅ Link copiado!');}).catch(function(){alert('Link: '+link);});
+}
 function copiarCodigo(){
-  var c=document.getElementById('s-codigo').textContent||document.getElementById('conf-code').textContent;
+  var c=document.getElementById('conf-code')?document.getElementById('conf-code').textContent:'';
   navigator.clipboard.writeText(c).then(function(){alert('✅ Código copiado: '+c);}).catch(function(){alert('Código: '+c);});
 }
 function irApp(){isAdm=true;iniciarApp();}
