@@ -482,7 +482,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);}
         <button onclick="adicionarMembroPorEmail()" style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:9px 12px;border-radius:8px;border:1px solid var(--success);background:rgba(86,217,138,0.1);color:var(--success);cursor:pointer;white-space:nowrap">+ Add</button>
       </div>
       <div id="add-mbr-msg" style="font-size:12px;margin-bottom:10px;min-height:16px;text-align:center"></div>
-      <div id="sh-users-body"></div>
+      <div id="sh-users-list"></div>
     </div>
   </div>
 </div>
@@ -654,7 +654,7 @@ function authAba(a){
 }
 
 function mostrarTela(id){
-  // Telas fullscreen
+  // Telas fullscreen — todas ocultas exceto a ativa
   ['pg-auth','pg-setup','pg-wait','pg-entrar-familia'].forEach(function(p){
     var el=document.getElementById(p);
     if(el)el.style.display=p===id?'flex':'none';
@@ -668,7 +668,7 @@ function mostrarTela(id){
     el.style.display=isApp&&isHome?'block':'none';
     el.classList.toggle('ativa',isApp&&isHome);
   });
-  if(isApp){pgAtual='home';}
+  if(isApp)pgAtual='home';
 }
 
 // LOGIN
@@ -703,35 +703,49 @@ function doCadastro(){
 
 // AUTH STATE
 auth.onAuthStateChanged(function(user){
+  // Esconder tudo enquanto verifica
+  ['pg-auth','pg-setup','pg-wait','pg-entrar-familia'].forEach(function(p){
+    var el=document.getElementById(p);if(el)el.style.display='none';
+  });
+  document.getElementById('navbar').classList.remove('show');
+
   if(!user){mostrarTela('pg-auth');return;}
   uid=user.uid;
+
   db.ref('usuarios/'+uid).once('value').then(function(snap){
     var u=snap.val();
-    // Sem registro — acabou de criar conta, escolhe o que fazer
+
+    // Sem registro — novo usuário, criar entrada básica
     if(!u){
-      // Cria registro básico e vai para tela de escolha
-      db.ref('usuarios/'+uid).set({
-        nome:auth.currentUser.displayName||auth.currentUser.email.split('@')[0],
-        email:auth.currentUser.email,
+      return db.ref('usuarios/'+uid).set({
+        nome:user.displayName||user.email.split('@')[0],
+        email:user.email,
         familiaId:null,
         perfil:'novo',
         ts:Date.now()
+      }).then(function(){
+        mostrarTela('pg-entrar-familia');
       });
+    }
+
+    // Tem registro mas sem família definida
+    if(!u.familiaId||u.familiaId==='null'||u.perfil==='novo'){
       mostrarTela('pg-entrar-familia');
       return;
     }
-    // Tem registro mas sem família — tela de escolha
-    if(!u.familiaId||u.perfil==='novo'){
-      mostrarTela('pg-entrar-familia');
-      return;
-    }
+
     // Pendente de aprovação
-    if(u.perfil==='pendente'){mostrarTela('pg-wait');return;}
+    if(u.perfil==='pendente'){
+      mostrarTela('pg-wait');
+      return;
+    }
+
     // Aprovado — entra no app
     familiaId=u.familiaId;
     isAdm=u.perfil==='admin';
     filhoNome=u.perfil==='filho'?u.nome.toLowerCase():null;
     iniciarApp();
+
   }).catch(function(){
     auth.signOut();
     mostrarTela('pg-auth');
@@ -1195,7 +1209,7 @@ function adicionarMembroPorEmail(){
 }
 
 function renderUsers(){
-  var body=document.getElementById('sh-users-body');
+  var body=document.getElementById('sh-users-list');
   db.ref('familias/'+familiaId+'/membros').once('value').then(function(snap){
     var m=snap.val()||{};
     var pend=[],aprov=[];
