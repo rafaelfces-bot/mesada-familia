@@ -378,6 +378,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);}
     </div>
     <div style="display:flex;gap:6px">
       <button class="top-btn" id="btn-pend" onclick="abrirSheet('sh-pend')" style="display:none">⏳<span class="tbadge" id="bdg-pend"></span></button>
+      <button class="top-btn" id="btn-users" onclick="abrirSheet('sh-users')" style="display:none">👥<span class="tbadge" id="bdg-users"></span></button>
       <button class="top-btn" id="btn-conf" onclick="abrirSheet('sh-conf')" style="display:none">⚙️</button>
     </div>
   </div>
@@ -395,7 +396,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);}
 <div id="pg-ativ" class="pg">
   <div class="topbar">
     <div class="topbar-title">Atividades</div>
-    <button class="top-btn" id="btn-users" onclick="abrirSheet('sh-users')" style="display:none">👥<span class="tbadge" id="bdg-users"></span></button>
   </div>
   <div class="filho-selector" id="filho-tabs-ativ"></div>
   <div class="ativ-list" id="ativ-list"></div>
@@ -820,7 +820,7 @@ function iniciarApp(){
   if(isAdm){
     document.getElementById('btn-pend').style.display='flex';
     document.getElementById('btn-conf').style.display='flex';
-    document.getElementById('btn-users').style.display='flex';
+    var bu=document.getElementById('btn-users');if(bu)bu.style.display='flex';
     document.getElementById('btn-add-ativ').classList.remove('np');
     document.getElementById('btn-add-pen').classList.remove('np');
   } else {
@@ -1169,7 +1169,7 @@ function ouvirMembros(){
     var m=snap.val()||{};
     var pend=Object.values(m).filter(function(x){return x.perfil==='pendente';}).length;
     var b=document.getElementById('bdg-users');
-    if(pend>0){b.textContent=pend;b.classList.add('on');}else b.classList.remove('on');
+    if(b){if(pend>0){b.textContent=pend;b.classList.add('on');}else b.classList.remove('on');}
   });
 }
 function adicionarMembroPorEmail(){
