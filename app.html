@@ -1216,32 +1216,41 @@ function adicionarMembroPorEmail(){
   msg.style.color='var(--muted)';msg.textContent='Buscando...';
   if(!email){msg.style.color='var(--penalty)';msg.textContent='Informe o e-mail.';return;}
 
-  // Buscar usuário pelo email no nó usuarios
-  db.ref('usuarios').orderByChild('email').equalTo(email).once('value').then(function(snap){
-    var dados=snap.val();
-    if(!dados){
+  // Buscar em todos os usuários e comparar email case-insensitive
+  db.ref('usuarios').once('value').then(function(snap){
+    var todos=snap.val()||{};
+    var encontrado=null,encontradoUid=null;
+    Object.entries(todos).forEach(function(e){
+      var u=e[1];
+      if(u.email&&u.email.toLowerCase()===email){
+        encontrado=u;encontradoUid=e[0];
+      }
+    });
+
+    if(!encontrado){
       msg.style.color='var(--penalty)';
-      msg.textContent='Usuário não encontrado. Peça para criar conta primeiro.';
+      msg.textContent='Usuário não encontrado. Verifique se o e-mail está correto e se a pessoa já criou conta.';
       return;
     }
-    var uid=Object.keys(dados)[0];
-    var u=dados[uid];
+
     // Adicionar à família
     return Promise.all([
-      db.ref('familias/'+familiaId+'/membros/'+uid).set({
-        nome:u.nome,email:u.email,perfil:perfil,ts:Date.now()
+      db.ref('familias/'+familiaId+'/membros/'+encontradoUid).set({
+        nome:encontrado.nome,email:encontrado.email,perfil:perfil,ts:Date.now()
       }),
-      db.ref('usuarios/'+uid).update({
+      db.ref('usuarios/'+encontradoUid).update({
         familiaId:familiaId,perfil:perfil
       })
     ]).then(function(){
       msg.style.color='var(--success)';
-      msg.textContent='✅ '+u.nome+' adicionado como '+perfil+'!';
+      msg.textContent='✅ '+encontrado.nome+' adicionado como '+perfil+'!';
       document.getElementById('add-mbr-email').value='';
       renderUsers();
     });
-  }).catch(function(){
-    msg.style.color='var(--penalty)';msg.textContent='Erro ao buscar usuário.';
+  }).catch(function(err){
+    console.log('Erro ao buscar:', err);
+    msg.style.color='var(--penalty)';
+    msg.textContent='Erro ao buscar usuário. Tente novamente.';
   });
 }
 
